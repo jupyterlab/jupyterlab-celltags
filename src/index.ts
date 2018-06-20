@@ -14,6 +14,14 @@ import {
   Widget, PanelLayout
 } from '@phosphor/widgets'
 
+import {
+  Cell
+} from '@jupyterlab/cells'
+
+import {
+  Message
+} from '@phosphor/messaging'
+
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
@@ -29,10 +37,26 @@ class TagsTool extends CellTools.Tool {
     widget.title.label = 'Tags';
     widget.title.closable = true;
     let tabsBarTitle = document.createElement('div');
-    tabsBarTitle.innerHTML = "hello";
+    tabsBarTitle.innerHTML = 'Tags';
+    let addButton = document.createElement('button');
+    addButton.innerHTML = 'New Tag';
+    let _self = this;
+    addButton.onclick = function() {
+      console.log(_self.activeCell.model.metadata.get("tags"));
+    };
     widget.node.appendChild(tabsBarTitle);
+    widget.node.appendChild(addButton);
     layout.addWidget(widget);
   }
+
+  /**
+   * Handle a change to the active cell.
+   */
+  protected onActiveCellChanged(msg: Message): void {
+    this.activeCell = this.parent.activeCell;
+  }
+
+  private activeCell: Cell = null;
 
 } 
 
@@ -45,6 +69,7 @@ namespace TagsTool {
     /**
      * The editor factory used by the tool.
      */
+    activeCell: Cell
   }
 }
 
@@ -56,7 +81,8 @@ const extension: JupyterLabPlugin<void> = {
   autoStart: true,
   requires: [ICellTools], 
   activate: (app: JupyterLab, cellTools: ICellTools) => {
-    let tagsTool = new TagsTool({ });
+    let cell = cellTools.activeCell;
+    let tagsTool = new TagsTool({ activeCell: cell });
     cellTools.addItem({tool: tagsTool})    
   }
 };
