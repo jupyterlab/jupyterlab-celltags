@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 *.bundle.*
 lib/
 node_modules/
 *.egg-info/
 .ipynb_checkpoints
-=======
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -109,4 +108,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
->>>>>>> e0e80d4f73cd71b0b4a67d691a6fbeabd73c035b

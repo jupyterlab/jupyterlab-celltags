@@ -1,5 +1,4 @@
 # jupyterlab-celltags
-<<<<<<< HEAD
 
 Add tags for JupyterLab
 
@@ -31,6 +30,3 @@ npm run build
 jupyter lab build
 ```
 
-=======
-A JupyterLab extension for notebook cell tags
->>>>>>> e0e80d4f73cd71b0b4a67d691a6fbeabd73c035b
