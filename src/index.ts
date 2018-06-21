@@ -22,6 +22,10 @@ import {
   Message
 } from '@phosphor/messaging'
 
+import {
+  ObservableJSON
+} from '@jupyterlab/observables'
+
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
@@ -32,21 +36,38 @@ class TagsTool extends CellTools.Tool {
     super();
     this.addClass(TAG_TOOL_CLASS);
     let layout = this.layout = new PanelLayout();
-    let widget = new Widget();
-    widget.id = 'cellsTags-tool';
-    widget.title.label = 'Tags';
-    widget.title.closable = true;
+    this.widget = new Widget();
+    this.widget.id = 'cellsTags-tool';
+    this.widget.title.label = 'Tags';
+    this.widget.title.closable = true;
     let tabsBarTitle = document.createElement('div');
     tabsBarTitle.innerHTML = 'Tags';
+    tabsBarTitle.id = 'allTags';
     let addButton = document.createElement('button');
     addButton.innerHTML = 'New Tag';
     let _self = this;
     addButton.onclick = function() {
       console.log(_self.activeCell.model.metadata.get("tags"));
     };
-    widget.node.appendChild(tabsBarTitle);
-    widget.node.appendChild(addButton);
-    layout.addWidget(widget);
+    this.widget.node.appendChild(tabsBarTitle);
+    this.widget.node.appendChild(addButton);
+    layout.addWidget(this.widget);
+  }
+
+  private loadLabels() {
+    let tagsDiv = document.getElementById('allTags');
+    tagsDiv.innerHTML = 'Tags';
+    let cell = this.activeCell
+    if (cell != null) {
+      let tags = cell.model.metadata.get("tags")
+      if (tags != null) {
+        tags.toString().split(',').forEach(function(tag: string) {
+          let labelBox = document.createElement('div');
+          labelBox.innerHTML = tag;
+          tagsDiv.appendChild(labelBox);
+        });
+      }
+    }
   }
 
   /**
@@ -54,9 +75,15 @@ class TagsTool extends CellTools.Tool {
    */
   protected onActiveCellChanged(msg: Message): void {
     this.activeCell = this.parent.activeCell;
+    this.loadLabels();
+  }
+
+  protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
+    this.loadLabels();
   }
 
   private activeCell: Cell = null;
+  private widget: Widget = null;
 
 } 
 
