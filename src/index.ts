@@ -34,6 +34,15 @@ import {
   Styling
 } from '@jupyterlab/apputils';
 
+import '../style/index.css';
+
+const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
+const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
+const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
+const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
+const TAG_DONE_BUTTON_CLASS = 'jp-cellTags-done-button';
+const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
+
 import {
   NotebookActions
 } from '@jupyterlab/notebook';
@@ -52,7 +61,9 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
     h.div({ },
-      h.label("Tags"),
+      h.label('Tags'),
+      h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
+      h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -63,6 +74,31 @@ class TagsWidget extends Widget {
 
   constructor() {
     super({ node: createAllTagsNode() });
+    let _self = this;
+
+    let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
+    addTagButton.addEventListener('click', function() {
+      _self.showNewTagInputBox(_self);
+    }, false);
+
+    let doneButton = this.node.getElementsByClassName(TAG_DONE_BUTTON_CLASS)[0];
+    doneButton.addEventListener('click', function() {
+      _self.finishAddingNewTags(_self);
+    }, false);
+  }
+
+  showNewTagInputBox(_self: TagsWidget) {
+    let node = VirtualDOM.realize(
+      h.div({ className: TAG_LABEL_DIV_CLASS },
+        h.input({ className: TAG_NEW_TAG_INPUT }))
+    )
+    _self.allTagsNode.appendChild(node);
+  }
+
+  finishAddingNewTags(_self: TagsWidget) {
+    let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT);
+    for (let i=0; i<newTagInputs.length; i++) {
+      alert((newTagInputs[i] as HTMLInputElement).value);
   }
 
   runAll() {
@@ -75,6 +111,7 @@ class TagsWidget extends Widget {
         NotebookActions.runCell()
       }
     }
+    
   }
 
   loadTagLabels() {
@@ -109,15 +146,6 @@ class TagsTool extends CellTools.Tool {
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
     this.widget = new TagsWidget();
-    let tabsBarTitle = document.createElement('div');
-    tabsBarTitle.innerHTML = 'Tags';
-    let addButton = document.createElement('button');
-    addButton.innerHTML = 'Run all';
-    addButton.onclick = function() {
-      console.log("markelle did something!");
-    };
-    this.widget.node.appendChild(tabsBarTitle);
-    this.widget.node.appendChild(addButton);
     layout.addWidget(this.widget);
   }
 
