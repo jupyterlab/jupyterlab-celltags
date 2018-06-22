@@ -12,65 +12,135 @@ import {
 
 import {
   Widget, PanelLayout
-} from '@phosphor/widgets'
+} from '@phosphor/widgets';
 
 import {
   Cell
-} from '@jupyterlab/cells'
+} from '@jupyterlab/cells';
 
 import {
   Message
-} from '@phosphor/messaging'
+} from '@phosphor/messaging';
+
+import {
+  ObservableJSON
+} from '@jupyterlab/observables';
+
+import {
+  h, VirtualDOM
+} from '@phosphor/virtualdom';
+
+import {
+  Styling
+} from '@jupyterlab/apputils';
+
+import {
+  NotebookActions
+} from '@jupyterlab/notebook';
+
+import {
+  INotebookTracker
+} from '@jupyterlab/notebook';
 
 import '../style/index.css';
 
+
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
+const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
+const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
+
+function createAllTagsNode() {
+  let node = VirtualDOM.realize(
+    h.div({ },
+      h.label("Tags"),
+      h.div({ className: TAGS_COLLECTION_CLASS }))
+  );
+  Styling.styleNode(node);
+  return node;
+}
+
+class TagsWidget extends Widget {
+
+  constructor() {
+    super({ node: createAllTagsNode() });
+  }
+
+  runAll() {
+    let SESSION = INotebookTracker.currentWidget.session;
+    let NOTEBOOK = INotebookTracker.currentWidget;
+    let nbWidget = docManager.open(NOTEBOOK) as NotebookPanel;
+    //let currentTag = retrieve selectedTag
+    for (Cell cell : Jupyter.notebook.cells) {
+      if (currentTag in cell's tags) {
+        NotebookActions.runCell()
+      }
+    }
+  }
+
+  loadTagLabels() {
+    this.allTagsNode.innerHTML = '';
+    if (this.currentActiveCell != null) {
+      let tags = this.currentActiveCell.model.metadata.get("tags")
+      if (tags != null) {
+        let _self = this;
+        tags.toString().split(',').forEach(function(tag: string) {
+          let node = VirtualDOM.realize(
+            h.div({ className: TAG_LABEL_DIV_CLASS },
+              h.label(tag))
+          )
+          _self.allTagsNode.appendChild(node);
+        });
+      }
+    }
+  }
+
+  get allTagsNode() {
+    return this.node.getElementsByClassName(TAGS_COLLECTION_CLASS)[0];
+  }
+
+  currentActiveCell: Cell = null;
+
+}
 
 class TagsTool extends CellTools.Tool {
 
-  constructor(options: TagsTool.IOptions) {
+  constructor() {
     super();
-    this.addClass(TAG_TOOL_CLASS);
     let layout = this.layout = new PanelLayout();
-    let widget = new Widget();
-    widget.id = 'cellsTags-tool';
-    widget.title.label = 'Tags';
-    widget.title.closable = true;
+    this.addClass(TAG_TOOL_CLASS);
+    this.widget = new TagsWidget();
     let tabsBarTitle = document.createElement('div');
     tabsBarTitle.innerHTML = 'Tags';
     let addButton = document.createElement('button');
-    addButton.innerHTML = 'New Tag';
-    let _self = this;
+    addButton.innerHTML = 'Run all';
     addButton.onclick = function() {
-      console.log(_self.activeCell.model.metadata.get("tags"));
+      console.log("markelle did something!");
     };
-    widget.node.appendChild(tabsBarTitle);
-    widget.node.appendChild(addButton);
-    layout.addWidget(widget);
+    this.widget.node.appendChild(tabsBarTitle);
+    this.widget.node.appendChild(addButton);
+    layout.addWidget(this.widget);
   }
 
   /**
    * Handle a change to the active cell.
    */
   protected onActiveCellChanged(msg: Message): void {
-    this.activeCell = this.parent.activeCell;
+    this.widget.currentActiveCell = this.parent.activeCell;
+    this.widget.loadTagLabels();
   }
 
-  private activeCell: Cell = null;
+  protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
+    this.widget.loadTagLabels();
+  }
 
+  private widget: TagsWidget = null;
 } 
 
 namespace TagsTool {
   /**
    * The options used to initialize a metadata editor tool.
    */
-  export
-  interface IOptions {
-    /**
-     * The editor factory used by the tool.
-     */
-    activeCell: Cell
-  }
+
 }
 
 /**
@@ -81,8 +151,7 @@ const extension: JupyterLabPlugin<void> = {
   autoStart: true,
   requires: [ICellTools], 
   activate: (app: JupyterLab, cellTools: ICellTools) => {
-    let cell = cellTools.activeCell;
-    let tagsTool = new TagsTool({ activeCell: cell });
+    let tagsTool = new TagsTool();
     cellTools.addItem({tool: tagsTool})    
   }
 };
