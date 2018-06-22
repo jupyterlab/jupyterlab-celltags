@@ -7,12 +7,12 @@
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/zuoyuanh/jupyterlab-celltags.git",
+  "homepage": "https://github.com/jupyterlab/jupyterlab-celltags.git",
   "bugs": {
-    "url": "https://github.com/zuoyuanh/jupyterlab-celltags.git/issues"
+    "url": "https://github.com/jupyterlab/jupyterlab-celltags.git/issues"
   },
   "license": "BSD-3-Clause",
-  "author": "Zuoyuan Huang",
+  "author": "Zuoyuan Huang, Markelle Kelly",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
@@ -21,7 +21,7 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zuoyuanh/jupyterlab-celltags.git.git"
+    "url": "https://github.com/jupyterlab/jupyterlab-celltags.git"
   },
   "scripts": {
     "build": "tsc",
@@ -31,6 +31,7 @@
   "dependencies": {
     "@jupyterlab/application": "^0.16.0",
     "@jupyterlab/notebook": "^0.16.3"
+    "@jupyterlab/apputils": "^0.16.4"
   },
   "devDependencies": {
     "rimraf": "^2.6.1",

@@ -43,6 +43,21 @@ const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_DONE_BUTTON_CLASS = 'jp-cellTags-done-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 
+import {
+  NotebookActions
+} from '@jupyterlab/notebook';
+
+import {
+  INotebookTracker
+} from '@jupyterlab/notebook';
+
+import '../style/index.css';
+
+
+const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
+const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
+const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
+
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
     h.div({ },
@@ -84,7 +99,19 @@ class TagsWidget extends Widget {
     let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT);
     for (let i=0; i<newTagInputs.length; i++) {
       alert((newTagInputs[i] as HTMLInputElement).value);
+  }
+
+  runAll() {
+    let SESSION = INotebookTracker.currentWidget.session;
+    let NOTEBOOK = INotebookTracker.currentWidget;
+    let nbWidget = docManager.open(NOTEBOOK) as NotebookPanel;
+    //let currentTag = retrieve selectedTag
+    for (Cell cell : Jupyter.notebook.cells) {
+      if (currentTag in cell's tags) {
+        NotebookActions.runCell()
+      }
     }
+    
   }
 
   loadTagLabels() {
