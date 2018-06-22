@@ -1,14 +1,4 @@
 import {
-    ICellTools
-} from '@jupyterlab/notebook';
-
-import {
-    CellTools
-} from '@jupyterlab/notebook';
-
-import '../style/index.css';
-
-import {
     Cell
   } from '@jupyterlab/cells';
 
@@ -48,7 +38,7 @@ function write_tag(cell: Cell, name:string, add:boolean) {
             cell.model.metadata.delete('tags');
         }
     }
-    model.dirty=true;
+    //model.dirty=true;
     return true;
 };
 
@@ -112,4 +102,3 @@ function init_tag_container (cell:Cell, on_remove:Function) {
     //Unused: jQuery.data(tag_container, 'tag_map', tag_map);
     return true;
 };
-
