@@ -34,6 +34,10 @@ import {
   Styling
 } from '@jupyterlab/apputils';
 
+import {
+  write_tag
+} from './celltags';
+
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
@@ -42,21 +46,6 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_DONE_BUTTON_CLASS = 'jp-cellTags-done-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
-
-import {
-  NotebookActions
-} from '@jupyterlab/notebook';
-
-import {
-  INotebookTracker
-} from '@jupyterlab/notebook';
-
-import '../style/index.css';
-
-
-const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
-const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
-const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
@@ -97,21 +86,14 @@ class TagsWidget extends Widget {
 
   finishAddingNewTags(_self: TagsWidget) {
     let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT);
-    for (let i=0; i<newTagInputs.length; i++) {
-      alert((newTagInputs[i] as HTMLInputElement).value);
-  }
-
-  runAll() {
-    let SESSION = INotebookTracker.currentWidget.session;
-    let NOTEBOOK = INotebookTracker.currentWidget;
-    let nbWidget = docManager.open(NOTEBOOK) as NotebookPanel;
-    //let currentTag = retrieve selectedTag
-    for (Cell cell : Jupyter.notebook.cells) {
-      if (currentTag in cell's tags) {
-        NotebookActions.runCell()
-      }
+    let tagNames: string[] = [];
+    for (var i=0; i<newTagInputs.length; i++) {
+      let tagName: string = (newTagInputs[i] as HTMLInputElement).value;
+      tagNames.push(tagName);
     }
-    
+    for (var i=0; i<tagNames.length; i++) {
+      write_tag(_self.currentActiveCell, tagNames[i], true);
+    }
   }
 
   loadTagLabels() {
@@ -125,17 +107,55 @@ class TagsWidget extends Widget {
             h.div({ className: TAG_LABEL_DIV_CLASS },
               h.label(tag))
           )
+          node.addEventListener('click', function() {
+            _self.tagClicked(_self, this);
+          })
           _self.allTagsNode.appendChild(node);
         });
       }
     }
   }
 
+  tagClicked(_self: TagsWidget, tag: HTMLElement) {
+    /* The commented out code below supports selecting multiple cells */
+    /*
+    let tagName = tag.getElementsByTagName('label')[0].innerHTML;
+    if (_self.selectedTags.indexOf(tagName) == -1) {
+      tag.style.backgroundColor = 'red';
+      _self.selectedTags.push(tagName);
+    } else {
+      tag.style.backgroundColor = 'white';
+      let index = _self.selectedTags.indexOf(tagName, 0);
+      _self.selectedTags.splice(index, 1);
+    } */
+    if (_self.selectedTag == null) {
+      _self.selectedTag = tag;
+      _self.selectedTag.style.backgroundColor = 'red';
+    } else if (_self.selectedTag == tag) {
+      _self.selectedTag.style.backgroundColor = 'white';
+      _self.selectedTag = null;
+    } else {
+      _self.selectedTag.style.backgroundColor = 'white';
+      _self.selectedTag = tag;
+      _self.selectedTag.style.backgroundColor = 'red';
+    }
+    console.log(_self.selectedTagName)
+  }
+
   get allTagsNode() {
     return this.node.getElementsByClassName(TAGS_COLLECTION_CLASS)[0];
   }
 
+  get selectedTagName() {
+    if (this.selectedTag == null) {
+      return null;
+    }
+    return this.selectedTag.getElementsByTagName('label')[0].innerHTML;
+  }
+
   currentActiveCell: Cell = null;
+  // selectedTags: string[] = [];
+  private selectedTag: HTMLElement = null;
 
 }
 
@@ -147,6 +167,10 @@ class TagsTool extends CellTools.Tool {
     this.addClass(TAG_TOOL_CLASS);
     this.widget = new TagsWidget();
     layout.addWidget(this.widget);
+  }
+
+  get selectedTag() {
+    return this.widget.selectedTagName;
   }
 
   /**
