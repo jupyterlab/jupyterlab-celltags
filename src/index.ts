@@ -35,10 +35,6 @@ import {
 } from '@jupyterlab/apputils';
 
 import {
-  NotebookActions
-} from '@jupyterlab/notebook';
-
-import {
   INotebookTracker
 } from '@jupyterlab/notebook';
 
@@ -66,14 +62,27 @@ class TagsWidget extends Widget {
     super({ node: createAllTagsNode() });
   }
 
-  runAll(tracker: INotebookTracker) {
+  runAll(tracker: INotebookTracker, selectedTag: string) {
     let session = tracker.currentWidget.session;
     let notebook = tracker.currentWidget;
-    let currentTag = retrieveSelected()
     let cell:any;
     for (cell in notebook.model.cells) {
-      if (currentTag in cell.model.metadata.get("cells")) {
+      if (selectedTag in cell.model.metadata.get("cells")) {
         runCell(notebook, cell, session );
+      }
+    }
+  }
+
+  replaceName(tracker: INotebookTracker, newTag: string, oldTag: string) {
+    let notebook = tracker.currentWidget;
+    let cell:any;
+    for (cell in notebook.model.cells) {
+      if (oldTag in cell.model.metadata.get("cells")) {
+        let tagList = cell.model.metadata.get("cells");
+        let index = tagList.indexOf(oldTag);
+        tagList = tagList.splice(index, 1);
+        tagList = tagList.put(newTag);
+        cell.model.metadata.set(tagList);
       }
     }
   }
