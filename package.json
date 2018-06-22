@@ -1,5 +1,5 @@
 {
-  "name": "celltags",
+  "name": "jupyterlab-celltags",
   "version": "0.1.0",
   "description": "A JupyterLab extension for notebook cell tags",
   "keywords": [
@@ -29,8 +29,10 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.16.0",
-    "@jupyterlab/apputils": "^0.16.4"
+    "@jupyterlab/application": "^0.16.3",
+    "@jupyterlab/apputils": "^0.16.4",
+    "@jupyterlab/notebook": "^0.16.3",
+    "@jupyterlab/notebook-extension": "^0.16.3"
   },
   "devDependencies": {
     "rimraf": "^2.6.1",
