@@ -35,6 +35,14 @@ import {
 } from '@jupyterlab/apputils';
 
 import {
+  INotebookTracker
+} from '@jupyterlab/notebook';
+
+import '../style/index.css';
+
+import runCell from '@jupyterlab/notebook';
+
+import {
   write_tag
 } from './celltags';
 
@@ -75,6 +83,29 @@ class TagsWidget extends Widget {
       _self.finishAddingNewTags(_self);
     }, false);
   }
+
+  runAll(tracker: INotebookTracker, selectedTag: string) {
+    let session = tracker.currentWidget.session;
+    let notebook = tracker.currentWidget;
+    let cell:any;
+    for (cell in notebook.model.cells) {
+      if (selectedTag in cell.model.metadata.get("cells")) {
+        runCell(notebook, cell, session );
+      }
+    }
+  }
+
+  replaceName(tracker: INotebookTracker, newTag: string, oldTag: string) {
+    let notebook = tracker.currentWidget;
+    let cell:any;
+    for (cell in notebook.model.cells) {
+      if (oldTag in cell.model.metadata.get("cells")) {
+        let tagList = cell.model.metadata.get("cells");
+        let index = tagList.indexOf(oldTag);
+        tagList = tagList.splice(index, 1);
+        tagList = tagList.put(newTag);
+        cell.model.metadata.set(tagList);
+      }
 
   showNewTagInputBox(_self: TagsWidget) {
     let node = VirtualDOM.realize(
@@ -201,7 +232,7 @@ namespace TagsTool {
 const extension: JupyterLabPlugin<void> = {
   id: 'jupyterlab-celltags',
   autoStart: true,
-  requires: [ICellTools], 
+  requires: [ICellTools, INotebookTracker],
   activate: (app: JupyterLab, cellTools: ICellTools) => {
     let tagsTool = new TagsTool();
     cellTools.addItem({tool: tagsTool})    
