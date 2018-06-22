@@ -44,6 +44,7 @@ import {
 
 import '../style/index.css';
 
+import runCell from '@jupyterlab/notebook';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
@@ -65,14 +66,14 @@ class TagsWidget extends Widget {
     super({ node: createAllTagsNode() });
   }
 
-  runAll() {
-    let SESSION = INotebookTracker.currentWidget.session;
-    let NOTEBOOK = INotebookTracker.currentWidget;
-    let nbWidget = docManager.open(NOTEBOOK) as NotebookPanel;
-    //let currentTag = retrieve selectedTag
-    for (Cell cell : Jupyter.notebook.cells) {
-      if (currentTag in cell's tags) {
-        NotebookActions.runCell()
+  runAll(tracker: INotebookTracker) {
+    let session = tracker.currentWidget.session;
+    let notebook = tracker.currentWidget;
+    let currentTag = retrieveSelected()
+    let cell:any;
+    for (cell in notebook.model.cells) {
+      if (currentTag in cell.model.metadata.get("cells")) {
+        runCell(notebook, cell, session );
       }
     }
   }
@@ -149,7 +150,7 @@ namespace TagsTool {
 const extension: JupyterLabPlugin<void> = {
   id: 'jupyterlab-celltags',
   autoStart: true,
-  requires: [ICellTools], 
+  requires: [ICellTools, INotebookTracker],
   activate: (app: JupyterLab, cellTools: ICellTools) => {
     let tagsTool = new TagsTool();
     cellTools.addItem({tool: tagsTool})    
