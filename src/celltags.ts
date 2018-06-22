@@ -2,6 +2,7 @@ import {
     Cell
   } from '@jupyterlab/cells';
 
+export
 function write_tag(cell: Cell, name:string, add:boolean) {
     /* If add = true, check if tags are undefined; if so, initialize the array.
        Otherwise, check if the tag already exists; if so, return false.
@@ -16,7 +17,9 @@ function write_tag(cell: Cell, name:string, add:boolean) {
             // Tag already exists
             return false;
         }
-        cell.model.metadata.set('tags', wtaglist.push(name));
+        wtaglist.push(name);
+        cell.model.metadata.set('tags', ['4444', '5555', '6666']);
+        cell.model.metadata.set('tags', wtaglist);
     /* If add = false, try to remove from metadata. First check if metadata and 
        metadata.tags exist; if not, return false. Then remove the tag and remove
        metadata.tags if it is empty.*/
@@ -42,20 +45,20 @@ function write_tag(cell: Cell, name:string, add:boolean) {
     return true;
 };
 
-function preprocess_input(input:string) {
+/* function preprocess_input(input:string) {
     // Split on whitespace + commas:
     return input.split(/[,\s]+/)
-};
+}; */
 
-function add_tag(cell:Cell, tag_container:string, on_remove:Function) {
+// function add_tag(cell:Cell, tag_container:string, on_remove:Function) {
     /* Returns a function that writes tags to metadata if non-empty */
-    return function(name:string) {
-        if (name === '') {
+//     return function(name:string) {
+//         if (name === '') {
             // Skip empty strings
-            return;
-        }
+//             return;
+//         }
         // Write tag to metadata
-        var changed = write_tag(cell, name, true);
+//         var changed = write_tag(cell, name, true);
 
         //Unused: tag UI
         /*if (changed) {
@@ -66,12 +69,12 @@ function add_tag(cell:Cell, tag_container:string, on_remove:Function) {
             tag_map[name] = tag;
             jQuery.data(tag_container, 'tag_map', tag_map);
         }*/
-    };
-};
+//     };
+// };
 
-function remove_tag(cell:Cell, tag_container:string) {
-    return function(name:string) {
-        var changed = write_tag(cell, name, false);
+// function remove_tag(cell:Cell, tag_container:string) {
+//     return function(name:string) {
+//         var changed = write_tag(cell, name, false);
         /*if (changed) {
             // Unused: Remove tag UI
             var tag_map = jQuery.data(tag_container, "tag_map") || {};
@@ -79,26 +82,26 @@ function remove_tag(cell:Cell, tag_container:string) {
             delete tag_map[name];
             tag_UI.remove();
     }*/
-    };
-};
+    // };
+// };
 
-function init_tag_container (cell:Cell, on_remove:Function) {
-    var tag_list = cell.model.metadata.get('tags') || [];
-    if (!Array.isArray(tag_list)) {
+// function init_tag_container (cell:Cell, on_remove:Function) {
+//     var tag_list = cell.model.metadata.get('tags') || [];
+//     if (!Array.isArray(tag_list)) {
         // We cannot make tags UI for this cell!
         // Maybe someone else used "tags" for something?
-        return false;  // Fail gracefully
-    }
+//         return false;  // Fail gracefully
+//     }
     //var tag_map = {};
-    for (var i=0; i < tag_list.length; ++i) {
-        var tag_name = tag_list[i];
-        if (typeof tag_name !== 'string') {
+//     for (var i=0; i < tag_list.length; ++i) {
+//         var tag_name = tag_list[i];
+//         if (typeof tag_name !== 'string') {
             // Unexpected type, disable toolbar for safety
-            return false;
-        }
+//             return false;
+//         }
         /*var tag = make_tag(tag_name, on_remove);
         tag_map[tag_name] = tag;*/
-    }
+//     }
     //Unused: jQuery.data(tag_container, 'tag_map', tag_map);
-    return true;
-};
+//     return true;
+// };
