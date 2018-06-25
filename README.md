@@ -1,4 +1,5 @@
 # jupyterlab-celltags
+
 A JupyterLab extension for notebook cell tags
 
 ## Prerequisites
@@ -8,7 +9,7 @@ A JupyterLab extension for notebook cell tags
 ## Installation
 
 ```bash
-jupyter labextension install celltags
+jupyter labextension install jupyterlab-celltags
 ```
 
 ## Development
