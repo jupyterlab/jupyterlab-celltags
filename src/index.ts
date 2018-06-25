@@ -57,6 +57,7 @@ const TAG_REMOVE_TAG_BUTTON_CLASS = 'jp-cellTags-remove-button';
 const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
+const TAG_RENAME_BUTTON_CLASS = 'jp-cellTags-rename-tag-button';
 
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
@@ -66,6 +67,7 @@ function createAllTagsNode() {
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
+      h.button({ className: TAG_RENAME_BUTTON_CLASS },'Rename Tag'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -74,9 +76,10 @@ function createAllTagsNode() {
 
 class TagsWidget extends Widget {
 
-  constructor() {
+  constructor(notebook_Tracker: INotebookTracker) {
     super({ node: createAllTagsNode() });
     let _self = this;
+    this.notebookTracker = notebook_Tracker;
 
     let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
     addTagButton.addEventListener('click', function() {
@@ -99,19 +102,21 @@ class TagsWidget extends Widget {
     }, false);
   }
 
-  /* runAll(tracker: INotebookTracker, selectedTag: string) {
-    let session = tracker.currentWidget.session;
-    let notebook = tracker.currentWidget;
+  runAll() {
+    //let session = this.notebookTracker.currentWidget.session;
+    let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
-      if (selectedTag in cell.model.metadata.get("cells")) {
-        runCell(notebook, cell, session );
+      if (this.selectedTagName in cell.model.metadata.get("cells")) {
+        //runCell(notebook, cell, session );
       }
     }
   }
 
-  replaceName(tracker: INotebookTracker, newTag: string, oldTag: string) {
-    let notebook = tracker.currentWidget;
+  replaceName(newTag: string) {
+    console.log("I'm doing something!");
+    let oldTag = this.selectedTagName;
+    let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
       if (oldTag in cell.model.metadata.get("cells")) {
@@ -122,7 +127,7 @@ class TagsWidget extends Widget {
         cell.model.metadata.set(tagList);
       }
     }
-  }*/
+  }
 
   showNewTagInputBox(_self: TagsWidget) {
     if (!_self.addingNewTag) {
@@ -133,6 +138,14 @@ class TagsWidget extends Widget {
       )
       _self.allTagsNode.appendChild(node);
     }
+  }
+
+  showReplaceTagInputBox(_self: TagsWidget) {
+    let node = VirtualDOM.realize(
+      h.div({ className: TAG_RENAME_BUTTON_CLASS },
+        h.input({ className: TAG_RENAME_TAG_INPUT }))
+    )
+    _self.allTagsNode.appendChild(node);
   }
 
   finishAddingNewTags(_self: TagsWidget) {
@@ -226,16 +239,16 @@ class TagsWidget extends Widget {
   // selectedTags: string[] = [];
   private selectedTag: HTMLElement = null;
   private addingNewTag = false;
-
+  public notebookTracker: INotebookTracker = null;
 }
 
 class TagsTool extends CellTools.Tool {
 
-  constructor() {
+  constructor(notebook_Tracker: INotebookTracker) {
     super();
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
-    this.widget = new TagsWidget();
+    this.widget = new TagsWidget(notebook_Tracker);
     layout.addWidget(this.widget);
   }
 
@@ -256,6 +269,7 @@ class TagsTool extends CellTools.Tool {
   }
 
   private widget: TagsWidget = null;
+  public notebookTracker: INotebookTracker = null;
 } 
 
 namespace TagsTool {
@@ -268,14 +282,16 @@ namespace TagsTool {
 /**
  * Initialization data for the jupyterlab-celltags extension.
  */
+function activate(app: JupyterLab, cellTools: ICellTools, notebook_Tracker: INotebookTracker) {
+  let tagsTool = new TagsTool(notebook_Tracker);
+  cellTools.addItem({tool: tagsTool}) 
+}
+
 const extension: JupyterLabPlugin<void> = {
   id: 'jupyterlab-celltags',
   autoStart: true,
   requires: [ICellTools, INotebookTracker],
-  activate: (app: JupyterLab, cellTools: ICellTools) => {
-    let tagsTool = new TagsTool();
-    cellTools.addItem({tool: tagsTool})    
-  }
+  activate: activate
 };
 
 export default extension;
