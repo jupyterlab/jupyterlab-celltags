@@ -57,7 +57,10 @@ const TAG_REMOVE_TAG_BUTTON_CLASS = 'jp-cellTags-remove-button';
 const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
-const TAG_RENAME_BUTTON_CLASS = 'jp-cellTags-rename-tag-button';
+
+const TAG_EDIT_STATUS_NULL = 0;
+const TAG_EDIT_STATUS_ADD = 1;
+const TAG_EDIT_STATUS_RENAME = 2;
 
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
@@ -67,7 +70,6 @@ function createAllTagsNode() {
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
-      h.button({ className: TAG_RENAME_BUTTON_CLASS },'Rename Tag'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -88,7 +90,7 @@ class TagsWidget extends Widget {
 
     let doneButton = this.node.getElementsByClassName(TAG_DONE_BUTTON_CLASS)[0];
     doneButton.addEventListener('click', function() {
-      _self.finishAddingNewTags(_self);
+      _self.didFinishEditingTags(_self);
     }, false);
 
     let removeButton = this.node.getElementsByClassName(TAG_REMOVE_TAG_BUTTON_CLASS)[0];
@@ -115,23 +117,33 @@ class TagsWidget extends Widget {
 
   replaceName(newTag: string) {
     console.log("I'm doing something!");
-    let oldTag = this.selectedTagName;
+    let oldTag = this.tagOldName;
     let notebook = this.notebookTracker.currentWidget;
-    let cell:any;
-    for (cell in notebook.model.cells) {
-      if (oldTag in cell.model.metadata.get("cells")) {
-        let tagList = cell.model.metadata.get("cells");
+    let cells = notebook.model.cells;
+    for (var i=0; i<cells.length; i++) {
+      let cellMetadata = cells.get(i).metadata;
+      let cellTagsData = cellMetadata.get('tags') as string[];
+      if (cellMetadata) {
+        for (var j=0; j<cellTagsData.length; j++) {
+          if (cellTagsData[j] == oldTag) {
+            cellTagsData[j] = newTag;
+          }
+        }
+        cellMetadata.set('tags', cellTagsData);
+      }
+      /* if (oldTag in cell.metadata.get("cells")) {
+        let tagList = cell.metadata.get("cells");
         let index = tagList.indexOf(oldTag);
         tagList = tagList.splice(index, 1);
         tagList = tagList.put(newTag);
-        cell.model.metadata.set(tagList);
-      }
+        cell.metadata.set(tagList);
+      } */
     }
   }
 
   showNewTagInputBox(_self: TagsWidget) {
-    if (!_self.addingNewTag) {
-      _self.addingNewTag = true;
+    if (_self.editingStatus == TAG_EDIT_STATUS_NULL) {
+      _self.editingStatus = TAG_EDIT_STATUS_ADD;
       let node = VirtualDOM.realize(
         h.div({ className: TAG_LABEL_DIV_CLASS },
           h.input({ className: TAG_NEW_TAG_INPUT }))
@@ -140,15 +152,7 @@ class TagsWidget extends Widget {
     }
   }
 
-  showReplaceTagInputBox(_self: TagsWidget) {
-    let node = VirtualDOM.realize(
-      h.div({ className: TAG_RENAME_BUTTON_CLASS },
-        h.input({ className: TAG_RENAME_TAG_INPUT }))
-    )
-    _self.allTagsNode.appendChild(node);
-  }
-
-  finishAddingNewTags(_self: TagsWidget) {
+  didFinishEditingTags(_self: TagsWidget) {
     /* let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT);
     let tagNames: string[] = [];
     for (var i=0; i<newTagInputs.length; i++) {
@@ -158,10 +162,15 @@ class TagsWidget extends Widget {
     for (var i=0; i<tagNames.length; i++) {
       write_tag(_self.currentActiveCell, tagNames[i], true);
     } */
-    if (_self.addingNewTag) {
-      _self.addingNewTag = false;
-      let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0] as HTMLInputElement;
-      write_tag(_self.currentActiveCell, newTagInputs.value, true);
+    if (_self.editingStatus != TAG_EDIT_STATUS_NULL) {
+      if (_self.editingStatus == TAG_EDIT_STATUS_ADD) {
+        let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0] as HTMLInputElement;
+        write_tag(_self.currentActiveCell, newTagInputs.value, true);
+      } else if (_self.editingStatus == TAG_EDIT_STATUS_RENAME) {
+        let newTagInputs = _self.node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0] as HTMLInputElement;
+        this.replaceName(newTagInputs.value);
+      }
+      _self.editingStatus = TAG_EDIT_STATUS_NULL;
     }
   }
 
@@ -170,12 +179,16 @@ class TagsWidget extends Widget {
   }
 
   renameSelectedTagForAllCells(_self: TagsWidget) {
-    let node = VirtualDOM.realize(
-      h.div({ className: TAG_LABEL_DIV_CLASS },
-        h.input({ className: TAG_RENAME_TAG_INPUT, value: _self.selectedTagName }))
-    )
-    _self.selectedTag.innerHTML = '';
-    _self.selectedTag.appendChild(node);
+    if (_self.editingStatus == TAG_EDIT_STATUS_NULL) {
+      _self.editingStatus = TAG_EDIT_STATUS_RENAME;
+      _self.tagOldName = _self.selectedTagName;
+      let node = VirtualDOM.realize(
+        h.div({ className: TAG_LABEL_DIV_CLASS },
+          h.input({ className: TAG_RENAME_TAG_INPUT, value: _self.tagOldName }))
+      );
+      _self.selectedTag.innerHTML = '';
+      _self.selectedTag.appendChild(node);
+    }
   }
 
   loadTagLabels() {
@@ -238,7 +251,8 @@ class TagsWidget extends Widget {
   currentActiveCell: Cell = null;
   // selectedTags: string[] = [];
   private selectedTag: HTMLElement = null;
-  private addingNewTag = false;
+  private editingStatus = TAG_EDIT_STATUS_NULL;
+  private tagOldName: string = null;
   public notebookTracker: INotebookTracker = null;
 }
 
