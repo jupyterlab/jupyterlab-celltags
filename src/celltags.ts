@@ -32,8 +32,10 @@ function write_tag(cell: Cell, name:string, add:boolean) {
         // Remove tag from tags list
         let rtaglist = <string[]>cell.model.metadata.get('tags');
         var index = rtaglist.indexOf(name);
+        rtaglist.splice(index, 1);
         if (index !== -1) {
-            cell.model.metadata.set('tags', rtaglist.splice(index, 1));
+            cell.model.metadata.set('tags', ['4444', '5555', '6666']);
+            cell.model.metadata.set('tags', rtaglist);
         }
         // If tags list is empty, remove it
         let updated = <string[]>cell.model.metadata.get('tags');
