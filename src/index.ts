@@ -32,8 +32,6 @@ import {
 
 import '../style/index.css';
 
-// import runCell from '@jupyterlab/notebook';
-
 import {
   write_tag
 } from './celltags';
