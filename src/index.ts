@@ -40,7 +40,7 @@ import {
 
 import '../style/index.css';
 
-import runCell from '@jupyterlab/notebook';
+//import runCell from '@jupyterlab/notebook';
 
 import {
   write_tag
@@ -54,6 +54,8 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_DONE_BUTTON_CLASS = 'jp-cellTags-done-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
+const TAG_RENAME_BUTTON_CLASS = 'jp-cellTags-rename-tag-button';
+const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input'
 
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
@@ -61,6 +63,7 @@ function createAllTagsNode() {
       h.label('Tags'),
       h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
+      h.button({ className: TAG_RENAME_BUTTON_CLASS },'Rename Tag'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -69,9 +72,10 @@ function createAllTagsNode() {
 
 class TagsWidget extends Widget {
 
-  constructor() {
+  constructor(notebook_Tracker: INotebookTracker) {
     super({ node: createAllTagsNode() });
     let _self = this;
+    this.notebookTracker = notebook_Tracker;
 
     let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
     addTagButton.addEventListener('click', function() {
@@ -82,21 +86,32 @@ class TagsWidget extends Widget {
     doneButton.addEventListener('click', function() {
       _self.finishAddingNewTags(_self);
     }, false);
+    
+    let renameButton = this.node.getElementsByClassName(TAG_RENAME_BUTTON_CLASS)[0];
+    renameButton.addEventListener('click', function() {
+      _self.showReplaceTagInputBox(_self);
+      let replaceTagInput = _self.node.getElementsByClassName(TAG_RENAME_TAG_INPUT);
+      let replaceTagString:string = (replaceTagInput[1] as HTMLInputElement).value;
+      //let replaceTagString = "MYNEWSTRING";
+      _self.replaceName(replaceTagString);
+    }, false);
   }
 
-  runAll(tracker: INotebookTracker, selectedTag: string) {
-    let session = tracker.currentWidget.session;
-    let notebook = tracker.currentWidget;
+  runAll() {
+    //let session = this.notebookTracker.currentWidget.session;
+    let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
-      if (selectedTag in cell.model.metadata.get("cells")) {
-        runCell(notebook, cell, session );
+      if (this.selectedTagName in cell.model.metadata.get("cells")) {
+        //runCell(notebook, cell, session );
       }
     }
   }
 
-  replaceName(tracker: INotebookTracker, newTag: string, oldTag: string) {
-    let notebook = tracker.currentWidget;
+  replaceName(newTag: string) {
+    console.log("I'm doing something!");
+    let oldTag = this.selectedTagName;
+    let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
       if (oldTag in cell.model.metadata.get("cells")) {
@@ -106,11 +121,21 @@ class TagsWidget extends Widget {
         tagList = tagList.put(newTag);
         cell.model.metadata.set(tagList);
       }
+    }
+  }
 
   showNewTagInputBox(_self: TagsWidget) {
     let node = VirtualDOM.realize(
       h.div({ className: TAG_LABEL_DIV_CLASS },
         h.input({ className: TAG_NEW_TAG_INPUT }))
+    )
+    _self.allTagsNode.appendChild(node);
+  }
+
+  showReplaceTagInputBox(_self: TagsWidget) {
+    let node = VirtualDOM.realize(
+      h.div({ className: TAG_RENAME_BUTTON_CLASS },
+        h.input({ className: TAG_RENAME_TAG_INPUT }))
     )
     _self.allTagsNode.appendChild(node);
   }
@@ -187,16 +212,16 @@ class TagsWidget extends Widget {
   currentActiveCell: Cell = null;
   // selectedTags: string[] = [];
   private selectedTag: HTMLElement = null;
-
+  public notebookTracker: INotebookTracker = null;
 }
 
 class TagsTool extends CellTools.Tool {
 
-  constructor() {
+  constructor(notebook_Tracker: INotebookTracker) {
     super();
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
-    this.widget = new TagsWidget();
+    this.widget = new TagsWidget(notebook_Tracker);
     layout.addWidget(this.widget);
   }
 
@@ -217,6 +242,7 @@ class TagsTool extends CellTools.Tool {
   }
 
   private widget: TagsWidget = null;
+  public notebookTracker: INotebookTracker = null;
 } 
 
 namespace TagsTool {
@@ -229,14 +255,16 @@ namespace TagsTool {
 /**
  * Initialization data for the jupyterlab-celltags extension.
  */
+function activate(app: JupyterLab, cellTools: ICellTools, notebook_Tracker: INotebookTracker) {
+  let tagsTool = new TagsTool(notebook_Tracker);
+  cellTools.addItem({tool: tagsTool}) 
+}
+
 const extension: JupyterLabPlugin<void> = {
   id: 'jupyterlab-celltags',
   autoStart: true,
   requires: [ICellTools, INotebookTracker],
-  activate: (app: JupyterLab, cellTools: ICellTools) => {
-    let tagsTool = new TagsTool();
-    cellTools.addItem({tool: tagsTool})    
-  }
+  activate: activate
 };
 
 export default extension;
