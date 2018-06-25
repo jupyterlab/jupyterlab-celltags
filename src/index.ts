@@ -3,11 +3,7 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  PathExt,nbformat
-} from '@jupyterlab/coreutils';
-
-import {
-  ICellTools, NotebookActions, CellTools, INotebookTracker
+  ICellTools, CellTools, INotebookTracker
 } from '@jupyterlab/notebook';
 
 import {
@@ -34,16 +30,7 @@ import {
   Styling
 } from '@jupyterlab/apputils';
 
-import {
-  ReadonlyJSONObject,JSONExt
-} from '@phosphor/coreutils';
-
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-import { IDocumentManager } from '@jupyterlab/docmanager';
-
 import '../style/index.css';
-
-import * as ext from '@jupyterlab/notebook-extension';
 
 // import runCell from '@jupyterlab/notebook';
 
@@ -110,29 +97,30 @@ class TagsWidget extends Widget {
   }
 
   runAll() {
-    let session = this.notebookTracker.currentWidget.session;
+    //let session = this.notebookTracker.currentWidget.session;
     let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
-      let currentCell = cell as Cell;
+      //let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        this.app.commands.execute('notebook:run-cell', {
+        /*this.app.commands.execute('notebook:run-cell', {
           notebook: notebook.notebook, cell: currentCell, session: session
-        });
+        });*/
       }
     }
   }
 
   deleteAll() {
-    let session = this.notebookTracker.currentWidget.session;
+    //let session = this.notebookTracker.currentWidget.session;
     let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
-      let currentCell = cell as Cell;
+      //let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        this.app.commands.execute('notebook:delete-cell', {
+        this.app.commands.execute('notebook:delete-cell')
+        /*, {
           notebook: notebook.notebook, cell: currentCell, session: session
-        });
+        })*/;
       }
     }
   }
