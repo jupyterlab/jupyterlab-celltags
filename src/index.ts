@@ -162,6 +162,13 @@ class TagsWidget extends Widget {
         h.div({ className: TAG_LABEL_DIV_CLASS },
           h.input({ className: TAG_NEW_TAG_INPUT }))
       )
+      node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0].addEventListener('keydown', function(event) {
+        switch ((event as KeyboardEvent).keyCode) {
+        case 13:
+          _self.didFinishEditingTags(_self);
+          break;
+        }
+      })
       _self.allTagsNode.appendChild(node);
     }
   }
@@ -182,9 +189,10 @@ class TagsWidget extends Widget {
         write_tag(_self.currentActiveCell, newTagInputs.value, true);
       } else if (_self.editingStatus == TAG_EDIT_STATUS_RENAME) {
         let newTagInputs = _self.node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0] as HTMLInputElement;
-        this.replaceName(newTagInputs.value);
+        _self.replaceName(newTagInputs.value);
       }
       _self.editingStatus = TAG_EDIT_STATUS_NULL;
+      _self.loadTagLabels();
     }
   }
 
@@ -200,6 +208,13 @@ class TagsWidget extends Widget {
         h.div({ className: TAG_LABEL_DIV_CLASS },
           h.input({ className: TAG_RENAME_TAG_INPUT, value: _self.tagOldName }))
       );
+      node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0].addEventListener('keydown', function(event) {
+        switch ((event as KeyboardEvent).keyCode) {
+        case 13:
+          _self.didFinishEditingTags(_self);
+          break;
+        }
+      })
       _self.selectedTag.innerHTML = '';
       _self.selectedTag.appendChild(node);
     }
@@ -237,6 +252,14 @@ class TagsWidget extends Widget {
       let index = _self.selectedTags.indexOf(tagName, 0);
       _self.selectedTags.splice(index, 1);
     } */
+    if (_self.editingStatus != TAG_EDIT_STATUS_NULL) {
+      if (tag == _self.selectedTag) {
+        return;
+      }
+      _self.editingStatus = TAG_EDIT_STATUS_NULL;
+      _self.tagOldName = null;
+      _self.loadTagLabels();
+    }
     if (_self.selectedTag == null) {
       _self.selectedTag = tag;
       _self.selectedTag.style.backgroundColor = 'red';
@@ -248,7 +271,6 @@ class TagsWidget extends Widget {
       _self.selectedTag = tag;
       _self.selectedTag.style.backgroundColor = 'red';
     }
-    console.log(_self.selectedTagName)
   }
 
   get allTagsNode() {
