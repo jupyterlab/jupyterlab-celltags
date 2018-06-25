@@ -40,7 +40,7 @@ import {
 
 import '../style/index.css';
 
-import runCell from '@jupyterlab/notebook';
+// import runCell from '@jupyterlab/notebook';
 
 import {
   write_tag
@@ -53,13 +53,18 @@ const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_DONE_BUTTON_CLASS = 'jp-cellTags-done-button';
+const TAG_REMOVE_TAG_BUTTON_CLASS = 'jp-cellTags-remove-button';
+const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
+const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
 
 function createAllTagsNode() {
   let node = VirtualDOM.realize(
     h.div({ },
       h.label('Tags'),
       h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
+      h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
+      h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
@@ -82,9 +87,19 @@ class TagsWidget extends Widget {
     doneButton.addEventListener('click', function() {
       _self.finishAddingNewTags(_self);
     }, false);
+
+    let removeButton = this.node.getElementsByClassName(TAG_REMOVE_TAG_BUTTON_CLASS)[0];
+    removeButton.addEventListener('click', function() {
+      _self.removeSelectedTagForSelectedCell(_self);
+    }, false);
+
+    let renameButton = this.node.getElementsByClassName(TAG_RENAME_TAG_BUTTON_CLASS)[0];
+    renameButton.addEventListener('click', function() {
+      _self.renameSelectedTagForAllCells(_self);
+    }, false);
   }
 
-  runAll(tracker: INotebookTracker, selectedTag: string) {
+  /* runAll(tracker: INotebookTracker, selectedTag: string) {
     let session = tracker.currentWidget.session;
     let notebook = tracker.currentWidget;
     let cell:any;
@@ -106,17 +121,22 @@ class TagsWidget extends Widget {
         tagList = tagList.put(newTag);
         cell.model.metadata.set(tagList);
       }
+    }
+  }*/
 
   showNewTagInputBox(_self: TagsWidget) {
-    let node = VirtualDOM.realize(
-      h.div({ className: TAG_LABEL_DIV_CLASS },
-        h.input({ className: TAG_NEW_TAG_INPUT }))
-    )
-    _self.allTagsNode.appendChild(node);
+    if (!_self.addingNewTag) {
+      _self.addingNewTag = true;
+      let node = VirtualDOM.realize(
+        h.div({ className: TAG_LABEL_DIV_CLASS },
+          h.input({ className: TAG_NEW_TAG_INPUT }))
+      )
+      _self.allTagsNode.appendChild(node);
+    }
   }
 
   finishAddingNewTags(_self: TagsWidget) {
-    let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT);
+    /* let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT);
     let tagNames: string[] = [];
     for (var i=0; i<newTagInputs.length; i++) {
       let tagName: string = (newTagInputs[i] as HTMLInputElement).value;
@@ -124,7 +144,25 @@ class TagsWidget extends Widget {
     }
     for (var i=0; i<tagNames.length; i++) {
       write_tag(_self.currentActiveCell, tagNames[i], true);
+    } */
+    if (_self.addingNewTag) {
+      _self.addingNewTag = false;
+      let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0] as HTMLInputElement;
+      write_tag(_self.currentActiveCell, newTagInputs.value, true);
     }
+  }
+
+  removeSelectedTagForSelectedCell(_self: TagsWidget) {
+    write_tag(_self.currentActiveCell, _self.selectedTagName, false);
+  }
+
+  renameSelectedTagForAllCells(_self: TagsWidget) {
+    let node = VirtualDOM.realize(
+      h.div({ className: TAG_LABEL_DIV_CLASS },
+        h.input({ className: TAG_RENAME_TAG_INPUT, value: _self.selectedTagName }))
+    )
+    _self.selectedTag.innerHTML = '';
+    _self.selectedTag.appendChild(node);
   }
 
   loadTagLabels() {
@@ -187,6 +225,7 @@ class TagsWidget extends Widget {
   currentActiveCell: Cell = null;
   // selectedTags: string[] = [];
   private selectedTag: HTMLElement = null;
+  private addingNewTag = false;
 
 }
 
