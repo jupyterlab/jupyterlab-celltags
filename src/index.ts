@@ -148,6 +148,13 @@ class TagsWidget extends Widget {
         h.div({ className: TAG_LABEL_DIV_CLASS },
           h.input({ className: TAG_NEW_TAG_INPUT }))
       )
+      node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0].addEventListener('keydown', function(event) {
+        switch ((event as KeyboardEvent).keyCode) {
+        case 13:
+          _self.didFinishEditingTags(_self);
+          break;
+        }
+      })
       _self.allTagsNode.appendChild(node);
     }
   }
@@ -187,6 +194,13 @@ class TagsWidget extends Widget {
         h.div({ className: TAG_LABEL_DIV_CLASS },
           h.input({ className: TAG_RENAME_TAG_INPUT, value: _self.tagOldName }))
       );
+      node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0].addEventListener('keydown', function(event) {
+        switch ((event as KeyboardEvent).keyCode) {
+        case 13:
+          _self.didFinishEditingTags(_self);
+          break;
+        }
+      })
       _self.selectedTag.innerHTML = '';
       _self.selectedTag.appendChild(node);
     }
@@ -243,7 +257,6 @@ class TagsWidget extends Widget {
       _self.selectedTag = tag;
       _self.selectedTag.style.backgroundColor = 'red';
     }
-    console.log(_self.selectedTagName)
   }
 
   get allTagsNode() {
@@ -307,6 +320,7 @@ namespace TagsTool {
  */
 function activate(app: JupyterLab, cellTools: ICellTools, notebook_Tracker: INotebookTracker) {
   let tagsTool = new TagsTool(notebook_Tracker);
+  app.commands.execute('notebook:run-cell', {a: 'hello'});
   cellTools.addItem({tool: tagsTool}) 
 }
 
