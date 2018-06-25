@@ -3,11 +3,11 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  ICellTools
-} from '@jupyterlab/notebook';
+  PathExt,nbformat
+} from '@jupyterlab/coreutils';
 
 import {
-  CellTools
+  ICellTools, NotebookActions, CellTools, INotebookTracker
 } from '@jupyterlab/notebook';
 
 import {
@@ -35,10 +35,15 @@ import {
 } from '@jupyterlab/apputils';
 
 import {
-  INotebookTracker
-} from '@jupyterlab/notebook';
+  ReadonlyJSONObject,JSONExt
+} from '@phosphor/coreutils';
+
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { IDocumentManager } from '@jupyterlab/docmanager';
 
 import '../style/index.css';
+
+import * as ext from '@jupyterlab/notebook-extension';
 
 // import runCell from '@jupyterlab/notebook';
 
@@ -57,7 +62,6 @@ const TAG_REMOVE_TAG_BUTTON_CLASS = 'jp-cellTags-remove-button';
 const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
-
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
@@ -78,10 +82,11 @@ function createAllTagsNode() {
 
 class TagsWidget extends Widget {
 
-  constructor(notebook_Tracker: INotebookTracker) {
+  constructor(notebook_Tracker: INotebookTracker,app: JupyterLab) {
     super({ node: createAllTagsNode() });
     let _self = this;
     this.notebookTracker = notebook_Tracker;
+    this.app = app;
 
     let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
     addTagButton.addEventListener('click', function() {
@@ -105,18 +110,34 @@ class TagsWidget extends Widget {
   }
 
   runAll() {
-    //let session = this.notebookTracker.currentWidget.session;
+    let session = this.notebookTracker.currentWidget.session;
     let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
+      let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        //runCell(notebook, cell, session );
+        this.app.commands.execute('notebook:run-cell', {
+          notebook: notebook.notebook, cell: currentCell, session: session
+        });
+      }
+    }
+  }
+
+  deleteAll() {
+    let session = this.notebookTracker.currentWidget.session;
+    let notebook = this.notebookTracker.currentWidget;
+    let cell:any;
+    for (cell in notebook.model.cells) {
+      let currentCell = cell as Cell;
+      if (this.selectedTagName in cell.model.metadata.get("cells")) {
+        this.app.commands.execute('notebook:delete-cell', {
+          notebook: notebook.notebook, cell: currentCell, session: session
+        });
       }
     }
   }
 
   replaceName(newTag: string) {
-    console.log("I'm doing something!");
     let oldTag = this.tagOldName;
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
@@ -131,13 +152,6 @@ class TagsWidget extends Widget {
         }
         cellMetadata.set('tags', cellTagsData);
       }
-      /* if (oldTag in cell.metadata.get("cells")) {
-        let tagList = cell.metadata.get("cells");
-        let index = tagList.indexOf(oldTag);
-        tagList = tagList.splice(index, 1);
-        tagList = tagList.put(newTag);
-        cell.metadata.set(tagList);
-      } */
     }
   }
 
@@ -254,15 +268,16 @@ class TagsWidget extends Widget {
   private editingStatus = TAG_EDIT_STATUS_NULL;
   private tagOldName: string = null;
   public notebookTracker: INotebookTracker = null;
+  private app: JupyterLab = null;
 }
 
 class TagsTool extends CellTools.Tool {
 
-  constructor(notebook_Tracker: INotebookTracker) {
+  constructor(notebook_Tracker: INotebookTracker, app: JupyterLab) {
     super();
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
-    this.widget = new TagsWidget(notebook_Tracker);
+    this.widget = new TagsWidget(notebook_Tracker, app);
     layout.addWidget(this.widget);
   }
 
@@ -297,7 +312,7 @@ namespace TagsTool {
  * Initialization data for the jupyterlab-celltags extension.
  */
 function activate(app: JupyterLab, cellTools: ICellTools, notebook_Tracker: INotebookTracker) {
-  let tagsTool = new TagsTool(notebook_Tracker);
+  let tagsTool = new TagsTool(notebook_Tracker, app);
   cellTools.addItem({tool: tagsTool}) 
 }
 
