@@ -168,9 +168,10 @@ class TagsWidget extends Widget {
         write_tag(_self.currentActiveCell, newTagInputs.value, true);
       } else if (_self.editingStatus == TAG_EDIT_STATUS_RENAME) {
         let newTagInputs = _self.node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0] as HTMLInputElement;
-        this.replaceName(newTagInputs.value);
+        _self.replaceName(newTagInputs.value);
       }
       _self.editingStatus = TAG_EDIT_STATUS_NULL;
+      _self.loadTagLabels();
     }
   }
 
@@ -223,6 +224,14 @@ class TagsWidget extends Widget {
       let index = _self.selectedTags.indexOf(tagName, 0);
       _self.selectedTags.splice(index, 1);
     } */
+    if (_self.editingStatus != TAG_EDIT_STATUS_NULL) {
+      if (tag == _self.selectedTag) {
+        return;
+      }
+      _self.editingStatus = TAG_EDIT_STATUS_NULL;
+      _self.tagOldName = null;
+      _self.loadTagLabels();
+    }
     if (_self.selectedTag == null) {
       _self.selectedTag = tag;
       _self.selectedTag.style.backgroundColor = 'red';
