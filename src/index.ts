@@ -47,6 +47,8 @@ const TAG_REMOVE_TAG_BUTTON_CLASS = 'jp-cellTags-remove-button';
 const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
+const TAG_RUN_ALL_BUTTON_CLASS = 'jp-cellTags-run-all-button';
+const TAG_DELETE_ALL_BUTTON_CLASS = 'jp-cellTags-delete-all-button';
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
@@ -59,6 +61,8 @@ function createAllTagsNode() {
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
+      h.button({ className: TAG_RUN_ALL_BUTTON_CLASS }, 'Run All'),
+      h.button({ className: TAG_DELETE_ALL_BUTTON_CLASS }, 'Delete All'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -92,20 +96,32 @@ class TagsWidget extends Widget {
     renameButton.addEventListener('click', function() {
       _self.renameSelectedTagForAllCells(_self);
     }, false);
+
+    let runAllButton = this.node.getElementsByClassName(TAG_RUN_ALL_BUTTON_CLASS)[0];
+    runAllButton.addEventListener('click', function() {
+      _self.runAll();
+    }, false);
+
+    let deleteAllButton = this.node.getElementsByClassName(TAG_DELETE_ALL_BUTTON_CLASS)[0];
+    deleteAllButton.addEventListener('click', function() {
+      _self.deleteAll();
+    }, false);
   }
 
   runAll() {
+    /*
     //let session = this.notebookTracker.currentWidget.session;
     let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
       //let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        /*this.app.commands.execute('notebook:run-cell', {
+        this.app.commands.execute('notebook:run-cell', {
           notebook: notebook.notebook, cell: currentCell, session: session
-        });*/
+        });
       }
-    }
+    } 
+    console.log('run all');*/
   }
 
   deleteAll() {
@@ -120,7 +136,8 @@ class TagsWidget extends Widget {
           notebook: notebook.notebook, cell: currentCell, session: session
         })*/;
       }
-    }
+    } */
+    console.log('delete all');
   }
 
   replaceName(newTag: string) {
