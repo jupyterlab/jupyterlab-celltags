@@ -2,12 +2,8 @@ import {
   JupyterLab, JupyterLabPlugin
 } from '@jupyterlab/application';
 
-/* import {
-  ICellTools, NotebookActions, CellTools, INotebookTracker
-} from '@jupyterlab/notebook'; */
-
 import {
-  ICellTools, NotebookActions, CellTools, INotebookTracker
+  ICellTools, CellTools, INotebookTracker
 } from '@jupyterlab/notebook';
 
 import {
@@ -113,30 +109,32 @@ class TagsWidget extends Widget {
   }
 
   runAll() {
-    /* let session = this.notebookTracker.currentWidget.session;
+    /*
+    //let session = this.notebookTracker.currentWidget.session;
     let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
-      let currentCell = cell as Cell;
+      //let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
         this.app.commands.execute('notebook:run-cell', {
           notebook: notebook.notebook, cell: currentCell, session: session
         });
       }
-    } */
-    console.log('run all');
+    } 
+    console.log('run all');*/
   }
 
   deleteAll() {
-    /* let session = this.notebookTracker.currentWidget.session;
+    //let session = this.notebookTracker.currentWidget.session;
     let notebook = this.notebookTracker.currentWidget;
     let cell:any;
     for (cell in notebook.model.cells) {
-      let currentCell = cell as Cell;
+      //let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        this.app.commands.execute('notebook:delete-cell', {
+        this.app.commands.execute('notebook:delete-cell')
+        /*, {
           notebook: notebook.notebook, cell: currentCell, session: session
-        });
+        })*/;
       }
     } */
     console.log('delete all');
