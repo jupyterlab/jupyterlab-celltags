@@ -48,7 +48,7 @@ const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
 const TAG_RUN_ALL_BUTTON_CLASS = 'jp-cellTags-run-all-button';
-const TAG_DELETE_ALL_BUTTON_CLASS = 'jp-cellTags-delete-all-button';
+const TAG_SELECT_ALL_BUTTON_CLASS = 'jp-cellTags-select-all-button';
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
@@ -62,7 +62,7 @@ function createAllTagsNode() {
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
       h.button({ className: TAG_RUN_ALL_BUTTON_CLASS }, 'Run All'),
-      h.button({ className: TAG_DELETE_ALL_BUTTON_CLASS }, 'Delete All'),
+      h.button({ className: TAG_SELECT_ALL_BUTTON_CLASS }, 'Select All'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -71,11 +71,10 @@ function createAllTagsNode() {
 
 class TagsWidget extends Widget {
 
-  constructor(notebook_Tracker: INotebookTracker,app: JupyterLab) {
+  constructor(notebook_Tracker: INotebookTracker) {
     super({ node: createAllTagsNode() });
     let _self = this;
     this.notebookTracker = notebook_Tracker;
-    this.app = app;
 
     let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
     addTagButton.addEventListener('click', function() {
@@ -97,47 +96,59 @@ class TagsWidget extends Widget {
       _self.renameSelectedTagForAllCells(_self);
     }, false);
 
-    let runAllButton = this.node.getElementsByClassName(TAG_RUN_ALL_BUTTON_CLASS)[0];
-    runAllButton.addEventListener('click', function() {
-      _self.runAll();
-    }, false);
-
-    let deleteAllButton = this.node.getElementsByClassName(TAG_DELETE_ALL_BUTTON_CLASS)[0];
-    deleteAllButton.addEventListener('click', function() {
-      _self.deleteAll();
+    let selectAllButton = this.node.getElementsByClassName(TAG_SELECT_ALL_BUTTON_CLASS)[0];
+    selectAllButton.addEventListener('click', function() {
+      _self.selectAll(_self);
     }, false);
   }
 
-  runAll() {
-    /*
-    //let session = this.notebookTracker.currentWidget.session;
-    let notebook = this.notebookTracker.currentWidget;
-    let cell:any;
-    for (cell in notebook.model.cells) {
-      //let currentCell = cell as Cell;
-      if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        this.app.commands.execute('notebook:run-cell', {
-          notebook: notebook.notebook, cell: currentCell, session: session
-        });
+  containsTag(tag:string, cell: Cell) {
+    let tagList = <string[]>cell.model.metadata.get("cells");
+    console.log(tagList);
+    for (let i=0; i< tagList.length; i++){
+      if (tagList[i] === tag) {
+        return true;
       }
-    } 
-    console.log('run all');*/
+    }
+    return false;
   }
 
-  deleteAll() {
+  selectAll(_self: TagsWidget) {
     //let session = this.notebookTracker.currentWidget.session;
-    let notebook = this.notebookTracker.currentWidget;
-    let cell:any;
-    for (cell in notebook.model.cells) {
-      //let currentCell = cell as Cell;
+    let notebookPanel = this.notebookTracker.currentWidget;
+    let notebook = notebookPanel.notebook;
+    //let cell:any;
+    let first:boolean = true;
+    for (let i=0; i< notebookPanel.model.cells.length; i++) {
+      let currentCell = <Cell>notebook.widgets[i];//notebookPanel.model.cells.get(i);
+      if (this.containsTag(this.selectedTagName, currentCell)) {
+        if (first === true) {
+          console.log("changing active cell");
+          notebook.activeCellIndex= i;
+          notebook.deselectAll();
+          first =false;
+        }
+        else {
+          notebook.select(<Cell>notebook.widgets[i]);
+        }
+      }
+    }
+    /*
+    for (cell in notebookPanel.model.cells) {
+      let currentCell = cell as Cell;
       if (this.selectedTagName in cell.model.metadata.get("cells")) {
-        this.app.commands.execute('notebook:delete-cell')
-        /*, {
-          notebook: notebook.notebook, cell: currentCell, session: session
-        })*/;
+        if (first === true) {
+          notebook.activeCellIndex= cellIndex;
+          notebook.deselectAll();
+          first =false;
+        }
+        else {
+          notebook.select(ewfw)
+        }
+        cellIndex+=1;
       }
     } */
-    console.log('delete all');
+    console.log('selected all');
   }
 
   replaceName(newTag: string) {
@@ -293,7 +304,6 @@ class TagsWidget extends Widget {
   private editingStatus = TAG_EDIT_STATUS_NULL;
   private tagOldName: string = null;
   public notebookTracker: INotebookTracker = null;
-  private app: JupyterLab = null;
 }
 
 class TagsTool extends CellTools.Tool {
@@ -302,7 +312,7 @@ class TagsTool extends CellTools.Tool {
     super();
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
-    this.widget = new TagsWidget(notebook_Tracker, app);
+    this.widget = new TagsWidget(notebook_Tracker);
     layout.addWidget(this.widget);
   }
 
