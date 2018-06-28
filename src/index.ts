@@ -47,7 +47,6 @@ const TAG_REMOVE_TAG_BUTTON_CLASS = 'jp-cellTags-remove-button';
 const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
-const TAG_RUN_ALL_BUTTON_CLASS = 'jp-cellTags-run-all-button';
 const TAG_SELECT_ALL_BUTTON_CLASS = 'jp-cellTags-select-all-button';
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
@@ -61,7 +60,6 @@ function createAllTagsNode() {
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
-      h.button({ className: TAG_RUN_ALL_BUTTON_CLASS }, 'Run All'),
       h.button({ className: TAG_SELECT_ALL_BUTTON_CLASS }, 'Select All'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
@@ -103,14 +101,16 @@ class TagsWidget extends Widget {
   }
 
   containsTag(tag:string, cell: Cell) {
-    let tagList = <string[]>cell.model.metadata.get("cells");
-    console.log(tagList);
-    for (let i=0; i< tagList.length; i++){
-      if (tagList[i] === tag) {
-        return true;
+    let tagList = <string[]>cell.model.metadata.get("tags");
+    if (tagList) {
+      console.log(tagList);
+      for (let i=0; i< tagList.length; i++){
+        if (tagList[i] === tag) {
+          return true;
+        }
       }
+      return false;
     }
-    return false;
   }
 
   selectAll(_self: TagsWidget) {
