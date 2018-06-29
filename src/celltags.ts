@@ -17,9 +17,15 @@ function write_tag(cell: Cell, name:string, add:boolean) {
             // Tag already exists
             return false;
         }
-        wtaglist.push(name);
-        cell.model.metadata.set('tags', ['4444', '5555', '6666']);
-        cell.model.metadata.set('tags', wtaglist);
+        var new_list: string[] = [];
+        for (var i=0; i<wtaglist.length; i++) {
+            if (wtaglist[i].length != 0) {
+                new_list.push(wtaglist[i]);
+            }
+        }
+        new_list.push(name);
+        // console.log((new_list === wtaglist));
+        cell.model.metadata.set('tags', new_list);
     /* If add = false, try to remove from metadata. First check if metadata and 
        metadata.tags exist; if not, return false. Then remove the tag and remove
        metadata.tags if it is empty.*/
@@ -31,12 +37,13 @@ function write_tag(cell: Cell, name:string, add:boolean) {
         }
         // Remove tag from tags list
         let rtaglist = <string[]>cell.model.metadata.get('tags');
-        var index = rtaglist.indexOf(name);
-        rtaglist.splice(index, 1);
-        if (index !== -1) {
-            cell.model.metadata.set('tags', ['4444', '5555', '6666']);
-            cell.model.metadata.set('tags', rtaglist);
+        var new_list: string[] = [];
+        for (var i=0; i<rtaglist.length; i++) {
+            if (rtaglist[i] != name) {
+                new_list.push(rtaglist[i]);
+            }
         }
+        cell.model.metadata.set('tags', new_list);
         // If tags list is empty, remove it
         let updated = <string[]>cell.model.metadata.get('tags');
         if (updated.length === 0) {
