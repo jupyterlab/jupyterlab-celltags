@@ -43,7 +43,7 @@ function write_tag(cell: Cell, name:string, add:boolean) {
             cell.model.metadata.delete('tags');
         }
     }
-    //model.dirty=true;
+    //cell.events.trigger('set_dirty.Notebook', {value: true});
     return true;
 };
 
