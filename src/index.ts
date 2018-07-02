@@ -98,6 +98,7 @@ class TagsWidget extends Widget {
     selectAllButton.addEventListener('click', function() {
       _self.selectAll(_self);
     }, false);
+
   }
 
   containsTag(tag:string, cell: Cell) {
@@ -158,13 +159,16 @@ class TagsWidget extends Widget {
     for (var i=0; i<cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
-      if (cellMetadata) {
+      if (cellTagsData) {
+        let results: string[] = [];
         for (var j=0; j<cellTagsData.length; j++) {
           if (cellTagsData[j] == oldTag) {
-            cellTagsData[j] = newTag;
+            results.push(newTag);
+          } else {
+            results.push(cellTagsData[j]);
           }
         }
-        cellMetadata.set('tags', cellTagsData);
+        cellMetadata.set('tags', results);
       }
     }
   }
@@ -183,7 +187,7 @@ class TagsWidget extends Widget {
           break;
         }
       })
-      _self.allTagsNode.appendChild(node);
+      _self.allTagsForSelectedCellNode.appendChild(node);
     }
   }
 
@@ -201,6 +205,7 @@ class TagsWidget extends Widget {
       if (_self.editingStatus == TAG_EDIT_STATUS_ADD) {
         let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0] as HTMLInputElement;
         write_tag(_self.currentActiveCell, newTagInputs.value, true);
+        _self.addTagIntoAllTagsList(newTagInputs.value);
       } else if (_self.editingStatus == TAG_EDIT_STATUS_RENAME) {
         let newTagInputs = _self.node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0] as HTMLInputElement;
         _self.replaceName(newTagInputs.value);
@@ -234,8 +239,35 @@ class TagsWidget extends Widget {
     }
   }
 
+  addTagIntoAllTagsList(name: string) {
+    if (this.allTagsInNotebook == null) {
+      this.allTagsInNotebook = [name];
+    } else {
+      if (this.allTagsInNotebook.indexOf(name) < 0) {
+        this.allTagsInNotebook.push(name);
+      }
+    }
+  }
+
+  getAllTagsInNotebook() {
+    let notebook = this.notebookTracker.currentWidget;
+    let cells = notebook.model.cells;
+    this.allTagsInNotebook = null;
+    for (var i=0; i<cells.length; i++) {
+      let cellMetadata = cells.get(i).metadata;
+      let cellTagsData = cellMetadata.get('tags') as string[];
+      if (cellTagsData) {
+        for (var j=0; j<cellTagsData.length; j++) {
+          let name = cellTagsData[j];
+          this.addTagIntoAllTagsList(name);
+        }
+      }
+    }
+    console.log(this.allTagsInNotebook)
+  }
+
   loadTagLabels() {
-    this.allTagsNode.innerHTML = '';
+    this.allTagsForSelectedCellNode.innerHTML = '';
     if (this.currentActiveCell != null) {
       let tags = this.currentActiveCell.model.metadata.get("tags")
       if (tags != null) {
@@ -248,7 +280,7 @@ class TagsWidget extends Widget {
           node.addEventListener('click', function() {
             _self.tagClicked(_self, this);
           })
-          _self.allTagsNode.appendChild(node);
+          _self.allTagsForSelectedCellNode.appendChild(node);
         });
       }
     }
@@ -287,7 +319,7 @@ class TagsWidget extends Widget {
     }
   }
 
-  get allTagsNode() {
+  get allTagsForSelectedCellNode() {
     return this.node.getElementsByClassName(TAGS_COLLECTION_CLASS)[0];
   }
 
@@ -300,6 +332,8 @@ class TagsWidget extends Widget {
 
   currentActiveCell: Cell = null;
   // selectedTags: string[] = [];
+
+  allTagsInNotebook: [string] = null;
   private selectedTag: HTMLElement = null;
   private editingStatus = TAG_EDIT_STATUS_NULL;
   private tagOldName: string = null;
@@ -310,6 +344,7 @@ class TagsTool extends CellTools.Tool {
 
   constructor(notebook_Tracker: INotebookTracker, app: JupyterLab) {
     super();
+    this.notebookTracker = notebook_Tracker;
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
     this.widget = new TagsWidget(notebook_Tracker);
@@ -320,6 +355,17 @@ class TagsTool extends CellTools.Tool {
     return this.widget.selectedTagName;
   }
 
+  delay(ms: number) {
+    return new Promise<void>(function(resolve) {
+        setTimeout(resolve, ms);
+    });
+  }
+
+  async loadAllTagsData() {
+    await this.delay(100);
+    this.widget.getAllTagsInNotebook();
+  }
+
   /**
    * Handle a change to the active cell.
    */
@@ -328,8 +374,13 @@ class TagsTool extends CellTools.Tool {
     this.widget.loadTagLabels();
   }
 
+  protected onAfterAttach() {
+    this.loadAllTagsData();
+  }
+
   protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
     this.widget.loadTagLabels();
+    this.widget.getAllTagsInNotebook();
   }
 
   private widget: TagsWidget = null;
