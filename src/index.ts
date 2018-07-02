@@ -49,6 +49,7 @@ const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
 const TAG_SELECT_ALL_BUTTON_CLASS = 'jp-cellTags-select-all-button';
 const TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS = 'jp-cellTags-all-tags-in-notebook-div';
+const TAG_SEARCH_INPUT_CLASS = 'jp-cellTags-search-input'
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
@@ -57,6 +58,7 @@ function createAllTagsNode() {
   let node = VirtualDOM.realize(
     h.div({ },
       h.label('Tags'),
+      h.input({ className: TAG_SEARCH_INPUT_CLASS }),
       h.div({ className: TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS }),
       h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
@@ -75,6 +77,11 @@ class TagsWidget extends Widget {
     super({ node: createAllTagsNode() });
     let _self = this;
     this.notebookTracker = notebook_Tracker;
+
+    let searchInput = this.node.getElementsByClassName(TAG_SEARCH_INPUT_CLASS)[0];
+    searchInput.addEventListener('input', function() {
+      _self.searchBoxValueDidChange(this.value);
+    }, false);
 
     let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
     addTagButton.addEventListener('click', function() {
@@ -286,6 +293,20 @@ class TagsWidget extends Widget {
         });
       }
     }
+  }
+
+  searchBoxValueDidChange(value: string) {
+    var result: string[] = [];
+    if (value.length == 0) {
+      this.loadTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
+      return;
+    }
+    for (var i=0; i<this.allTagsInNotebook.length; i++) {
+      if (this.allTagsInNotebook[i].toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+        result.push(this.allTagsInNotebook[i]);
+      }
+    }
+    this.loadTagLabelsForAllTagsInNotebook(result);
   }
 
   loadTagLabelsForAllTagsInNotebook(tags: string[]) {
