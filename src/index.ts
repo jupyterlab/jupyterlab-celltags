@@ -355,17 +355,6 @@ class TagsTool extends CellTools.Tool {
     return this.widget.selectedTagName;
   }
 
-  delay(ms: number) {
-    return new Promise<void>(function(resolve) {
-        setTimeout(resolve, ms);
-    });
-  }
-
-  async loadAllTagsData() {
-    await this.delay(100);
-    this.widget.getAllTagsInNotebook();
-  }
-
   /**
    * Handle a change to the active cell.
    */
@@ -375,7 +364,9 @@ class TagsTool extends CellTools.Tool {
   }
 
   protected onAfterAttach() {
-    this.loadAllTagsData();
+    this.notebookTracker.currentWidget.context.ready.then(() => { 
+      this.widget.getAllTagsInNotebook(); 
+    });
   }
 
   protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
