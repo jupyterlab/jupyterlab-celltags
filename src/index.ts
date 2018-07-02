@@ -407,9 +407,12 @@ class TagsTool extends CellTools.Tool {
   }
 
   protected onAfterAttach() {
-    this.notebookTracker.currentWidget.context.ready.then(() => { 
+    this.notebookTracker.currentWidget.context.ready.then(() => {
       this.widget.getAllTagsInNotebook(); 
     });
+    this.notebookTracker.currentChanged.connect(() => {
+      this.widget.getAllTagsInNotebook(); 
+    })
   }
 
   protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
