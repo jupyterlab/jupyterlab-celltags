@@ -312,16 +312,18 @@ class TagsWidget extends Widget {
   loadTagLabelsForAllTagsInNotebook(tags: string[]) {
     this.allTagsInNotebookNode.innerHTML = '';
     let _self = this;
-    tags.forEach(function(tag: string) {
-      let node = VirtualDOM.realize(
-        h.div({ className: TAG_LABEL_DIV_CLASS },
-          h.label(tag))
-      )
-      /* node.addEventListener('click', function() {
-        this.tagClicked(this, this);
-      }) */
-      _self.allTagsInNotebookNode.appendChild(node);
-    });
+    if (tags != null) {
+      tags.forEach(function(tag: string) {
+        let node = VirtualDOM.realize(
+          h.div({ className: TAG_LABEL_DIV_CLASS },
+            h.label(tag))
+        )
+        /* node.addEventListener('click', function() {
+          this.tagClicked(this, this);
+        }) */
+        _self.allTagsInNotebookNode.appendChild(node);
+      });
+    }
   }
 
 
