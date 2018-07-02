@@ -48,6 +48,7 @@ const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
 const TAG_SELECT_ALL_BUTTON_CLASS = 'jp-cellTags-select-all-button';
+const TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS = 'jp-cellTags-all-tags-in-notebook-div';
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
@@ -56,6 +57,7 @@ function createAllTagsNode() {
   let node = VirtualDOM.realize(
     h.div({ },
       h.label('Tags'),
+      h.div({ className: TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS }),
       h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
@@ -263,7 +265,7 @@ class TagsWidget extends Widget {
         }
       }
     }
-    console.log(this.allTagsInNotebook)
+    this.loadTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
   }
 
   loadTagLabels() {
@@ -285,6 +287,22 @@ class TagsWidget extends Widget {
       }
     }
   }
+
+  loadTagLabelsForAllTagsInNotebook(tags: string[]) {
+    this.allTagsInNotebookNode.innerHTML = '';
+    let _self = this;
+    tags.forEach(function(tag: string) {
+      let node = VirtualDOM.realize(
+        h.div({ className: TAG_LABEL_DIV_CLASS },
+          h.label(tag))
+      )
+      /* node.addEventListener('click', function() {
+        this.tagClicked(this, this);
+      }) */
+      _self.allTagsInNotebookNode.appendChild(node);
+    });
+  }
+
 
   tagClicked(_self: TagsWidget, tag: HTMLElement) {
     /* The commented out code below supports selecting multiple cells */
@@ -321,6 +339,10 @@ class TagsWidget extends Widget {
 
   get allTagsForSelectedCellNode() {
     return this.node.getElementsByClassName(TAGS_COLLECTION_CLASS)[0];
+  }
+
+  get allTagsInNotebookNode() {
+    return this.node.getElementsByClassName(TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS)[0];
   }
 
   get selectedTagName() {
