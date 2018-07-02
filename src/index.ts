@@ -48,6 +48,8 @@ const TAG_RENAME_TAG_BUTTON_CLASS = 'jp-cellTags-rename-button';
 const TAG_NEW_TAG_INPUT = 'jp-cellTags-new-tag-input';
 const TAG_RENAME_TAG_INPUT = 'jp-cellTags-rename-tag-input';
 const TAG_SELECT_ALL_BUTTON_CLASS = 'jp-cellTags-select-all-button';
+const TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS = 'jp-cellTags-all-tags-in-notebook-div';
+const TAG_SEARCH_INPUT_CLASS = 'jp-cellTags-search-input'
 const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
@@ -56,6 +58,8 @@ function createAllTagsNode() {
   let node = VirtualDOM.realize(
     h.div({ },
       h.label('Tags'),
+      h.input({ className: TAG_SEARCH_INPUT_CLASS }),
+      h.div({ className: TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS }),
       h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
       h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
@@ -73,6 +77,11 @@ class TagsWidget extends Widget {
     super({ node: createAllTagsNode() });
     let _self = this;
     this.notebookTracker = notebook_Tracker;
+
+    let searchInput = this.node.getElementsByClassName(TAG_SEARCH_INPUT_CLASS)[0];
+    searchInput.addEventListener('input', function() {
+      _self.searchBoxValueDidChange(this.value);
+    }, false);
 
     let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
     addTagButton.addEventListener('click', function() {
@@ -98,6 +107,7 @@ class TagsWidget extends Widget {
     selectAllButton.addEventListener('click', function() {
       _self.selectAll(_self);
     }, false);
+
   }
 
   containsTag(tag:string, cell: Cell) {
@@ -158,13 +168,16 @@ class TagsWidget extends Widget {
     for (var i=0; i<cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
-      if (cellMetadata) {
+      if (cellTagsData) {
+        let results: string[] = [];
         for (var j=0; j<cellTagsData.length; j++) {
           if (cellTagsData[j] == oldTag) {
-            cellTagsData[j] = newTag;
+            results.push(newTag);
+          } else {
+            results.push(cellTagsData[j]);
           }
         }
-        cellMetadata.set('tags', cellTagsData);
+        cellMetadata.set('tags', results);
       }
     }
   }
@@ -183,7 +196,7 @@ class TagsWidget extends Widget {
           break;
         }
       })
-      _self.allTagsNode.appendChild(node);
+      _self.allTagsForSelectedCellNode.appendChild(node);
     }
   }
 
@@ -201,6 +214,7 @@ class TagsWidget extends Widget {
       if (_self.editingStatus == TAG_EDIT_STATUS_ADD) {
         let newTagInputs = _self.node.getElementsByClassName(TAG_NEW_TAG_INPUT)[0] as HTMLInputElement;
         write_tag(_self.currentActiveCell, newTagInputs.value, true);
+        _self.addTagIntoAllTagsList(newTagInputs.value);
       } else if (_self.editingStatus == TAG_EDIT_STATUS_RENAME) {
         let newTagInputs = _self.node.getElementsByClassName(TAG_RENAME_TAG_INPUT)[0] as HTMLInputElement;
         _self.replaceName(newTagInputs.value);
@@ -234,8 +248,35 @@ class TagsWidget extends Widget {
     }
   }
 
+  addTagIntoAllTagsList(name: string) {
+    if (this.allTagsInNotebook == null) {
+      this.allTagsInNotebook = [name];
+    } else {
+      if (this.allTagsInNotebook.indexOf(name) < 0) {
+        this.allTagsInNotebook.push(name);
+      }
+    }
+  }
+
+  getAllTagsInNotebook() {
+    let notebook = this.notebookTracker.currentWidget;
+    let cells = notebook.model.cells;
+    this.allTagsInNotebook = null;
+    for (var i=0; i<cells.length; i++) {
+      let cellMetadata = cells.get(i).metadata;
+      let cellTagsData = cellMetadata.get('tags') as string[];
+      if (cellTagsData) {
+        for (var j=0; j<cellTagsData.length; j++) {
+          let name = cellTagsData[j];
+          this.addTagIntoAllTagsList(name);
+        }
+      }
+    }
+    this.loadTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
+  }
+
   loadTagLabels() {
-    this.allTagsNode.innerHTML = '';
+    this.allTagsForSelectedCellNode.innerHTML = '';
     if (this.currentActiveCell != null) {
       let tags = this.currentActiveCell.model.metadata.get("tags")
       if (tags != null) {
@@ -248,11 +289,43 @@ class TagsWidget extends Widget {
           node.addEventListener('click', function() {
             _self.tagClicked(_self, this);
           })
-          _self.allTagsNode.appendChild(node);
+          _self.allTagsForSelectedCellNode.appendChild(node);
         });
       }
     }
   }
+
+  searchBoxValueDidChange(value: string) {
+    var result: string[] = [];
+    if (value.length == 0) {
+      this.loadTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
+      return;
+    }
+    for (var i=0; i<this.allTagsInNotebook.length; i++) {
+      if (this.allTagsInNotebook[i].toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+        result.push(this.allTagsInNotebook[i]);
+      }
+    }
+    this.loadTagLabelsForAllTagsInNotebook(result);
+  }
+
+  loadTagLabelsForAllTagsInNotebook(tags: string[]) {
+    this.allTagsInNotebookNode.innerHTML = '';
+    let _self = this;
+    if (tags != null) {
+      tags.forEach(function(tag: string) {
+        let node = VirtualDOM.realize(
+          h.div({ className: TAG_LABEL_DIV_CLASS },
+            h.label(tag))
+        )
+        /* node.addEventListener('click', function() {
+          this.tagClicked(this, this);
+        }) */
+        _self.allTagsInNotebookNode.appendChild(node);
+      });
+    }
+  }
+
 
   tagClicked(_self: TagsWidget, tag: HTMLElement) {
     /* The commented out code below supports selecting multiple cells */
@@ -287,8 +360,12 @@ class TagsWidget extends Widget {
     }
   }
 
-  get allTagsNode() {
+  get allTagsForSelectedCellNode() {
     return this.node.getElementsByClassName(TAGS_COLLECTION_CLASS)[0];
+  }
+
+  get allTagsInNotebookNode() {
+    return this.node.getElementsByClassName(TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS)[0];
   }
 
   get selectedTagName() {
@@ -300,6 +377,8 @@ class TagsWidget extends Widget {
 
   currentActiveCell: Cell = null;
   // selectedTags: string[] = [];
+
+  allTagsInNotebook: [string] = null;
   private selectedTag: HTMLElement = null;
   private editingStatus = TAG_EDIT_STATUS_NULL;
   private tagOldName: string = null;
@@ -310,6 +389,7 @@ class TagsTool extends CellTools.Tool {
 
   constructor(notebook_Tracker: INotebookTracker, app: JupyterLab) {
     super();
+    this.notebookTracker = notebook_Tracker;
     let layout = this.layout = new PanelLayout();
     this.addClass(TAG_TOOL_CLASS);
     this.widget = new TagsWidget(notebook_Tracker);
@@ -328,8 +408,18 @@ class TagsTool extends CellTools.Tool {
     this.widget.loadTagLabels();
   }
 
+  protected onAfterAttach() {
+    this.notebookTracker.currentWidget.context.ready.then(() => {
+      this.widget.getAllTagsInNotebook(); 
+    });
+    this.notebookTracker.currentChanged.connect(() => {
+      this.widget.getAllTagsInNotebook(); 
+    })
+  }
+
   protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
     this.widget.loadTagLabels();
+    this.widget.getAllTagsInNotebook();
   }
 
   private widget: TagsWidget = null;
