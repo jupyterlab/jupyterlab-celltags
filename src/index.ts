@@ -59,12 +59,12 @@ function createAllTagsNode() {
     h.div({ },
       h.label('Tags'),
       h.input({ className: TAG_SEARCH_INPUT_CLASS }),
+      h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
+      h.button({ className: TAG_SELECT_ALL_BUTTON_CLASS }, 'Select All'),
       h.div({ className: TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS }),
       h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
       h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
-      h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
       h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
-      h.button({ className: TAG_SELECT_ALL_BUTTON_CLASS }, 'Select All'),
       h.div({ className: TAGS_COLLECTION_CLASS }))
   );
   Styling.styleNode(node);
@@ -326,7 +326,6 @@ class TagsWidget extends Widget {
     }
   }
 
-
   tagClicked(_self: TagsWidget, tag: HTMLElement) {
     /* The commented out code below supports selecting multiple cells */
     /*
@@ -438,7 +437,7 @@ namespace TagsTool {
  */
 function activate(app: JupyterLab, cellTools: ICellTools, notebook_Tracker: INotebookTracker) {
   let tagsTool = new TagsTool(notebook_Tracker, app);
-  cellTools.addItem({tool: tagsTool}) 
+  cellTools.addItem({tool: tagsTool, rank: 1.7}) 
 }
 
 const extension: JupyterLabPlugin<void> = {
