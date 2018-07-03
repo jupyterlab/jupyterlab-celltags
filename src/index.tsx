@@ -103,11 +103,24 @@ class TagsForSelectedCellComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { selectedTab: null };
+    this.state = { selectedTab: null, pendingInput: false };
   }
 
   didSelectTagWithName(name: string) {
     this.setState({ selectedTab: name });
+  }
+
+  didFinishAddingTagWithName(name: string) {
+    this.setState({ pendingInput: false });
+    (this.props.widget as TagsWidget).didFinishAddingTags(name);
+  }
+
+  didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.keyCode == 13) {
+      let value = (event.target as HTMLInputElement).value;
+      (event.target as HTMLInputElement).value = '';
+      this.didFinishAddingTagWithName(value);
+    }
   }
 
   render() {
@@ -133,7 +146,18 @@ class TagsForSelectedCellComponent extends React.Component<any, any> {
         );
       });
     }
-    return renderedTags;
+    return (
+      <div>
+        <button 
+          className={ TAG_ADD_TAG_BUTTON_CLASS }
+          onClick={ () => this.setState( { pendingInput: true } ) }
+        >
+          Add
+        </button>
+        { renderedTags }
+        <input hidden={ !this.state.pendingInput } onKeyDown={ (event) => this.didPressedKeyIn(event) } />
+      </div>
+    );
   }
 
 }
@@ -150,11 +174,6 @@ class TagsWidget extends Widget {
     /* let searchInput = this.node.getElementsByClassName(TAG_SEARCH_INPUT_CLASS)[0];
     searchInput.addEventListener('input', function() {
       _self.searchBoxValueDidChange(this.value);
-    }, false);
-
-    let addTagButton = this.node.getElementsByClassName(TAG_ADD_TAG_BUTTON_CLASS)[0];
-    addTagButton.addEventListener('click', function() {
-      _self.showNewTagInputBox(_self);
     }, false);
 
     let doneButton = this.node.getElementsByClassName(TAG_DONE_BUTTON_CLASS)[0];
@@ -267,6 +286,11 @@ class TagsWidget extends Widget {
       })
       _self.allTagsForSelectedCellNode.appendChild(node);
     }
+  }
+
+  didFinishAddingTags(name: string) {
+    write_tag(this.currentActiveCell, name, true);
+    this.addTagIntoAllTagsList(name);
   }
 
   didFinishEditingTags(_self: TagsWidget) {
