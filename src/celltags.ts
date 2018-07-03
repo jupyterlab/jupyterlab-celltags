@@ -7,7 +7,10 @@ function write_tag(cell: Cell, name:string, add:boolean) {
     /* If add = true, check if tags are undefined; if so, initialize the array.
        Otherwise, check if the tag already exists; if so, return false.
        Then add the tag to metadata.tags. */
-    if (add) {
+    if (name === "") {
+        //do nothing if tag is a blank string - can't add or remove
+    }
+    else if (add) {
         // Add to metadata
         let wtaglist = <string[]>cell.model.metadata.get('tags');
         if (wtaglist === undefined) {
@@ -24,7 +27,6 @@ function write_tag(cell: Cell, name:string, add:boolean) {
             }
         }
         new_list.push(name);
-        // console.log((new_list === wtaglist));
         cell.model.metadata.set('tags', new_list);
     /* If add = false, try to remove from metadata. First check if metadata and 
        metadata.tags exist; if not, return false. Then remove the tag and remove
