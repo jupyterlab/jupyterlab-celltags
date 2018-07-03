@@ -26,19 +26,22 @@ import {
   h, VirtualDOM
 } from '@phosphor/virtualdom';
 
-import {
-  Styling
-} from '@jupyterlab/apputils';
-
 import '../style/index.css';
 
 import {
   write_tag
 } from './celltags';
 
+import * as React from 'react';
+
+import * as ReactDOM from 'react-dom';
+
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
+const HEADER_CLASS = 'jp-cellTags-header';
+const ALL_TAGS_HOST_CLASS = 'jp-cellTags-all-tags-host';
+const TAGS_FOR_CELL_HOST_CLASS = 'jp-cellTags-tags-for-cell-host';
 const TAGS_COLLECTION_CLASS = 'jp-cellTags-all-tags-div';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
@@ -54,31 +57,97 @@ const TAG_EDIT_STATUS_NULL = 0;
 const TAG_EDIT_STATUS_ADD = 1;
 const TAG_EDIT_STATUS_RENAME = 2;
 
-function createAllTagsNode() {
-  let node = VirtualDOM.realize(
-    h.div({ },
-      h.label('Tags'),
-      h.input({ className: TAG_SEARCH_INPUT_CLASS }),
-      h.button({ className: TAG_RENAME_TAG_BUTTON_CLASS }, 'Rename'),
-      h.button({ className: TAG_SELECT_ALL_BUTTON_CLASS }, 'Select All'),
-      h.div({ className: TAGS_ALL_TAGS_IN_NOTEBOOK_CLASS }),
-      h.button({ className: TAG_ADD_TAG_BUTTON_CLASS }, 'New Tag'),
-      h.button({ className: TAG_REMOVE_TAG_BUTTON_CLASS }, 'Remove Tag'),
-      h.button({ className: TAG_DONE_BUTTON_CLASS }, 'Done'),
-      h.div({ className: TAGS_COLLECTION_CLASS }))
-  );
-  Styling.styleNode(node);
-  return node;
+namespace Private {
+
+  export
+  function createAllTagsNode() {
+    const title = 'Tags';
+    return (
+      <React.Fragment>
+        <div className={ HEADER_CLASS }>
+          <span className={ HEADER_CLASS }>{ title }</span>
+        </div>
+        <span>All Tags In Notebook: </span>
+        <div className={ ALL_TAGS_HOST_CLASS }></div>
+        <span>Tags for Selected Cell: </span>
+        <div className={ TAGS_FOR_CELL_HOST_CLASS }></div>
+      </React.Fragment>
+    );
+  }
+
+}
+  
+class AllTagsInNotebookComponent extends React.Component<any, Object> {
+
+  render() {
+    let tags = this.props.tags as string[];
+    var renderedTags = null;
+    if (tags != null) {
+      renderedTags = tags.map((tag, index) => {
+        return (
+          <div
+            className={ TAG_LABEL_DIV_CLASS }
+            onClick={ () => console.log('clicked') }
+          >
+            {tag}
+          </div>
+        );
+      });
+    }
+    return renderedTags;
+  }
+
+}
+
+class TagsForSelectedCellComponent extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = { selectedTab: null };
+  }
+
+  didSelectTagWithName(name: string) {
+    this.setState({ selectedTab: name });
+  }
+
+  render() {
+    let tags = (this.props.tags as string).toString().split(',');
+    var renderedTags = null;
+
+    const { selectedTab } = this.state;
+    if (tags != null) {
+      renderedTags = tags.map((tag, index) => {
+        const style = (selectedTab === tag)
+                       ? { backgroundColor: "red" }
+                       : { backgroundColor: "white" };
+        return (
+          <div
+            className={ TAG_LABEL_DIV_CLASS }
+            style={style}
+            onClick={ (event) =>
+              this.didSelectTagWithName(tag)
+            }
+          >
+            {tag}
+          </div>
+        );
+      });
+    }
+    return renderedTags;
+  }
+
 }
 
 class TagsWidget extends Widget {
 
   constructor(notebook_Tracker: INotebookTracker) {
-    super({ node: createAllTagsNode() });
+    super();
     let _self = this;
     this.notebookTracker = notebook_Tracker;
 
-    let searchInput = this.node.getElementsByClassName(TAG_SEARCH_INPUT_CLASS)[0];
+    ReactDOM.render(Private.createAllTagsNode(), this.node);
+
+    /* let searchInput = this.node.getElementsByClassName(TAG_SEARCH_INPUT_CLASS)[0];
     searchInput.addEventListener('input', function() {
       _self.searchBoxValueDidChange(this.value);
     }, false);
@@ -106,12 +175,12 @@ class TagsWidget extends Widget {
     let selectAllButton = this.node.getElementsByClassName(TAG_SELECT_ALL_BUTTON_CLASS)[0];
     selectAllButton.addEventListener('click', function() {
       _self.selectAll(_self);
-    }, false);
+    }, false); */
 
   }
 
   containsTag(tag:string, cell: Cell) {
-    let tagList = <string[]>cell.model.metadata.get("tags");
+    let tagList = cell.model.metadata.get("tags") as string[];
     if (tagList) {
       console.log(tagList);
       for (let i=0; i< tagList.length; i++){
@@ -130,7 +199,7 @@ class TagsWidget extends Widget {
     //let cell:any;
     let first:boolean = true;
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
-      let currentCell = <Cell>notebook.widgets[i];//notebookPanel.model.cells.get(i);
+      let currentCell = notebook.widgets[i] as Cell;//notebookPanel.model.cells.get(i);
       if (this.containsTag(this.selectedTagName, currentCell)) {
         if (first === true) {
           console.log("changing active cell");
@@ -139,7 +208,7 @@ class TagsWidget extends Widget {
           first =false;
         }
         else {
-          notebook.select(<Cell>notebook.widgets[i]);
+          notebook.select(notebook.widgets[i] as Cell);
         }
       }
     }
@@ -272,33 +341,21 @@ class TagsWidget extends Widget {
         }
       }
     }
-    this.loadTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
+    this.renderTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
   }
 
   loadTagLabels() {
-    this.allTagsForSelectedCellNode.innerHTML = '';
     if (this.currentActiveCell != null) {
-      let tags = this.currentActiveCell.model.metadata.get("tags")
-      if (tags != null) {
-        let _self = this;
-        tags.toString().split(',').forEach(function(tag: string) {
-          let node = VirtualDOM.realize(
-            h.div({ className: TAG_LABEL_DIV_CLASS },
-              h.label(tag))
-          )
-          node.addEventListener('click', function() {
-            _self.tagClicked(_self, this);
-          })
-          _self.allTagsForSelectedCellNode.appendChild(node);
-        });
-      }
+      let tags = this.currentActiveCell.model.metadata.get("tags");
+      let renderedComponent = <TagsForSelectedCellComponent widget={this} tags={tags} />;
+      ReactDOM.render(renderedComponent, this.tagsForSelectedCellNode);
     }
   }
 
   searchBoxValueDidChange(value: string) {
     var result: string[] = [];
     if (value.length == 0) {
-      this.loadTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
+      this.renderTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
       return;
     }
     for (var i=0; i<this.allTagsInNotebook.length; i++) {
@@ -306,24 +363,12 @@ class TagsWidget extends Widget {
         result.push(this.allTagsInNotebook[i]);
       }
     }
-    this.loadTagLabelsForAllTagsInNotebook(result);
+    this.renderTagLabelsForAllTagsInNotebook(result);
   }
 
-  loadTagLabelsForAllTagsInNotebook(tags: string[]) {
-    this.allTagsInNotebookNode.innerHTML = '';
-    let _self = this;
-    if (tags != null) {
-      tags.forEach(function(tag: string) {
-        let node = VirtualDOM.realize(
-          h.div({ className: TAG_LABEL_DIV_CLASS },
-            h.label(tag))
-        )
-        /* node.addEventListener('click', function() {
-          this.tagClicked(this, this);
-        }) */
-        _self.allTagsInNotebookNode.appendChild(node);
-      });
-    }
+  renderTagLabelsForAllTagsInNotebook(tags: string[]) {
+    let renderedComponent = <AllTagsInNotebookComponent widget={this} tags={tags} />
+    ReactDOM.render(renderedComponent, this.allTagsHostNode);
   }
 
   tagClicked(_self: TagsWidget, tag: HTMLElement) {
@@ -357,6 +402,14 @@ class TagsWidget extends Widget {
       _self.selectedTag = tag;
       _self.selectedTag.style.backgroundColor = 'red';
     }
+  }
+
+  get allTagsHostNode() {
+    return this.node.getElementsByClassName(ALL_TAGS_HOST_CLASS)[0] as HTMLElement;
+  }
+
+  get tagsForSelectedCellNode() {
+    return this.node.getElementsByClassName(TAGS_FOR_CELL_HOST_CLASS)[0] as HTMLElement;
   }
 
   get allTagsForSelectedCellNode() {
