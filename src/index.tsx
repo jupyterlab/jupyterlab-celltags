@@ -40,27 +40,6 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_BUTTON_CLASS = 'jp-cellTags-button';
 const TAG_INPUT = 'jp-cellTags-tag-input';
-// const TAG_SEARCH_INPUT_CLASS = 'jp-cellTags-search-input'
-
-namespace Private {
-
-  export
-  function createAllTagsNode() {
-    const title = 'Tags';
-    return (
-      <React.Fragment>
-        <div className={ HEADER_CLASS }>
-          <span className={ HEADER_CLASS }>{ title }</span>
-        </div>
-        <span>All Tags In Notebook: </span>
-        <div className={ ALL_TAGS_HOST_CLASS }></div>
-        <span>Tags for Selected Cell: </span>
-        <div className={ TAGS_FOR_CELL_HOST_CLASS }></div>
-      </React.Fragment>
-    );
-  }
-
-}
 
 class TagsComponent extends React.Component<any, any> {
 
@@ -98,8 +77,9 @@ class TagsComponent extends React.Component<any, any> {
       const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
       return (
         <div
+          key={ tag }
           className={ TAG_LABEL_DIV_CLASS }
-          style={style}
+          style={ style }
           onClick={ (event) =>
             this.didSelectTagWithName(tag)
           }
@@ -180,12 +160,8 @@ class TagsForSelectedCellComponent extends TagsComponent {
   }
 
   render() {
-    let tags = (this.props.tags as string).toString().split(',');
     var renderedTags = null;
-    if (tags != null) {
-      renderedTags = this.renderElementForTags(tags);
-    }
-    return (
+    var renderedTools = (
       <div>
         <button 
           className={ TAG_ADD_TAG_BUTTON_CLASS }
@@ -199,6 +175,15 @@ class TagsForSelectedCellComponent extends TagsComponent {
         >
           Remove
         </button>
+      </div>
+    );
+    if (this.props.tags != null) {
+      let tags = (this.props.tags as string).toString().split(',');
+      renderedTags = this.renderElementForTags(tags);
+    }
+    return (
+      <div>
+        { renderedTools }
         { renderedTags }
         <input className={ TAG_INPUT } hidden={ !this.state.pendingInput } onKeyDown={ (event) => this.didPressedKeyIn(event) } />
       </div>
@@ -213,10 +198,6 @@ class TagsWidget extends Widget {
     super();
     this.notebookTracker = notebook_Tracker;
     ReactDOM.render(Private.createAllTagsNode(), this.node);
-    /* let searchInput = this.node.getElementsByClassName(TAG_SEARCH_INPUT_CLASS)[0];
-    searchInput.addEventListener('input', function() {
-      _self.searchBoxValueDidChange(this.value);
-    }, false); */
   }
 
   containsTag(tag:string, cell: Cell) {
@@ -321,20 +302,6 @@ class TagsWidget extends Widget {
     }
   }
 
-  /* searchBoxValueDidChange(value: string) {
-    var result: string[] = [];
-    if (value.length == 0) {
-      this.renderTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
-      return;
-    }
-    for (var i=0; i<this.allTagsInNotebook.length; i++) {
-      if (this.allTagsInNotebook[i].toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-        result.push(this.allTagsInNotebook[i]);
-      }
-    }
-    this.renderTagLabelsForAllTagsInNotebook(result);
-  } */
-
   renderTagLabelsForAllTagsInNotebook(tags: string[]) {
     let renderedComponent = <AllTagsInNotebookComponent widget={this} tags={tags} />
     ReactDOM.render(renderedComponent, this.allTagsHostNode);
@@ -391,7 +358,27 @@ class TagsTool extends CellTools.Tool {
 
   private widget: TagsWidget = null;
   public notebookTracker: INotebookTracker = null;
-} 
+}
+
+namespace Private {
+
+  export
+  function createAllTagsNode() {
+    const title = 'Tags';
+    return (
+      <React.Fragment>
+        <div className={ HEADER_CLASS }>
+          <span className={ HEADER_CLASS }>{ title }</span>
+        </div>
+        <span>Tags for Selected Cell: </span>
+        <div className={ TAGS_FOR_CELL_HOST_CLASS }></div>
+        <span>All Tags In Notebook: </span>
+        <div className={ ALL_TAGS_HOST_CLASS }></div>
+      </React.Fragment>
+    );
+  }
+
+}
 
 namespace TagsTool {
   /**
