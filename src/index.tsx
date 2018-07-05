@@ -33,7 +33,7 @@ import * as ReactDOM from 'react-dom';
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
-const HEADER_CLASS = 'jp-cellTags-header';
+//const HEADER_CLASS = 'jp-cellTags-header';
 const ALL_TAGS_HOST_CLASS = 'jp-cellTags-all-tags-host';
 const TAGS_FOR_CELL_HOST_CLASS = 'jp-cellTags-tags-for-cell-host';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
@@ -75,7 +75,7 @@ class TagsComponent extends React.Component<any, any> {
       const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
       const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
       return (
-        <div
+        <span
           key={ tag }
           className={ tagClass }
           onClick={ (event) =>
@@ -84,7 +84,7 @@ class TagsComponent extends React.Component<any, any> {
         >
           <label hidden={ inputShouldShow }>{ tag }</label>
           <input hidden={ !inputShouldShow } className={ TAG_INPUT } defaultValue={ tag } onKeyDown={ (event) => this.didPressedKeyIn(event) } />
-        </div>
+        </span>
       );
     });
   }
@@ -111,7 +111,7 @@ class AllTagsInNotebookComponent extends TagsComponent {
       renderedTags = this.renderElementForTags(tags);
     }
     return (
-      <div>
+      <div className="tag-section">
         <button 
           className={ TAG_BUTTON_CLASS }
           onClick={ () => (this.props.widget as TagsWidget).selectAll(this.state.selectedTag) }
@@ -124,7 +124,9 @@ class AllTagsInNotebookComponent extends TagsComponent {
         >
           Rename
         </button>
+        <div className="tag-holder">
         { renderedTags }
+        </div>
       </div>
     );
   }
@@ -180,9 +182,9 @@ class TagsForSelectedCellComponent extends TagsComponent {
       renderedTags = this.renderElementForTags(tags);
     }
     return (
-      <div>
+      <div className="tag-section">
         { renderedTools }
-        { renderedTags }
+        <div className="tag-holder">{ renderedTags } </div>
         <input className={ TAG_INPUT } hidden={ !this.state.pendingInput } onKeyDown={ (event) => this.didPressedKeyIn(event) } />
       </div>
     );
@@ -362,16 +364,19 @@ namespace Private {
 
   export
   function createAllTagsNode() {
-    const title = 'Tags';
+    //const title = 'Tags';
     return (
       <React.Fragment>
-        <div className={ HEADER_CLASS }>
+        {/* <div className={ HEADER_CLASS }>
           <span className={ HEADER_CLASS }>{ title }</span>
-        </div>
-        <span>Tags for Selected Cell: </span>
+        </div> */}
+        <span className="tag-header">Tags in Active Cell</span> <hr className="tag-header-hr"/>
         <div className={ TAGS_FOR_CELL_HOST_CLASS }></div>
-        <span>All Tags In Notebook: </span>
+        <span className="tag-header">All Tags In Notebook</span> <hr className="tag-header-hr"/>
         <div className={ ALL_TAGS_HOST_CLASS }></div>
+        <span className="tag-header">Tag Operations</span> <hr className="tag-header-hr"/>
+        {/*move className="tag-section" to the code where buttons are defined when possible*/}
+        <div className="tag-section"><p> Operations will go here</p> </div>
       </React.Fragment>
     );
   }
