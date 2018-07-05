@@ -42,6 +42,18 @@
     width:fit-content;
 }
 
+.no-tag-selected {
+    box-sizing: border-box;
+    background-color: #E2E2E2;
+    color: #808080;
+    border-radius:160px;
+    padding:6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin:4px;
+    width:fit-content;
+}
+
 .tag-holder {
     display: flex;
     flex-wrap:wrap;
@@ -56,9 +68,19 @@
 }
 
 .tag-header-hr {
-    border-color: #E0E0E0;
+    border:0;
+    margin:0;
+    width:100%;
+    height:1px;
+    background:#E0E0E0;
 }
 
 .tag-section {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.tag-operations-option {
+    font-size:14px;
+    width:100%;
+    padding:5px;
 }
