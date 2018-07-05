@@ -167,6 +167,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
       (event.target as HTMLInputElement).value = '';
       this.didFinishAddingTagWithName(value);
     }
+    return event.keyCode;
   }
 
   render() {
