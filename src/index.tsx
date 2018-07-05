@@ -30,11 +30,14 @@ import * as React from 'react';
 
 import * as ReactDOM from 'react-dom';
 
+import '../style/index.css';
+
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const HEADER_CLASS = 'jp-cellTags-header';
 const ALL_TAGS_HOST_CLASS = 'jp-cellTags-all-tags-host';
 const TAGS_FOR_CELL_HOST_CLASS = 'jp-cellTags-tags-for-cell-host';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
+const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_BUTTON_CLASS = 'jp-cellTags-button';
 const TAG_INPUT = 'jp-cellTags-tag-input';
@@ -69,15 +72,12 @@ class TagsComponent extends React.Component<any, any> {
   renderElementForTags(tags: string[]) {
     const { selectedTag } = this.state;
     return tags.map((tag, index) => {
-      const style = (selectedTag === tag)
-                     ? { backgroundColor: "red" }
-                     : { backgroundColor: "white" };
+      const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
       const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
       return (
         <div
           key={ tag }
-          className={ TAG_LABEL_DIV_CLASS }
-          style={ style }
+          className={ tagClass }
           onClick={ (event) =>
             this.didSelectTagWithName(tag)
           }
@@ -390,7 +390,7 @@ namespace TagsTool {
  */
 function activate(app: JupyterLab, cellTools: ICellTools, notebook_Tracker: INotebookTracker) {
   let tagsTool = new TagsTool(notebook_Tracker, app);
-  cellTools.addItem({tool: tagsTool, rank: 1.7}) 
+  cellTools.addItem({tool: tagsTool, rank: 1.7});
 }
 
 const extension: JupyterLabPlugin<void> = {
