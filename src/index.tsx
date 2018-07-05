@@ -49,7 +49,11 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   handleSelectingTag(name: string) {
-    this.setState({ selectedTag: name });
+    if (this.state.selectedTag == null || this.state.selectedTag != name) {
+      this.setState({ selectedTag: name });
+    } else {
+      this.setState({ selectedTag: null });
+    }
   }
 
   render() {
@@ -385,7 +389,6 @@ namespace TagsTool {
    */
 
 }
-
 
 namespace Private {
 
