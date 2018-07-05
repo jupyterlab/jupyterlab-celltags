@@ -1,5 +1,6 @@
 *.bundle.*
 *.egg-info/
+node_modules/
 .ipynb_checkpoints
 
 # Byte-compiled / optimized / DLL files
