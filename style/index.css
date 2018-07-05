@@ -1,17 +1,18 @@
 .jp-cellTags-tag-label-div {
     box-sizing: border-box;
     background-color: #E2E2E2;
-    border-radius:12px;
-    padding:6px;
+    border-radius:15px;
+    padding:8px;
     margin:4px;
     width:fit-content;
 }
 
 .jp-cellTags-selected-tag-label-div {
+    color: white;
     box-sizing: border-box;
     background-color: #2196F3;
-    border-radius:12px;
-    padding: 6px;
+    border-radius:15px;
+    padding: 8px;
     margin:4px;
     width:fit-content;
 }
@@ -24,13 +25,13 @@
 }
 
 .tag-header {
+    padding: 2px;
     text-transform: uppercase;
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 .tag-header-hr {
-    color: #E0E0E0;
-    background-color:#E0E0E0;
+    border-color: #E0E0E0;
 }
 
 .tag-section {
