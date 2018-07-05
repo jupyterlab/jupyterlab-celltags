@@ -22,8 +22,6 @@ import {
   ObservableJSON
 } from '@jupyterlab/observables';
 
-import '../style/index.css';
-
 import {
   write_tag
 } from './celltags';
