@@ -32,9 +32,10 @@
 }
 
 .jp-cellTags-selected-tag-label-div {
+    color: white;
     box-sizing: border-box;
     background-color: #2196F3;
-    border-radius:16px;
+    border-radius:160px;
     padding: 6px;
     padding-left: 14px;
     padding-right: 14px;
@@ -50,13 +51,13 @@
 }
 
 .tag-header {
+    padding: 2px;
     text-transform: uppercase;
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 .tag-header-hr {
-    color: #E0E0E0;
-    background-color:#E0E0E0;
+    border-color: #E0E0E0;
 }
 
 .tag-section {

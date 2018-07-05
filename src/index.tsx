@@ -60,10 +60,11 @@ import {
           <span className="tag-header">Tags in Active Cell</span><hr className="tag-header-hr"/>
           <TagsForSelectedCellComponent widget={ this.props.widget } tags={ this.props.tagsList } 
             selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
-          <span>All Tags In Notebook: </span>
+          <span className="tag-header">All Tags In Notebook</span><hr className={"tag-header-hr"}/>
           <AllTagsInNotebookComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
             selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
-          <div className="tag-section"><p> Operations will go here</p> </div>
+          <span className="tag-header">Tag Operations</span><hr className={"tag-header-hr"}/>
+          <p className="tag-section"> Operations will go here</p>
         </div>
       );
     }
