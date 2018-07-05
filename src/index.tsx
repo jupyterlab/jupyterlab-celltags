@@ -34,32 +34,61 @@ import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const HEADER_CLASS = 'jp-cellTags-header';
-const ALL_TAGS_HOST_CLASS = 'jp-cellTags-all-tags-host';
-const TAGS_FOR_CELL_HOST_CLASS = 'jp-cellTags-tags-for-cell-host';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
 const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
 const TAG_BUTTON_CLASS = 'jp-cellTags-button';
 const TAG_INPUT = 'jp-cellTags-tag-input';
 
+class TagsToolComponent extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = { selectedTag: null };
+    this.handleSelectingTag = this.handleSelectingTag.bind(this);
+  }
+
+  handleSelectingTag(name: string) {
+    this.setState({ selectedTag: name });
+  }
+
+  render() {
+    const title = 'Tags';
+    return (
+      <div>
+        <div className={ HEADER_CLASS }>
+          <span className={ HEADER_CLASS }>{ title }</span>
+        </div>
+        <span>Tags for Selected Cell: </span>
+        <TagsForSelectedCellComponent widget={ this.props.widget } tags={ this.props.tagsList } 
+          selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
+        <span>All Tags In Notebook: </span>
+        <AllTagsInNotebookComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
+          selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
+      </div>
+    );
+  }
+
+}
+
 class TagsComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { selectedTag: null, editingSelectedTag: false };
+    this.state = { editingSelectedTag: false };
   }
 
   didSelectTagWithName(name: string) {
-    if ((!this.state.editingSelectedTag) || (this.state.selectedTag != name)) {
+    if ((!this.state.editingSelectedTag) || (this.props.selected != name)) {
       this.setState({ editingSelectedTag: false });
-      this.setState({ selectedTag: name });
+      this.props.selectHandler(name);
     }
   }
 
   didfinishEditingTagName(newName: string) {
     this.setState({ editingSelectedTag: false });
-    this.setState({ selectedTag: newName });
-    (this.props.widget as TagsWidget).replaceName(this.state.selectedTag, newName);
+    (this.props.widget as TagsWidget).replaceName(this.props.selected, newName);
+    this.props.selectHandler(newName);
   }
 
   didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -70,7 +99,7 @@ class TagsComponent extends React.Component<any, any> {
   }
 
   renderElementForTags(tags: string[]) {
-    const { selectedTag } = this.state;
+    const selectedTag = this.props.selected as string;
     return tags.map((tag, index) => {
       const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
       const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
@@ -83,7 +112,8 @@ class TagsComponent extends React.Component<any, any> {
           }
         >
           <label hidden={ inputShouldShow }>{ tag }</label>
-          <input hidden={ !inputShouldShow } className={ TAG_INPUT } defaultValue={ tag } onKeyDown={ (event) => this.didPressedKeyIn(event) } />
+          <input hidden={ !inputShouldShow } className={ TAG_INPUT } defaultValue={ tag } 
+            onKeyDown={ (event) => this.didPressedKeyIn(event) } />
         </div>
       );
     });
@@ -95,11 +125,10 @@ class AllTagsInNotebookComponent extends TagsComponent {
 
   constructor(props: any) {
     super(props);
-    this.state = { selectedTag: null };
   }
 
   didClickRenameTag() {
-    if (this.state.selectedTag != null) {
+    if (this.props.selected as string != null) {
       this.setState({ editingSelectedTag: true });
     }
   }
@@ -114,7 +143,7 @@ class AllTagsInNotebookComponent extends TagsComponent {
       <div>
         <button 
           className={ TAG_BUTTON_CLASS }
-          onClick={ () => (this.props.widget as TagsWidget).selectAll(this.state.selectedTag) }
+          onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
         >
           Select All
         </button>
@@ -135,7 +164,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
 
   constructor(props: any) {
     super(props);
-    this.state = { selectedTag: null, editingSelectedTag: false, pendingInput: false };
+    this.state = { editingSelectedTag: false, pendingInput: false };
   }
 
   didFinishAddingTagWithName(name: string) {
@@ -144,8 +173,8 @@ class TagsForSelectedCellComponent extends TagsComponent {
   }
 
   removeSelectedTagFromCell() {
-    if (this.state.selectedTag != null) {
-      (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(this.state.selectedTag);
+    if (this.props.selected as string != null) {
+      (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(this.props.selected as string);
     }
   }
 
@@ -183,7 +212,8 @@ class TagsForSelectedCellComponent extends TagsComponent {
       <div>
         { renderedTools }
         { renderedTags }
-        <input className={ TAG_INPUT } hidden={ !this.state.pendingInput } onKeyDown={ (event) => this.didPressedKeyIn(event) } />
+        <input className={ TAG_INPUT } hidden={ !this.state.pendingInput } 
+          onKeyDown={ (event) => this.didPressedKeyIn(event) } />
       </div>
     );
   }
@@ -195,7 +225,8 @@ class TagsWidget extends Widget {
   constructor(notebook_Tracker: INotebookTracker) {
     super();
     this.notebookTracker = notebook_Tracker;
-    ReactDOM.render(Private.createAllTagsNode(), this.node);
+    Private.setWidget(this);
+    Private.renderAllTagsNode();
   }
 
   containsTag(tag:string, cell: Cell) {
@@ -295,22 +326,12 @@ class TagsWidget extends Widget {
   loadTagsForActiveCell() {
     if (this.currentActiveCell != null) {
       let tags = this.currentActiveCell.model.metadata.get("tags");
-      let renderedComponent = <TagsForSelectedCellComponent widget={this} tags={tags} />;
-      ReactDOM.render(renderedComponent, this.tagsForSelectedCellNode);
+      Private.setTagsListFor(Private.TAGS_FOR_CELL, tags);
     }
   }
 
   renderTagLabelsForAllTagsInNotebook(tags: string[]) {
-    let renderedComponent = <AllTagsInNotebookComponent widget={this} tags={tags} />
-    ReactDOM.render(renderedComponent, this.allTagsHostNode);
-  }
-
-  get allTagsHostNode() {
-    return this.node.getElementsByClassName(ALL_TAGS_HOST_CLASS)[0] as HTMLElement;
-  }
-
-  get tagsForSelectedCellNode() {
-    return this.node.getElementsByClassName(TAGS_FOR_CELL_HOST_CLASS)[0] as HTMLElement;
+    Private.setTagsListFor(Private.ALL_TAGS, tags);
   }
 
   currentActiveCell: Cell = null;
@@ -358,30 +379,45 @@ class TagsTool extends CellTools.Tool {
   public notebookTracker: INotebookTracker = null;
 }
 
-namespace Private {
-
-  export
-  function createAllTagsNode() {
-    const title = 'Tags';
-    return (
-      <React.Fragment>
-        <div className={ HEADER_CLASS }>
-          <span className={ HEADER_CLASS }>{ title }</span>
-        </div>
-        <span>Tags for Selected Cell: </span>
-        <div className={ TAGS_FOR_CELL_HOST_CLASS }></div>
-        <span>All Tags In Notebook: </span>
-        <div className={ ALL_TAGS_HOST_CLASS }></div>
-      </React.Fragment>
-    );
-  }
-
-}
-
 namespace TagsTool {
   /**
    * The options used to initialize a metadata editor tool.
    */
+
+}
+
+
+namespace Private {
+
+  let widget: TagsWidget = null;
+  let tagsList: any = [];
+  let allTagsList: any[] = [];
+
+  export const ALL_TAGS = 0;
+  export const TAGS_FOR_CELL = 1;
+
+  export
+  function setTagsListFor(type: number, list: any) {
+    switch (type) {
+      case ALL_TAGS:
+        allTagsList = list;
+        break;
+      case TAGS_FOR_CELL:
+        tagsList = list;
+        break;
+    }
+    renderAllTagsNode();
+  }
+
+  export
+  function setWidget(currentWidget: TagsWidget) {
+    widget = currentWidget;
+  }
+
+  export
+  function renderAllTagsNode() {
+    ReactDOM.render((<TagsToolComponent widget={ widget } tagsList={ tagsList } allTagsList={ allTagsList } />), widget.node);
+  }
 
 }
 
