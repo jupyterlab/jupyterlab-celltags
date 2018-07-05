@@ -1,9 +1,7 @@
 .jp-cellTags-tag-label-div {
-    color: black;
     background-color: white;
 }
 
-jp-cellTags-selected-tag-label-div {
-    color: red;
+.jp-cellTags-selected-tag-label-div {
     background-color: red;
 }
