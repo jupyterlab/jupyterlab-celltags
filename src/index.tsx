@@ -36,6 +36,7 @@ import {
   const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
   const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
   const TAG_BUTTON_CLASS = 'jp-cellTags-button';
+  const TAG_ADD_DIV = 'jp-cellTags-tag-add-div';
   const TAG_INPUT = 'jp-cellTags-tag-input';
   
   class TagsToolComponent extends React.Component<any, any> {
@@ -166,6 +167,7 @@ import {
   
     constructor(props: any) {
       super(props);
+      this.state = { editingSelectedTag: false, plusIconShouldHide: false };
     }
   
     didFinishAddingTagWithName(name: string) {
@@ -184,6 +186,7 @@ import {
         (event.target as HTMLInputElement).value = '';
         this.didFinishAddingTagWithName(value);
       }
+      return event.keyCode;
     }
   
     render() {
@@ -207,14 +210,31 @@ import {
           { renderedTools }
           <div className="tag-holder">
             { renderedTags }
-            <div className="jp-cellTags-input-div" >
+            <div className={ TAG_ADD_DIV } >
               <input className={ TAG_INPUT }
                 defaultValue='Add Tag'
-                onClick={ (event) =>
-                  (event.target as HTMLInputElement).value = ''
-                }
-                onKeyDown={ (event) => this.didPressedKeyIn(event) } 
+                onClick={ (event) => {
+                  this.setState({ plusIconShouldHide: true });
+                  let inputElement = event.target as HTMLInputElement;
+                  if (inputElement.value === 'Add Tag') {
+                    inputElement.value = '';
+                    inputElement.style.width = '63px';
+                    inputElement.style.minWidth = '63px';
+                  }
+                } }
+                onKeyDown={ (event) => {
+                  let inputElement = event.target as HTMLInputElement;
+                  inputElement.style.width = inputElement.value.length + "ch";
+                  if (this.didPressedKeyIn(event) == 13) {
+                    inputElement.value = 'Add Tag';
+                    inputElement.style.width = '50px';
+                    inputElement.style.minWidth = '50px';
+                    inputElement.blur();
+                    this.setState({ plusIconShouldHide: false });
+                  }
+                } }
               />
+              <label hidden={ this.state.plusIconShouldHide }>  +</label>
             </div>
           </div>
         </div>
