@@ -33,7 +33,6 @@ import {
   import '../style/index.css';
   
   const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
-  //const HEADER_CLASS = 'jp-cellTags-header';
   const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
   const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
   const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
@@ -57,20 +56,14 @@ import {
     }
   
     render() {
-      //const title = 'Tags';
       return (
         <div>
-          {/* <div className={ HEADER_CLASS }>
-            <span className={ HEADER_CLASS }>{ title }</span>
-          </div> */}
-  
           <span className="tag-header">All Tags In Notebook </span><hr className="tag-header-hr"/>
           <TagsForSelectedCellComponent widget={ this.props.widget } tags={ this.props.tagsList } 
             selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
           <span>All Tags In Notebook: </span>
           <AllTagsInNotebookComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
             selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
-            {/*move className="tag-section" to the code where buttons are defined when possible*/}
           <div className="tag-section"><p> Operations will go here</p> </div>
         </div>
       );
