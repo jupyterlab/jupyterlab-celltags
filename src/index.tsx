@@ -215,7 +215,7 @@ class TagOperationsComponent extends TagsComponent {
       ><label hidden={ false }>{ this.props.selected as string }</label></div>);
     }
     else {
-      return <p>No Tag Selected</p>;
+      return <div key="notagselected" className="no-tag-selected">No Tag Selected</div>;
     }
   }
 
@@ -230,18 +230,18 @@ class TagOperationsComponent extends TagsComponent {
     return (
       <div className="tag-section">
        <div> { selected } </div>
-        <button 
-          className={ TAG_BUTTON_CLASS }
+        <div 
+          className={ "tag-operations-option" }
           onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
         >
-          Select All
-        </button>
-        <button 
-          className={ TAG_BUTTON_CLASS }
+          Select All Cells with this Tag
+        </div>
+        <div 
+          className={ "tag-operations-option"  }
           onClick={ () => this.didClickRenameTag() }
         >
-          Rename
-        </button> 
+          Rename Tag for All Cells
+        </div> 
       </div>
     );
   }
