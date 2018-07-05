@@ -35,7 +35,6 @@ import {
   const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
   const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
   const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
-  const TAG_ADD_TAG_BUTTON_CLASS = 'jp-cellTags-add-tag-button';
   const TAG_BUTTON_CLASS = 'jp-cellTags-button';
   const TAG_INPUT = 'jp-cellTags-tag-input';
   
@@ -58,7 +57,7 @@ import {
     render() {
       return (
         <div>
-          <span className="tag-header">All Tags In Notebook </span><hr className="tag-header-hr"/>
+          <span className="tag-header">Tags in Active Cell</span><hr className="tag-header-hr"/>
           <TagsForSelectedCellComponent widget={ this.props.widget } tags={ this.props.tagsList } 
             selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
           <span>All Tags In Notebook: </span>
@@ -166,11 +165,9 @@ import {
   
     constructor(props: any) {
       super(props);
-      this.state = { editingSelectedTag: false, pendingInput: false };
     }
   
     didFinishAddingTagWithName(name: string) {
-      this.setState({ pendingInput: false });
       (this.props.widget as TagsWidget).didFinishAddingTags(name);
     }
   
@@ -193,12 +190,6 @@ import {
       var renderedTools = (
         <div>
           <button 
-            className={ TAG_ADD_TAG_BUTTON_CLASS }
-            onClick={ () => this.setState( { pendingInput: true } ) }
-          >
-            Add
-          </button>
-          <button 
             className={ TAG_BUTTON_CLASS }
             onClick={ () => this.removeSelectedTagFromCell() }
           >
@@ -213,9 +204,18 @@ import {
       return (
         <div className="tag-section">
           { renderedTools }
-          <div className="tag-holder">{ renderedTags } </div>
-          <input className={ TAG_INPUT } hidden={ !this.state.pendingInput } 
-            onKeyDown={ (event) => this.didPressedKeyIn(event) } />
+          <div className="tag-holder">
+            { renderedTags }
+            <div className="jp-cellTags-input-div" >
+              <input className={ TAG_INPUT }
+                defaultValue='Add Tag'
+                onClick={ (event) =>
+                  (event.target as HTMLInputElement).value = ''
+                }
+                onKeyDown={ (event) => this.didPressedKeyIn(event) } 
+              />
+            </div>
+          </div>
         </div>
       );
     }

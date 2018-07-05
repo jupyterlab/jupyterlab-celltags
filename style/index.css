@@ -1,17 +1,43 @@
 .jp-cellTags-tag-label-div {
     box-sizing: border-box;
     background-color: #E2E2E2;
-    border-radius:12px;
+    border-radius:160px;
     padding:6px;
+    padding-left: 14px;
+    padding-right: 14px;
     margin:4px;
     width:fit-content;
+}
+
+.jp-cellTags-tag-input-div {
+    box-sizing: border-box;
+    background-color: white;
+    border-width: 1px;
+    border-color: gray;
+    border-radius:160px;
+    padding:6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin: 4px;
+    width: 100px;
+}
+
+.jp-cellTags-tag-input {
+    min-width: 50px;
+    resize: horizontal;
+}
+
+.jp-cellTags-tag-input:active {
+    width: auto;
 }
 
 .jp-cellTags-selected-tag-label-div {
     box-sizing: border-box;
     background-color: #2196F3;
-    border-radius:12px;
+    border-radius:16px;
     padding: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
     margin:4px;
     width:fit-content;
 }
