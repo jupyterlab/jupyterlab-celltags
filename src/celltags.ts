@@ -26,7 +26,10 @@ function write_tag(cell: Cell, name:string, add:boolean) {
                 new_list.push(wtaglist[i]);
             }
         }
-        new_list.push(name);
+        let new_tags = preprocess_input(name);
+        for (var tag=0; tag<new_tags.length; tag++) {
+            new_list.push(new_tags[tag]);
+        }
         cell.model.metadata.set('tags', new_list);
     /* If add = false, try to remove from metadata. First check if metadata and 
        metadata.tags exist; if not, return false. Then remove the tag and remove
@@ -56,10 +59,10 @@ function write_tag(cell: Cell, name:string, add:boolean) {
     return true;
 };
 
-/* function preprocess_input(input:string) {
+ function preprocess_input(input:string) {
     // Split on whitespace + commas:
     return input.split(/[,\s]+/)
-}; */
+}; 
 
 // function add_tag(cell:Cell, tag_container:string, on_remove:Function) {
     /* Returns a function that writes tags to metadata if non-empty */
