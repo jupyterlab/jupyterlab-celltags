@@ -127,7 +127,7 @@ class AllTagsInNotebookComponent extends TagsComponent {
   }
 
   singleCellOperationButton(name: string) {
-    return <img src="" />;
+    return <img src={ require('../static/darkgrey_addcircle.svg') } />;
   }
 
   singleCellOperationHandler(name: string) {
