@@ -90,7 +90,7 @@ class TagsComponent extends React.Component<any, any> {
   }
 
   singleCellOperationButton(name: string) {
-    return <img src={ require("../static/darkgrey_addcircle.svg") } key={ name } />;
+    return <img src={ require("../static/darkgrey_addcircle.svg") } key={ name } className="tag-icon"/>;
   }
 
   singleCellOperationHandler(name: string) {
@@ -133,15 +133,15 @@ class AllTagsInNotebookComponent extends TagsComponent {
   singleCellOperationButton(name: string) {
     if (this.props.selected === name) {
       if (this.tagAlreadyInActiveCellTagsList(name)) {
-        return <img src={ require("../static/lightblue_addcircle.svg") } />;
+        return <img src={ require("../static/lightblue_addcircle.svg") } className="tag-icon"/>;
       } else {
-        return <img src={ require("../static/white_addcircle.svg") } />;
+        return <img src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
       }
     } else {
       if (this.tagAlreadyInActiveCellTagsList(name)) {
-        return <img src={ require("../static/lightgrey_addcircle.svg") } />;
+        return <img src={ require("../static/lightgrey_addcircle.svg") } className="tag-icon"/>;
       } else {
-        return <img src={ require("../static/darkgrey_addcircle.svg") } />;
+        return <img src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
       }
     }
   }
