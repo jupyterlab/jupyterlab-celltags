@@ -178,9 +178,10 @@ class TagsForSelectedCellComponent extends TagsComponent {
 
   singleCellOperationButton(name: string) {
     if (this.props.selected === name) {
-      return <img src={ require("../static/white_minuscircle.svg") } />;
-    } else {
-      return <img src={require("../static/darkgrey_minuscircle.svg")} />;
+      return <img src={ require("../static/white_minuscircle.svg") } className="tag-icon" />;
+    }
+    else {
+      return <img src={require("../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
     }
   }
 
