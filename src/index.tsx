@@ -89,8 +89,8 @@ class TagsComponent extends React.Component<any, any> {
     }
   }
 
-  singleCellOperationButton() {
-    return <img src={require("../static/darkgrey_addcircle.svg")}/>;
+  singleCellOperationButton(name: string) {
+    return <img src={ require("../static/darkgrey_addcircle.svg") } key={ name } />;
   }
 
   singleCellOperationHandler(name: string) {
@@ -113,7 +113,7 @@ class TagsComponent extends React.Component<any, any> {
           <label onClick={ (event) => {
             event.stopPropagation();
             this.singleCellOperationHandler(tag);
-          } }>{ this.singleCellOperationButton() }</label>
+          } }>{ this.singleCellOperationButton(tag) }</label>
         </div>
       );
     });
@@ -126,8 +126,8 @@ class AllTagsInNotebookComponent extends TagsComponent {
     super(props);
   }
 
-  singleCellOperationButton() {
-    return <img src={require("../static/darkgrey_addcircle.svg")} />;
+  singleCellOperationButton(name: string) {
+    return <img src={ require('../static/darkgrey_addcircle.svg') } />;
   }
 
   singleCellOperationHandler(name: string) {
@@ -160,8 +160,8 @@ class TagsForSelectedCellComponent extends TagsComponent {
     (this.props.widget as TagsWidget).didFinishAddingTags(name);
   }
 
-  singleCellOperationButton() {
-    return <img src={require("../static/darkgrey_minuscircle.svg")}/>;
+  singleCellOperationButton(name: string) {
+    return <img src={ require("../static/darkgrey_minuscircle.svg") } />;
   }
 
   singleCellOperationHandler(name: string) {
