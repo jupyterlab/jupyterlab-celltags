@@ -32,6 +32,8 @@ import * as ReactDOM from 'react-dom';
 
 import '../style/index.css';
 
+import * as darkgreyadd from '../static/darkgrey_addcircle.svg';
+
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
@@ -90,7 +92,7 @@ class TagsComponent extends React.Component<any, any> {
   }
 
   singleCellOperationButton() {
-    return '*';
+    return <img src={require("../static/darkgrey_addcircle.svg")}/>;
   }
 
   singleCellOperationHandler(name: string) {
@@ -125,10 +127,10 @@ class AllTagsInNotebookComponent extends TagsComponent {
   constructor(props: any) {
     super(props);
   }
-
+/*
   singleCellOperationButton() {
-    return ' +';
-  }
+    return <img src="" />;
+  }*/
 
   singleCellOperationHandler(name: string) {
     (this.props.widget as TagsWidget).addTagToActiveCell(name);
@@ -161,7 +163,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
   }
 
   singleCellOperationButton() {
-    return ' -';
+    return <img src={require("../static/darkgrey_minuscircle.svg")}/>;
   }
 
   singleCellOperationHandler(name: string) {
