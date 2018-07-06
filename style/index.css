@@ -9,26 +9,48 @@
     width:fit-content;
 }
 
-.jp-cellTags-tag-input-div {
+.jp-cellTags-tag-add-div {
     box-sizing: border-box;
     background-color: white;
-    border-width: 1px;
-    border-color: gray;
+    border: 1px solid gray;
     border-radius:160px;
-    padding:6px;
+    padding: 6px;
     padding-left: 14px;
     padding-right: 14px;
     margin: 4px;
-    width: 100px;
+    width: fit-content;
+}
+
+.jp-cellTags-tag-edit-div {
+    color: white;
+    box-sizing: border-box;
+    background-color: #2196F3;
+    border-radius:160px;
+    padding: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin: 4px;
+    width: fit-content;
 }
 
 .jp-cellTags-tag-input {
+    width: 50px;
     min-width: 50px;
+    padding: 0px;
+    border: none;
+    outline: none;
     resize: horizontal;
 }
 
-.jp-cellTags-tag-input:active {
-    width: auto;
+.jp-cellTags-edit-tag-input {
+    color: white;
+    width: 50px;
+    min-width: 50px;
+    background: transparent;
+    padding: 0px;
+    border: none;
+    outline: none;
+    resize: horizontal;
 }
 
 .jp-cellTags-selected-tag-label-div {

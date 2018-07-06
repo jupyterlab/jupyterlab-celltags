@@ -1,4 +1,5 @@
 import {
+
   JupyterLab, JupyterLabPlugin
 } from '@jupyterlab/application';
 
@@ -27,14 +28,19 @@ import {
 } from './celltags';
 
 import * as React from 'react';
+
 import * as ReactDOM from 'react-dom';
+
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
 const TAG_BUTTON_CLASS = 'jp-cellTags-button';
+const TAG_ADD_DIV = 'jp-cellTags-tag-add-div';
+const TAG_EDIT_DIV = 'jp-cellTags-tag-edit-div';
 const TAG_INPUT = 'jp-cellTags-tag-input';
+const EDIT_TAG_INPUT = 'jp-cellTags-edit-tag-input';
 
 class TagsToolComponent extends React.Component<any, any> {
 
@@ -87,24 +93,10 @@ class TagsComponent extends React.Component<any, any> {
     }
   }
 
-  didfinishEditingTagName(newName: string) {
-    this.setState({ editingSelectedTag: false });
-    (this.props.widget as TagsWidget).replaceName(this.props.selected, newName);
-    this.props.selectHandler(newName,false);
-  }
-
-  didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.keyCode == 13) {
-      let value = (event.target as HTMLInputElement).value;
-      this.didfinishEditingTagName(value);
-    }
-  }
-
   renderElementForTags(tags: string[]) {
     const selectedTag = this.props.selected as string;
     return tags.map((tag, index) => {
       const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
-      const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
       return (
         <div
           key={ tag }
@@ -113,9 +105,7 @@ class TagsComponent extends React.Component<any, any> {
             this.didSelectTagWithName(tag)
           }
         >
-          <label hidden={ inputShouldShow }>{ tag }</label>
-          <input hidden={ !inputShouldShow } className={ TAG_INPUT } defaultValue={ tag } 
-            onKeyDown={ (event) => this.didPressedKeyIn(event) } />
+          <label>{ tag }</label>
         </div>
       );
     });
@@ -166,6 +156,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
       (event.target as HTMLInputElement).value = '';
       this.didFinishAddingTagWithName(value);
     }
+    return event.keyCode;
   }
 
   render() {
@@ -189,19 +180,37 @@ class TagsForSelectedCellComponent extends TagsComponent {
         { renderedTools }
         <div className="tag-holder">
           { renderedTags }
-          <div className="jp-cellTags-input-div" >
+          <div className={ TAG_ADD_DIV } >
             <input className={ TAG_INPUT }
               defaultValue='Add Tag'
-              onClick={ (event) =>
-                (event.target as HTMLInputElement).value = ''
-              }
-              onKeyDown={ (event) => this.didPressedKeyIn(event) } 
+              onClick={ (event) => {
+                this.setState({ plusIconShouldHide: true });
+                let inputElement = event.target as HTMLInputElement;
+                if (inputElement.value === 'Add Tag') {
+                  inputElement.value = '';
+                  inputElement.style.width = '63px';
+                  inputElement.style.minWidth = '63px';
+                }
+              } }
+              onKeyDown={ (event) => {
+                let inputElement = event.target as HTMLInputElement;
+                inputElement.style.width = inputElement.value.length + "ch";
+                if (this.didPressedKeyIn(event) == 13) {
+                  inputElement.value = 'Add Tag';
+                  inputElement.style.width = '50px';
+                  inputElement.style.minWidth = '50px';
+                  inputElement.blur();
+                  this.setState({ plusIconShouldHide: false });
+                }
+              } }
             />
+            <label hidden={ this.state.plusIconShouldHide }>  +</label>
           </div>
         </div>
       </div>
     );
   }
+
 }
 
 class TagOperationsComponent extends TagsComponent {
@@ -249,6 +258,19 @@ class TagOperationsComponent extends TagsComponent {
           onClick={ () => this.didClickRenameTag() }
         >
           Rename Tag for All Cells
+          <div className={ TAG_EDIT_DIV } hidden={ !this.state.editingSelectedTag }>
+            <input className={ EDIT_TAG_INPUT }
+                defaultValue={ this.props.selected }
+                onKeyDown={ (event) => {
+                  let inputElement = event.target as HTMLInputElement;
+                  inputElement.style.width = inputElement.value.length + "ch";
+                  if (event.keyCode == 13) {
+                    (this.props.widget as TagsWidget).replaceName(this.props.selected, inputElement.value);
+                    this.setState({ selectedTag: inputElement.value });
+                  }
+                } }
+            />
+          </div>
         </div> 
         <div 
           className={ "tag-operations-option"  }
@@ -303,6 +325,8 @@ class TagsWidget extends Widget {
   }
 
   replaceName(oldTag: string, newTag: string) {
+    console.log(oldTag);
+    console.log(newTag);
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.tagsListShallNotRefresh = true;
