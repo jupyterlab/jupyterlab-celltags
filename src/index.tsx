@@ -131,10 +131,18 @@ class AllTagsInNotebookComponent extends TagsComponent {
   }
 
   singleCellOperationButton(name: string) {
-    if (this.tagAlreadyInActiveCellTagsList(name)) {
-      return <img src={ require("../static/lightgrey_addcircle.svg") } />;
+    if (this.props.selected === name) {
+      if (this.tagAlreadyInActiveCellTagsList(name)) {
+        return <img src={ require("../static/lightblue_addcircle.svg") } />;
+      } else {
+        return <img src={ require("../static/white_addcircle.svg") } />;
+      }
     } else {
-      return <img src={ require("../static/darkgrey_addcircle.svg") } />;
+      if (this.tagAlreadyInActiveCellTagsList(name)) {
+        return <img src={ require("../static/lightgrey_addcircle.svg") } />;
+      } else {
+        return <img src={ require("../static/darkgrey_addcircle.svg") } />;
+      }
     }
   }
 
@@ -171,8 +179,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
   singleCellOperationButton(name: string) {
     if (this.props.selected === name) {
       return <img src={ require("../static/white_minuscircle.svg") } />;
-    }
-    else {
+    } else {
       return <img src={require("../static/darkgrey_minuscircle.svg")} />;
     }
   }
@@ -256,7 +263,6 @@ class TagOperationsComponent extends TagsComponent {
   }
 
   didClickDeleteTag() {
-    console.log('delete');
     this.props.selectHandler(this.props.selected, true);
     (this.props.widget as TagsWidget).removeTagFromAllCells(this.props.selected);
   }
