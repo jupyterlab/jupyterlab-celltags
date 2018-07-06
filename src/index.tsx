@@ -126,8 +126,16 @@ class AllTagsInNotebookComponent extends TagsComponent {
     super(props);
   }
 
+  tagAlreadyInActiveCellTagsList(name: string) {
+    return (this.props.widget as TagsWidget).activeCellContainsTag(name);
+  }
+
   singleCellOperationButton(name: string) {
-    return <img src={ require('../static/darkgrey_addcircle.svg') } />;
+    if (this.tagAlreadyInActiveCellTagsList(name)) {
+      return <img src={ require("../static/lightgrey_addcircle.svg") } />;
+    } else {
+      return <img src={ require("../static/darkgrey_addcircle.svg") } />;
+    }
   }
 
   singleCellOperationHandler(name: string) {
@@ -305,6 +313,9 @@ class TagsWidget extends Widget {
   }
 
   containsTag(tag:string, cell: Cell) {
+    if (cell === null) {
+      return false;
+    }
     let tagList = cell.model.metadata.get("tags") as string[];
     if (tagList) {
       for (let i=0; i< tagList.length; i++){
@@ -314,6 +325,10 @@ class TagsWidget extends Widget {
       }
       return false;
     }
+  }
+
+  activeCellContainsTag(tag: string) {
+    return this.containsTag(tag, this.currentActiveCell);
   }
 
   selectAll(name: string) {
