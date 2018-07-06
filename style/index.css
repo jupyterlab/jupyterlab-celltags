@@ -21,9 +21,32 @@
     width: fit-content;
 }
 
+.jp-cellTags-tag-edit-div {
+    color: white;
+    box-sizing: border-box;
+    background-color: #2196F3;
+    border-radius:160px;
+    padding: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin: 4px;
+    width: fit-content;
+}
+
 .jp-cellTags-tag-input {
     width: 50px;
     min-width: 50px;
+    padding: 0px;
+    border: none;
+    outline: none;
+    resize: horizontal;
+}
+
+.jp-cellTags-edit-tag-input {
+    color: white;
+    width: 50px;
+    min-width: 50px;
+    background: transparent;
     padding: 0px;
     border: none;
     outline: none;
