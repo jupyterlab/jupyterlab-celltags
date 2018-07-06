@@ -115,6 +115,11 @@ class AllTagsInNotebookComponent extends TagsComponent {
     super(props);
   }
 
+  addTagToCell() {
+    let toAdd = this.props.selected;
+    (this.props.widget as TagsWidget).addTagToActiveCell(toAdd);
+  }
+
   render() {
     let tags = this.props.tags as string[];
     var renderedTags = null;
@@ -384,6 +389,11 @@ class TagsWidget extends Widget {
         this.allTagsInNotebook.push(name);
       }
     }
+  }
+
+  addTagToActiveCell(name:string) {
+    write_tag(this.currentActiveCell, name, true);
+    this.loadTagsForActiveCell();
   }
 
   getAllTagsInNotebook() {
