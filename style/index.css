@@ -82,6 +82,7 @@
     flex-wrap:wrap;
     padding:4px;
     height:fit-content; 
+    margin-bottom: 20px;
 }
 
 .tag-header {
@@ -96,10 +97,6 @@
     width:100%;
     height:1px;
     background:#E0E0E0;
-}
-
-.tag-section {
-    margin-bottom: 20px;
 }
 
 .tag-operations-option {
