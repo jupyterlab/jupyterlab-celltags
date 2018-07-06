@@ -116,3 +116,8 @@
 .jp-ActiveCellTool {
     min-height: 54px;
 }
+
+.tag-icon {
+    padding-left: 10px;
+    height: 13px;
+}
