@@ -44,8 +44,12 @@ class TagsToolComponent extends React.Component<any, any> {
     this.handleSelectingTag = this.handleSelectingTag.bind(this);
   }
 
-  handleSelectingTag(name: string) {
-    if (this.state.selectedTag == null || this.state.selectedTag != name) {
+  handleSelectingTag(name: string, deleted:boolean) {
+    if (deleted) {
+      console.log("DSJF");
+      this.setState({ selectedTag: null });
+    }
+    else if (this.state.selectedTag == null || this.state.selectedTag != name) {
       this.setState({ selectedTag: name });
     } else {
       this.setState({ selectedTag: null });
@@ -67,7 +71,6 @@ class TagsToolComponent extends React.Component<any, any> {
       </div>
     );
   }
-
 }
 
 class TagsComponent extends React.Component<any, any> {
@@ -80,14 +83,14 @@ class TagsComponent extends React.Component<any, any> {
   didSelectTagWithName(name: string) {
     if ((!this.state.editingSelectedTag) || (this.props.selected != name)) {
       this.setState({ editingSelectedTag: false });
-      this.props.selectHandler(name);
+      this.props.selectHandler(name,false);
     }
   }
 
   didfinishEditingTagName(newName: string) {
     this.setState({ editingSelectedTag: false });
     (this.props.widget as TagsWidget).replaceName(this.props.selected, newName);
-    this.props.selectHandler(newName);
+    this.props.selectHandler(newName,false);
   }
 
   didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -225,6 +228,11 @@ class TagOperationsComponent extends TagsComponent {
     }
   }
 
+  didClickDeleteTag() {    
+    (this.props.widget as TagsWidget).removeTagFromAllCells(this.props.selected);
+    this.props.selectHandler(this.props.selected, true);
+  }
+
   render() {
     var selected = this.renderSelectedTag();
     return (
@@ -232,7 +240,7 @@ class TagOperationsComponent extends TagsComponent {
        <div> { selected } </div>
         <div 
           className={ "tag-operations-option" }
-          onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
+          onClick={ () => this.didClickDeleteTag() }
         >
           Select All Cells with this Tag
         </div>
@@ -241,6 +249,12 @@ class TagOperationsComponent extends TagsComponent {
           onClick={ () => this.didClickRenameTag() }
         >
           Rename Tag for All Cells
+        </div> 
+        <div 
+          className={ "tag-operations-option"  }
+          onClick={ () => (this.props.widget as TagsWidget).removeTagFromAllCells(this.props.selected) }
+        >
+          Delete Tag from All Cells
         </div> 
       </div>
     );
@@ -259,7 +273,6 @@ class TagsWidget extends Widget {
   containsTag(tag:string, cell: Cell) {
     let tagList = cell.model.metadata.get("tags") as string[];
     if (tagList) {
-      console.log(tagList);
       for (let i=0; i< tagList.length; i++){
         if (tagList[i] === tag) {
           return true;
@@ -320,6 +333,24 @@ class TagsWidget extends Widget {
 
   removeTagForSelectedCellWithName(name: string) {
     write_tag(this.currentActiveCell, name, false);
+  }
+
+  removeTagFromAllCells(name:string) {
+    let notebookPanel = this.notebookTracker.currentWidget;
+    let notebook = notebookPanel.notebook;
+    for (let i=0; i< notebookPanel.model.cells.length; i++) {
+      let currentCell = notebook.widgets[i] as Cell;
+      if (this.containsTag(name, currentCell)) {
+        write_tag(currentCell, name, false);
+      }
+    }
+    var newArray = [...this.allTagsInNotebook]; // make a separate copy of the array
+    var index = newArray.indexOf(name);
+    newArray.splice(index, 1);
+    for (var j=0; j<newArray.length; j++) {
+      let name = newArray[j];
+      this.addTagIntoAllTagsList(name);
+    }
   }
 
   addTagIntoAllTagsList(name: string) {
