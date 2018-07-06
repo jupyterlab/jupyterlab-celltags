@@ -1,5 +1,4 @@
 import {
-
   JupyterLab, JupyterLabPlugin
 } from '@jupyterlab/application';
 
@@ -52,10 +51,8 @@ class TagsToolComponent extends React.Component<any, any> {
 
   handleSelectingTag(name: string, deleted:boolean) {
     if (deleted) {
-      console.log("DSJF");
       this.setState({ selectedTag: null });
-    }
-    else if (this.state.selectedTag == null || this.state.selectedTag != name) {
+    } else if (this.state.selectedTag == null || this.state.selectedTag != name) {
       this.setState({ selectedTag: name });
     } else {
       this.setState({ selectedTag: null });
