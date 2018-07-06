@@ -50,7 +50,7 @@ class TagsToolComponent extends React.Component<any, any> {
     this.handleSelectingTag = this.handleSelectingTag.bind(this);
   }
 
-  handleSelectingTag(name: string, deleted:boolean) {
+  handleSelectingTag(name: string, deleted: boolean) {
     if (deleted) {
       console.log("DSJF");
       this.setState({ selectedTag: null });
@@ -237,9 +237,10 @@ class TagOperationsComponent extends TagsComponent {
     }
   }
 
-  didClickDeleteTag() {    
-    (this.props.widget as TagsWidget).removeTagFromAllCells(this.props.selected);
+  didClickDeleteTag() {
+    console.log('delete');
     this.props.selectHandler(this.props.selected, true);
+    (this.props.widget as TagsWidget).removeTagFromAllCells(this.props.selected);
   }
 
   render() {
@@ -249,7 +250,7 @@ class TagOperationsComponent extends TagsComponent {
        <div> { selected } </div>
         <div 
           className={ "tag-operations-option" }
-          onClick={ () => this.didClickDeleteTag() }
+          onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
         >
           Select All Cells with this Tag
         </div>
@@ -258,7 +259,7 @@ class TagOperationsComponent extends TagsComponent {
           onClick={ () => this.didClickRenameTag() }
         >
           Rename Tag for All Cells
-          <div className={ TAG_EDIT_DIV } hidden={ !this.state.editingSelectedTag }>
+          <div key={ this.props.selected } className={ TAG_EDIT_DIV } hidden={ !this.state.editingSelectedTag }>
             <input className={ EDIT_TAG_INPUT }
                 defaultValue={ this.props.selected }
                 onKeyDown={ (event) => {
@@ -266,7 +267,8 @@ class TagOperationsComponent extends TagsComponent {
                   inputElement.style.width = inputElement.value.length + "ch";
                   if (event.keyCode == 13) {
                     (this.props.widget as TagsWidget).replaceName(this.props.selected, inputElement.value);
-                    this.setState({ selectedTag: inputElement.value });
+                    this.props.selectHandler(inputElement.value, false);
+                    this.setState({ editingSelectedTag: false });
                   }
                 } }
             />
@@ -274,7 +276,7 @@ class TagOperationsComponent extends TagsComponent {
         </div> 
         <div 
           className={ "tag-operations-option"  }
-          onClick={ () => (this.props.widget as TagsWidget).removeTagFromAllCells(this.props.selected) }
+          onClick={ () => this.didClickDeleteTag() }
         >
           Delete Tag from All Cells
         </div> 
