@@ -125,10 +125,10 @@ class AllTagsInNotebookComponent extends TagsComponent {
   constructor(props: any) {
     super(props);
   }
-/*
+
   singleCellOperationButton() {
-    return <img src="" />;
-  }*/
+    return <img src={require("../static/darkgrey_addcircle.svg")} />;
+  }
 
   singleCellOperationHandler(name: string) {
     (this.props.widget as TagsWidget).addTagToActiveCell(name);
