@@ -186,6 +186,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
   }
 
   singleCellOperationHandler(name: string) {
+    this.props.selectHandler(null, false);
     (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
   }
 
