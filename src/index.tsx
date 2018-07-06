@@ -397,19 +397,16 @@ class TagsWidget extends Widget {
   removeTagFromAllCells(name:string) {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.notebook;
+    this.tagsListShallNotRefresh = true;
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
         write_tag(currentCell, name, false);
       }
     }
-    var newArray = [...this.allTagsInNotebook]; // make a separate copy of the array
-    var index = newArray.indexOf(name);
-    newArray.splice(index, 1);
-    for (var j=0; j<newArray.length; j++) {
-      let name = newArray[j];
-      this.addTagIntoAllTagsList(name);
-    }
+    this.tagsListShallNotRefresh = false;
+    this.loadTagsForActiveCell();
+    this.getAllTagsInNotebook();
   }
 
   addTagIntoAllTagsList(name: string) {
