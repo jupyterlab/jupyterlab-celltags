@@ -386,7 +386,10 @@ class TagsWidget extends Widget {
 
   didFinishAddingTags(name: string) {
     write_tag(this.currentActiveCell, name, true);
-    this.addTagIntoAllTagsList(name);
+    let new_tags = name.split(/[,\s]+/);
+    for (var i=0; i < new_tags.length; i++) {
+      this.addTagIntoAllTagsList(new_tags[i]);
+    }
   }
 
   removeTagForSelectedCellWithName(name: string) {
