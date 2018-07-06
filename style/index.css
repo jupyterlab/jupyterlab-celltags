@@ -107,3 +107,15 @@
     width:100%;
     padding:8px;
 }
+
+.jp-CellTools-tool {
+    overflow: visible;
+}
+
+.jp-CellTools {
+    overflow: scroll;
+}
+
+.jp-ActiveCellTool {
+    min-height: 54px;
+}
