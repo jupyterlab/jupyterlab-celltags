@@ -32,8 +32,6 @@ import * as ReactDOM from 'react-dom';
 
 import '../style/index.css';
 
-import * as darkgreyadd from '../static/darkgrey_addcircle.svg';
-
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
