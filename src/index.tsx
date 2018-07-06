@@ -35,7 +35,6 @@ import '../style/index.css';
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
-const TAG_BUTTON_CLASS = 'jp-cellTags-button';
 const TAG_ADD_DIV = 'jp-cellTags-tag-add-div';
 const TAG_EDIT_DIV = 'jp-cellTags-tag-edit-div';
 const TAG_INPUT = 'jp-cellTags-tag-input';
@@ -90,6 +89,14 @@ class TagsComponent extends React.Component<any, any> {
     }
   }
 
+  singleCellOperationButton() {
+    return '*';
+  }
+
+  singleCellOperationHandler(name: string) {
+    console.log(name);
+  }
+
   renderElementForTags(tags: string[]) {
     const selectedTag = this.props.selected as string;
     return tags.map((tag, index) => {
@@ -103,6 +110,10 @@ class TagsComponent extends React.Component<any, any> {
           }
         >
           <label>{ tag }</label>
+          <label onClick={ (event) => {
+            event.stopPropagation();
+            this.singleCellOperationHandler(tag);
+          } }>{ this.singleCellOperationButton() }</label>
         </div>
       );
     });
@@ -115,9 +126,12 @@ class AllTagsInNotebookComponent extends TagsComponent {
     super(props);
   }
 
-  addTagToCell() {
-    let toAdd = this.props.selected;
-    (this.props.widget as TagsWidget).addTagToActiveCell(toAdd);
+  singleCellOperationButton() {
+    return ' +';
+  }
+
+  singleCellOperationHandler(name: string) {
+    (this.props.widget as TagsWidget).addTagToActiveCell(name);
   }
 
   render() {
@@ -146,10 +160,12 @@ class TagsForSelectedCellComponent extends TagsComponent {
     (this.props.widget as TagsWidget).didFinishAddingTags(name);
   }
 
-  removeSelectedTagFromCell() {
-    if (this.props.selected as string != null) {
-      (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(this.props.selected as string);
-    }
+  singleCellOperationButton() {
+    return ' -';
+  }
+
+  singleCellOperationHandler(name: string) {
+    (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
   }
 
   didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -163,51 +179,38 @@ class TagsForSelectedCellComponent extends TagsComponent {
 
   render() {
     var renderedTags = null;
-    var renderedTools = (
-      <div>
-        <button 
-          className={ TAG_BUTTON_CLASS }
-          onClick={ () => this.removeSelectedTagFromCell() }
-        >
-          Remove
-        </button>
-      </div>
-    );
     if (this.props.tags != null) {
       let tags = (this.props.tags as string).toString().split(',');
       renderedTags = this.renderElementForTags(tags);
     }
     return (
-      <div className="tag-section">
-        { renderedTools }
-        <div className="tag-holder">
-          { renderedTags }
-          <div className={ TAG_ADD_DIV } >
-            <input className={ TAG_INPUT }
-              defaultValue='Add Tag'
-              onClick={ (event) => {
-                this.setState({ plusIconShouldHide: true });
-                let inputElement = event.target as HTMLInputElement;
-                if (inputElement.value === 'Add Tag') {
-                  inputElement.value = '';
-                  inputElement.style.width = '63px';
-                  inputElement.style.minWidth = '63px';
-                }
-              } }
-              onKeyDown={ (event) => {
-                let inputElement = event.target as HTMLInputElement;
-                inputElement.style.width = inputElement.value.length + "ch";
-                if (this.didPressedKeyIn(event) == 13) {
-                  inputElement.value = 'Add Tag';
-                  inputElement.style.width = '50px';
-                  inputElement.style.minWidth = '50px';
-                  inputElement.blur();
-                  this.setState({ plusIconShouldHide: false });
-                }
-              } }
-            />
-            <label hidden={ this.state.plusIconShouldHide }>  +</label>
-          </div>
+      <div className="tag-holder">
+        { renderedTags }
+        <div className={ TAG_ADD_DIV } >
+          <input className={ TAG_INPUT }
+            defaultValue='Add Tag'
+            onClick={ (event) => {
+              this.setState({ plusIconShouldHide: true });
+              let inputElement = event.target as HTMLInputElement;
+              if (inputElement.value === 'Add Tag') {
+                inputElement.value = '';
+                inputElement.style.width = '63px';
+                inputElement.style.minWidth = '63px';
+              }
+            } }
+            onKeyDown={ (event) => {
+              let inputElement = event.target as HTMLInputElement;
+              inputElement.style.width = inputElement.value.length + "ch";
+              if (this.didPressedKeyIn(event) == 13) {
+                inputElement.value = 'Add Tag';
+                inputElement.style.width = '50px';
+                inputElement.style.minWidth = '50px';
+                inputElement.blur();
+                this.setState({ plusIconShouldHide: false });
+              }
+            } }
+          />
+          <label hidden={ this.state.plusIconShouldHide }>  +</label>
         </div>
       </div>
     );
