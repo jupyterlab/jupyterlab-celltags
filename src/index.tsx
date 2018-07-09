@@ -397,7 +397,9 @@ class TagsWidget extends Widget {
   }
 
   addTagIntoAllTagsList(name: string) {
-    if (this.allTagsInNotebook == null) {
+    if (name === "") {
+      //do nothing;
+    } else if (this.allTagsInNotebook == null) {
       this.allTagsInNotebook = [name];
     } else {
       if (this.allTagsInNotebook.indexOf(name) < 0) {
