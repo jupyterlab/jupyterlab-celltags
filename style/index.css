@@ -3,8 +3,8 @@
     background-color: #E2E2E2;
     border-radius:160px;
     padding:6px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 11px;
+    padding-right: 11px;
     margin:4px;
     width:fit-content;
 }
@@ -15,8 +15,8 @@
     border: 1px solid #828282;
     border-radius:160px;
     padding: 6px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin: 4px;
     width: fit-content;
 }
@@ -27,8 +27,8 @@
     background-color: #2196F3;
     border-radius:160px;
     padding: 6px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin: 4px;
     width: fit-content;
 }
@@ -64,23 +64,23 @@
     background-color: #2196F3;
     border-radius:160px;
     padding: 6px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin:4px;
     width:fit-content;
 }
-
+/*
 .no-tag-selected {
     box-sizing: border-box;
     background-color: #E2E2E2;
     color: #808080;
     border-radius:160px;
     padding:6px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 11px;
+    padding-right: 11px;
     margin:4px;
     width:fit-content;
-}
+}*/
 
 .tag-holder {
     display: flex;
@@ -91,14 +91,16 @@
 }
 
 .tag-header {
-    padding-left: 8px;
-    padding-top: 5px;
+    padding-left: 12px;
+    padding-top: 10px;
+    padding-bottom: 4px;
     text-transform: uppercase;
     font-size: 10pt;
 }
 
 .tag-sub-header {
     padding-left:10px;
+    margin-bottom: 3px;
     color: #828282;
 }
 
@@ -106,6 +108,8 @@
     height:0;
     border:0; 
     border-top:1px solid #E2E2E2; 
+    padding-top: 0px;
+    margin-top:0px;
 } 
 .tag-operations-option {
     font-size:13px;
@@ -127,5 +131,7 @@
 
 .tag-icon {
     padding-left: 10px;
-    height: 13.5px;
+    margin-top: 2px;
+    margin-bottom:-1px;
+    height: 13px;
 }
