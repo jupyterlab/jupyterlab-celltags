@@ -110,7 +110,7 @@
 }
 
 .jp-CellTools {
-    overflow: scroll;
+    overflow-y: auto;
 }
 
 .jp-ActiveCellTool {
