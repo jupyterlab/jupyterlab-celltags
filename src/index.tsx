@@ -229,6 +229,15 @@ class TagsForSelectedCellComponent extends TagsComponent {
                 this.setState({ plusIconShouldHide: false });
               }
             } }
+            onBlur = { (event) => {
+              let inputElement = event.target as HTMLInputElement;
+              inputElement.value = 'Add Tag';
+              inputElement.style.width = '50px';
+              inputElement.style.minWidth = '50px';
+              inputElement.blur();
+              this.setState({ plusIconShouldHide: false });
+              }
+            } 
           />
           <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
         </div>
