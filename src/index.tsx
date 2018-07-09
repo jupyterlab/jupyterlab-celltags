@@ -61,10 +61,11 @@ class TagsToolComponent extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <div className="tag-header">Tags in Active Cell</div>
+        <span><div className="tag-header">Tags</div><hr className={"tag-header-hr"}/></span>
+        <div className="tag-sub-header">Tags in Active Cell</div>
         <TagsForSelectedCellComponent widget={ this.props.widget } tags={ this.props.tagsList } 
           selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
-        <div className="tag-header">Other Tags In Notebook</div>
+        <div className="tag-sub-header">Other Tags in Notebook</div>
         <AllTagsInNotebookComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
           selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
         <TagOperationsComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
@@ -131,17 +132,9 @@ class AllTagsInNotebookComponent extends TagsComponent {
 
   singleCellOperationButton(name: string) {
     if (this.props.selected === name) {
-      if (this.tagAlreadyInActiveCellTagsList(name)) {
-        return <img src={ require("../static/lightblue_addcircle.svg") } className="tag-icon"/>;
-      } else {
-        return <img src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
-      }
+      return <img src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
     } else {
-      if (this.tagAlreadyInActiveCellTagsList(name)) {
-        return <img src={ require("../static/lightgrey_addcircle.svg") } className="tag-icon"/>;
-      } else {
-        return <img src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
-      }
+      return <img src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
     }
   }
 
@@ -162,7 +155,7 @@ class AllTagsInNotebookComponent extends TagsComponent {
       renderedTags = this.renderElementForTags(tagsToRender);
     }
     return (
-      <div className="tag-section">
+      <div>
         <div className="tag-holder">
         { renderedTags }
         </div>
@@ -237,7 +230,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
               }
             } }
           />
-          <label hidden={ this.state.plusIconShouldHide }>  +</label>
+          <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
         </div>
       </div>
     );
@@ -249,18 +242,6 @@ class TagOperationsComponent extends TagsComponent {
 
   constructor(props: any) {
     super(props);
-  }
-
-  renderSelectedTag() {
-    if (this.props.selected !== null) {
-      return ( <div
-        key={ this.props.selected }
-        className={ TAG_SELECTED_LABEL_DIV_CLASS }
-      ><label hidden={ false }>{ this.props.selected as string }</label></div>);
-    }
-    else {
-      return <div key="notagselected" className="no-tag-selected">No Tag Selected</div>;
-    }
   }
 
   didClickRenameTag() {
@@ -275,16 +256,14 @@ class TagOperationsComponent extends TagsComponent {
   }
 
   render() {
-    var selected = this.renderSelectedTag();
     return (
-      <div className="tag-section">
-       <div> { selected } </div>
-        <div 
+      <div className="tag-holder">
+        {/* <div 
           className={ "tag-operations-option" }
           onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
         >
           Select All Cells with this Tag
-        </div>
+        </div> */}
         <div 
           className={ "tag-operations-option"  }
           onClick={ () => this.didClickRenameTag() }
