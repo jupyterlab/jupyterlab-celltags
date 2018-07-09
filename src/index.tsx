@@ -145,9 +145,11 @@ class AllTagsInNotebookComponent extends TagsComponent {
   render() {
     let tags = this.props.tags as string[];
     let tagsToRender: string[] =[];
-    for (let i=0; i < tags.length; i++) {
-      if (!this.tagAlreadyInActiveCellTagsList(tags[i])) {
-        tagsToRender.push(tags[i])
+    if (tags) {
+      for (let i=0; i < tags.length; i++) {
+        if (!this.tagAlreadyInActiveCellTagsList(tags[i])) {
+          tagsToRender.push(tags[i])
+        }
       }
     }
     var renderedTags = null;
@@ -185,7 +187,9 @@ class TagsForSelectedCellComponent extends TagsComponent {
 
   singleCellOperationHandler(name: string) {
     this.props.selectHandler(null, false);
-    (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
+    if (name !== null) {
+      (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
+    }
   }
 
   didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -220,6 +224,7 @@ class TagsForSelectedCellComponent extends TagsComponent {
             } }
             onKeyDown={ (event) => {
               let inputElement = event.target as HTMLInputElement;
+              console.log("input length: line 226" + inputElement.value);
               inputElement.style.width = inputElement.value.length + "ch";
               if (this.didPressedKeyIn(event) == 13) {
                 inputElement.value = 'Add Tag';
@@ -283,6 +288,7 @@ class TagOperationsComponent extends TagsComponent {
                 defaultValue={ this.props.selected }
                 onKeyDown={ (event) => {
                   let inputElement = event.target as HTMLInputElement;
+                  console.log("input length: line 290" + inputElement.value);
                   inputElement.style.width = inputElement.value.length + "ch";
                   if (event.keyCode == 13) {
                     (this.props.widget as TagsWidget).replaceName(this.props.selected, inputElement.value);
@@ -318,6 +324,7 @@ class TagsWidget extends Widget {
       return false;
     }
     let tagList = cell.model.metadata.get("tags") as string[];
+    console.log("tags: line 326" + tagList);
     if (tagList) {
       for (let i=0; i< tagList.length; i++){
         if (tagList[i] === tag) {
@@ -336,6 +343,7 @@ class TagsWidget extends Widget {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.notebook;
     let first:boolean = true;
+    console.log("notebook cells: line 345" + notebookPanel.model.cells);
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
@@ -358,6 +366,7 @@ class TagsWidget extends Widget {
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.tagsListShallNotRefresh = true;
+    console.log("cells from notebook: line 368" + cells);
     for (var i=0; i<cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
@@ -381,6 +390,7 @@ class TagsWidget extends Widget {
   didFinishAddingTags(name: string) {
     write_tag(this.currentActiveCell, name, true);
     let new_tags = name.split(/[,\s]+/);
+    console.log("new tags: line 392" + new_tags);
     for (var i=0; i < new_tags.length; i++) {
       this.addTagIntoAllTagsList(new_tags[i]);
     }
@@ -394,6 +404,7 @@ class TagsWidget extends Widget {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.notebook;
     this.tagsListShallNotRefresh = true;
+    console.log("notebook cells: line 406" + notebookPanel.model.cells );
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
@@ -426,6 +437,7 @@ class TagsWidget extends Widget {
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.allTagsInNotebook = null;
+    console.log("notebook cells: line 439" + cells);
     for (var i=0; i<cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
