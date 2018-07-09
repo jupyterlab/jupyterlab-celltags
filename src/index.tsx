@@ -61,13 +61,12 @@ class TagsToolComponent extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <span className="tag-header">Tags in Active Cell</span><hr className="tag-header-hr"/>
+        <div className="tag-header">Tags in Active Cell</div>
         <TagsForSelectedCellComponent widget={ this.props.widget } tags={ this.props.tagsList } 
           selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
-        <span className="tag-header">All Tags In Notebook</span><hr className={"tag-header-hr"}/>
+        <div className="tag-header">Other Tags In Notebook</div>
         <AllTagsInNotebookComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
           selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
-        <span className="tag-header">Tag Operations</span><hr className={"tag-header-hr"}/>
         <TagOperationsComponent widget={ this.props.widget } tags={ this.props.allTagsList } 
           selected={ this.state.selectedTag } selectHandler={ this.handleSelectingTag } />
       </div>
@@ -152,9 +151,15 @@ class AllTagsInNotebookComponent extends TagsComponent {
 
   render() {
     let tags = this.props.tags as string[];
+    let tagsToRender: string[] =[];
+    for (let i=0; i < tags.length; i++) {
+      if (!this.tagAlreadyInActiveCellTagsList(tags[i])) {
+        tagsToRender.push(tags[i])
+      }
+    }
     var renderedTags = null;
-    if (tags != null) {
-      renderedTags = this.renderElementForTags(tags);
+    if (tagsToRender != null) {
+      renderedTags = this.renderElementForTags(tagsToRender);
     }
     return (
       <div className="tag-section">
