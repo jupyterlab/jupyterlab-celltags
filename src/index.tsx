@@ -33,9 +33,9 @@ import * as ReactDOM from 'react-dom';
 import '../style/index.css';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
-const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
-const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
-const TAG_ADD_DIV = 'jp-cellTags-tag-add-div';
+const TAG_LABEL_DIV_CLASS = 'jp-cellTags-unselected-tag';
+const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag';
+const TAG_ADD_DIV = 'jp-cellTags-tag-add';
 const TAG_INPUT = 'jp-cellTags-tag-input';
 const TAG_RENAME_INPUT = 'jp-cellTags-rename-input';
 
