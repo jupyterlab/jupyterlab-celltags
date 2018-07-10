@@ -25,26 +25,24 @@
     height: 13px;
 }
 
-.jp-cellTags-tag-input, .jp-cellTags-rename-input, .jp-cellTags-edit-tag-input {
+.jp-cellTags-tag-input{
+    padding: 0px;
+    color:#828282;
+    font-size: 12px;
     width: 50px;
     min-width: 50px;
     border: none;
     outline: none;
     resize: horizontal;
 }
-.jp-cellTags-tag-input {
-    padding: 0px;
-    color:#828282;
-    font-size: 12px;
-}
 .jp-cellTags-rename-input {
-    background: none;
-    color: white;
-}
-.jp-cellTags-edit-tag-input {
-    color: white;
-    background: transparent;
-    padding: 0px;
+    background: transparent; 
+    border: none;
+    outline: none; 
+    font-size: 13px;
+    padding:0px;
+    color:white;
+    width:fit-content;
 }
 .add-tag-box {
     color: #828282;
@@ -77,13 +75,16 @@
     padding-top: 0px;
     margin-top:0px;
 } 
-.tag-operations-option {
+.tag-operations-option, .tag-operations-no-selected{
     font-size:13px;
     width:100%;
     padding:5px;
 }
 .tag-operations-option:hover { 
     background-color: #EEEEEE;
+}
+.tag-operations-no-selected {
+    color:#828282;
 }
 
 .jp-CellTools-tool {
