@@ -66,7 +66,11 @@ class TagsToolComponent extends React.Component<any, any> {
 
   didClickRenameTag() {
     if (this.state.selected as string != null) {
-      this.setState({ editingSelectedTag: true });
+      if (this.state.editingSelectedTag === false) {
+        this.setState({ editingSelectedTag: true });
+      } else {
+        this.setState({editingSelectedTag: false});
+      }
     }
   }
 
@@ -113,7 +117,13 @@ class TagsToolComponent extends React.Component<any, any> {
               let inputElement = event.target as HTMLInputElement;
               inputElement.style.width = inputElement.value.length + "ch";
               this.didPressedKeyIn(event) 
-            } } />
+            } } 
+            onBlur = { (event) => {
+              let inputElement = event.target as HTMLInputElement;
+              inputElement.value = tag;
+              this.setState({editingSelectedTag:false});
+              }
+            } />
           <label onClick={ (event) => {
             event.stopPropagation();
             cellOperationHandler(tag);
@@ -160,6 +170,7 @@ class TagsToolComponent extends React.Component<any, any> {
         }
       } ));
     }
+    const operationClass = (this.state.selected === null) ? "tag-operations-no-selected": "tag-operations-option";
     return (
       <div>
         <span><div className="tag-header">Tags</div><hr className={"tag-header-hr"}/></span>
@@ -180,7 +191,6 @@ class TagsToolComponent extends React.Component<any, any> {
               } }
               onKeyDown={ (event) => {
                 let inputElement = event.target as HTMLInputElement;
-                console.log("input length: line 226" + inputElement.value);
                 inputElement.style.width = inputElement.value.length + "ch";
                 if (this.didPressedKeyIn(event) == 13) {
                   inputElement.value = 'Add Tag';
@@ -217,13 +227,13 @@ class TagsToolComponent extends React.Component<any, any> {
             Select All Cells with this Tag
           </div> */}
           <div 
-            className={ "tag-operations-option"  }
+            className={ operationClass}
             onClick={ () => this.didClickRenameTag() }
           >
             Rename Tag for All Cells
           </div> 
           <div 
-            className={ "tag-operations-option"  }
+            className={ operationClass }
             onClick={ () => this.didClickDeleteTag() }
           >
             Delete Tag from All Cells
@@ -266,7 +276,6 @@ class TagsWidget extends Widget {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.notebook;
     let first:boolean = true;
-    console.log("notebook cells: line 345" + notebookPanel.model.cells);
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
@@ -284,12 +293,9 @@ class TagsWidget extends Widget {
   }
 
   replaceName(oldTag: string, newTag: string) {
-    console.log(oldTag);
-    console.log(newTag);
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.tagsListShallNotRefresh = true;
-    console.log("cells from notebook: line 368" + cells);
     for (var i=0; i<cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
@@ -313,7 +319,6 @@ class TagsWidget extends Widget {
   didFinishAddingTags(name: string) {
     write_tag(this.currentActiveCell, name, true);
     let new_tags = name.split(/[,\s]+/);
-    console.log("new tags: line 392" + new_tags);
     for (var i=0; i < new_tags.length; i++) {
       this.addTagIntoAllTagsList(new_tags[i]);
     }
@@ -327,7 +332,6 @@ class TagsWidget extends Widget {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.notebook;
     this.tagsListShallNotRefresh = true;
-    console.log("notebook cells: line 406" + notebookPanel.model.cells );
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
@@ -360,7 +364,6 @@ class TagsWidget extends Widget {
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.allTagsInNotebook = null;
-    console.log("notebook cells: line 439" + cells);
     for (var i=0; i<cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
