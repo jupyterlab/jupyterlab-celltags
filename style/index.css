@@ -3,8 +3,8 @@
     background-color: #E2E2E2;
     border-radius:160px;
     padding:6px;
-    padding-left: 11px;
-    padding-right: 11px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin:4px;
     width:fit-content;
 }
@@ -69,18 +69,6 @@
     margin:4px;
     width:fit-content;
 }
-/*
-.no-tag-selected {
-    box-sizing: border-box;
-    background-color: #E2E2E2;
-    color: #808080;
-    border-radius:160px;
-    padding:6px;
-    padding-left: 11px;
-    padding-right: 11px;
-    margin:4px;
-    width:fit-content;
-}*/
 
 .tag-holder {
     display: flex;
@@ -114,7 +102,7 @@
 .tag-operations-option {
     font-size:13px;
     width:100%;
-    padding:8px;
+    padding:5px;
 }
 
 .jp-CellTools-tool {

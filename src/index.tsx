@@ -205,7 +205,7 @@ class TagsToolComponent extends React.Component<any, any> {
           { renderedTagsForActiveCell }
           </div>
         </div>
-        <div className="tag-holder">
+        <div>
           {/* <div 
             className={ "tag-operations-option" }
             onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
