@@ -124,10 +124,10 @@ class TagsToolComponent extends React.Component<any, any> {
               this.setState({editingSelectedTag:false});
               }
             } />
-          <label onClick={ (event) => {
+          <div onClick={ (event) => {
             event.stopPropagation();
             cellOperationHandler(tag);
-          } }>{ cellButton(tag) }</label>
+          } }>{ cellButton(tag) }</div>
         </div>
       );
     });
