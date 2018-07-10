@@ -132,13 +132,11 @@ class TagsToolComponent extends React.Component<any, any> {
             onBlur = { (event) => {
               let inputElement = event.target as HTMLInputElement;
               inputElement.value = tag;
-              this.setState({editingSelectedTag:false});
-            } }
-          /> */ }
+              this.setState({editingSelectedTag:false});*/ }
           <label onClick={ (event) => {
             event.stopPropagation();
             cellOperationHandler(tag);
-          } }>{ cellButton(tag) }</label>
+          } }>{ cellButton(tag) }</div>
         </div>
       );
     });
