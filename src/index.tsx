@@ -37,7 +37,7 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-unselected-tag';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag';
 const TAG_ADD_DIV = 'jp-cellTags-tag-add';
 const TAG_INPUT = 'jp-cellTags-tag-input';
-const TAG_RENAME_INPUT = 'jp-cellTags-rename-input';
+// const TAG_RENAME_INPUT = 'jp-cellTags-rename-input';
 
 class TagsToolComponent extends React.Component<any, any> {
 
@@ -80,10 +80,10 @@ class TagsToolComponent extends React.Component<any, any> {
     this.setState({ selected: newName });
   }
 
-  didPressedKeyIn(event: React.KeyboardEvent<HTMLInputElement>) {
+  didPressedKeyIn(event: React.KeyboardEvent<any>) {
     if (event.keyCode == 13) {
       if (this.state.editingSelectedTag) {
-        let value = (event.target as HTMLInputElement).value;
+        let value = (event.target as HTMLLabelElement).innerHTML;
         this.didfinishEditingTagName(value);
       } else {
         let value = (event.target as HTMLInputElement).value;
@@ -111,8 +111,19 @@ class TagsToolComponent extends React.Component<any, any> {
             this.didSelectTagWithName(tag)
           }
         >
-          <label hidden={ inputShouldShow }>{ tag }</label>
-          <input hidden={ !inputShouldShow } className={ TAG_RENAME_INPUT } defaultValue={ tag } 
+          <label ref={ (label) => inputShouldShow && label && label.focus() }
+            contentEditable={ inputShouldShow } 
+            onFocus={ (event) => document.execCommand('selectAll', false, null) }
+            onKeyDown={ (event) => {
+              this.didPressedKeyIn(event);
+            } }
+            onBlur={ (event) => {
+              let inputElement = event.target as HTMLLabelElement;
+              inputElement.innerHTML = tag;
+              this.setState({ editingSelectedTag: false });
+            } }
+          >{ tag }</label>
+          { /* <input hidden={ !inputShouldShow } className={ TAG_RENAME_INPUT } defaultValue={ tag }
             onKeyDown={ (event) => {
               let inputElement = event.target as HTMLInputElement;
               inputElement.style.width = inputElement.value.length + "ch";
@@ -121,10 +132,8 @@ class TagsToolComponent extends React.Component<any, any> {
             onBlur = { (event) => {
               let inputElement = event.target as HTMLInputElement;
               inputElement.value = tag;
-              this.setState({editingSelectedTag:false});
-              }
-            } />
-          <div onClick={ (event) => {
+              this.setState({editingSelectedTag:false});*/ }
+          <label onClick={ (event) => {
             event.stopPropagation();
             cellOperationHandler(tag);
           } }>{ cellButton(tag) }</div>
