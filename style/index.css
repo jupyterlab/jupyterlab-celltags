@@ -1,84 +1,55 @@
-.jp-cellTags-tag-label-div {
+.jp-cellTags-unselected-tag, .jp-cellTags-tag-add, .jp-cellTags-selected-tag{
     box-sizing: border-box;
-    background-color: #E2E2E2;
-    border-radius:160px;
-    padding:6px;
+    border-radius:20px;
+    padding: 6px;
     padding-left: 10px;
     padding-right: 10px;
     margin:4px;
     width:fit-content;
 }
-
-.jp-cellTags-tag-add-div {
-    box-sizing: border-box;
+.jp-cellTags-selected-tag {
+    color: white;
+    background-color: #2196F3;
+}
+.jp-cellTags-unselected-tag {
+    background-color: #E2E2E2;
+}
+.jp-cellTags-tag-add {
     background-color: white;
     border: 1px solid #828282;
-    border-radius:160px;
-    padding: 6px;
+}
+.tag-icon {
     padding-left: 10px;
-    padding-right: 10px;
-    margin: 4px;
-    width: fit-content;
+    margin-top: 2px;
+    margin-bottom:-1px;
+    height: 13px;
 }
 
-.jp-cellTags-tag-edit-div {
-    color: white;
-    box-sizing: border-box;
-    background-color: #2196F3;
-    border-radius:160px;
-    padding: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 4px;
-    width: fit-content;
-}
-
-.jp-cellTags-tag-input {
+.jp-cellTags-tag-input, .jp-cellTags-rename-input, .jp-cellTags-edit-tag-input {
     width: 50px;
     min-width: 50px;
-    padding: 0px;
     border: none;
     outline: none;
     resize: horizontal;
+}
+.jp-cellTags-tag-input {
+    padding: 0px;
     color:#828282;
     font-size: 12px;
 }
-
 .jp-cellTags-rename-input {
-    width: 50px;
-    min-width: 50px;
-    border: none;
-    outline: none;
-    resize: horizontal;
     background: none;
     color: white;
 }
-
+.jp-cellTags-edit-tag-input {
+    color: white;
+    background: transparent;
+    padding: 0px;
+}
 .add-tag-box {
     color: #828282;
 }
-.jp-cellTags-edit-tag-input {
-    color: white;
-    width: 50px;
-    min-width: 50px;
-    background: transparent;
-    padding: 0px;
-    border: none;
-    outline: none;
-    resize: horizontal;
-}
 
-.jp-cellTags-selected-tag-label-div {
-    color: white;
-    box-sizing: border-box;
-    background-color: #2196F3;
-    border-radius:160px;
-    padding: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin:4px;
-    width:fit-content;
-}
 
 .tag-holder {
     display: flex;
@@ -87,21 +58,18 @@
     height:fit-content; 
     margin-bottom: 20px;
 }
-
 .tag-header {
-    padding-left: 12px;
+    padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 4px;
     text-transform: uppercase;
     font-size: 10pt;
 }
-
 .tag-sub-header {
     padding-left:10px;
     margin-bottom: 3px;
     color: #828282;
 }
-
 .tag-header-hr {
     height:0;
     border:0; 
@@ -114,7 +82,6 @@
     width:100%;
     padding:5px;
 }
-
 .tag-operations-option:hover { 
     background-color: #EEEEEE;
 }
@@ -122,18 +89,9 @@
 .jp-CellTools-tool {
     overflow: visible;
 }
-
 .jp-CellTools {
     overflow-y: auto;
 }
-
 .jp-ActiveCellTool {
     min-height: 54px;
-}
-
-.tag-icon {
-    padding-left: 10px;
-    margin-top: 2px;
-    margin-bottom:-1px;
-    height: 13px;
 }
