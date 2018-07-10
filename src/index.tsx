@@ -94,6 +94,37 @@ class TagsToolComponent extends React.Component<any, any> {
     return event.keyCode;
   }
 
+  addTagOnClick(event: React.MouseEvent<HTMLInputElement>) {
+    this.setState({ plusIconShouldHide: true });
+    let inputElement = event.target as HTMLInputElement;
+    if (inputElement.value === 'Add Tag') {
+      inputElement.value = '';
+      inputElement.style.width = '63px';
+      inputElement.style.minWidth = '63px';
+    }
+  }
+
+  addTagOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    let inputElement = event.target as HTMLInputElement;
+    inputElement.style.width = inputElement.value.length + "ch";
+    if (this.didPressedKeyIn(event) == 13) {
+      inputElement.value = 'Add Tag';
+      inputElement.style.width = '50px';
+      inputElement.style.minWidth = '50px';
+      inputElement.blur();
+      this.setState({ plusIconShouldHide: false });
+    }
+  }
+
+  addTagOnBlur(event:React.FocusEvent<HTMLInputElement>) {
+    let inputElement = event.target as HTMLInputElement;
+    inputElement.value = 'Add Tag';
+    inputElement.style.width = '50px';
+    inputElement.style.minWidth = '50px';
+    inputElement.blur();
+    this.setState({ plusIconShouldHide: false });
+  }
+
   tagAlreadyInActiveCellTagsList(name: string) {
     return (this.props.widget as TagsWidget).activeCellContainsTag(name);
   }
@@ -170,34 +201,6 @@ class TagsToolComponent extends React.Component<any, any> {
         }
       } ));
     }
-    function addTagOnClick(event: React.MouseEvent<HTMLInputElement>) {
-      this.setState({ plusIconShouldHide: true });
-      let inputElement = event.target as HTMLInputElement;
-      if (inputElement.value === 'Add Tag') {
-        inputElement.value = '';
-        inputElement.style.width = '63px';
-        inputElement.style.minWidth = '63px';
-      }
-    }
-    function addTagOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-      let inputElement = event.target as HTMLInputElement;
-      inputElement.style.width = inputElement.value.length + "ch";
-      if (this.didPressedKeyIn(event) == 13) {
-        inputElement.value = 'Add Tag';
-        inputElement.style.width = '50px';
-        inputElement.style.minWidth = '50px';
-        inputElement.blur();
-        this.setState({ plusIconShouldHide: false });
-      }
-    }
-    function addTagOnBlur(event:React.FocusEvent<HTMLInputElement>) {
-      let inputElement = event.target as HTMLInputElement;
-      inputElement.value = 'Add Tag';
-      inputElement.style.width = '50px';
-      inputElement.style.minWidth = '50px';
-      inputElement.blur();
-      this.setState({ plusIconShouldHide: false });
-    }
     const operationClass = (this.state.selected === null) ? "tag-operations-no-selected": "tag-operations-option";
     return (
       <div>
@@ -208,9 +211,9 @@ class TagsToolComponent extends React.Component<any, any> {
           <div className={ TAG_ADD_DIV } >
             <input className={ TAG_INPUT }
               defaultValue='Add Tag'
-              onClick={(event) => addTagOnClick(event)}
-              onKeyDown={ (event) => addTagOnKeyDown(event)}
-              onBlur = { (event) => addTagOnBlur(event)} 
+              onClick={(event) => this.addTagOnClick(event)}
+              onKeyDown={ (event) => this.addTagOnKeyDown(event)}
+              onBlur = { (event) => this.addTagOnBlur(event)} 
             />
             <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
           </div>
@@ -382,6 +385,7 @@ class TagsWidget extends Widget {
   allTagsInNotebook: [string] = null;
   notebookTracker: INotebookTracker = null;
   tagsListShallNotRefresh = false;
+
 }
 
 class TagsTool extends CellTools.Tool {
@@ -409,7 +413,7 @@ class TagsTool extends CellTools.Tool {
     });
     this.notebookTracker.currentChanged.connect(() => {
       this.widget.getAllTagsInNotebook(); 
-    })
+    });
   }
 
   protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
