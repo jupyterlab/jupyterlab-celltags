@@ -37,6 +37,7 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-tag-label-div';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag-label-div';
 const TAG_ADD_DIV = 'jp-cellTags-tag-add-div';
 const TAG_INPUT = 'jp-cellTags-tag-input';
+const TAG_RENAME_INPUT = 'jp-cellTags-rename-input';
 
 class TagsToolComponent extends React.Component<any, any> {
 
@@ -49,7 +50,7 @@ class TagsToolComponent extends React.Component<any, any> {
     if ((!this.state.editingSelectedTag) || (this.state.selected != name)) {
       this.setState({ selected: name, editingSelectedTag: false });
     }
-    if (this.state.selected === name) {
+    if (this.state.selected === name && (!this.state.editingSelectedTag)) {
       this.setState({ selected: null, editingSelectedTag: false });
     }
   }
@@ -107,8 +108,12 @@ class TagsToolComponent extends React.Component<any, any> {
           }
         >
           <label hidden={ inputShouldShow }>{ tag }</label>
-          <input hidden={ !inputShouldShow } className={ TAG_INPUT } defaultValue={ tag } 
-            onKeyDown={ (event) => this.didPressedKeyIn(event) } />
+          <input hidden={ !inputShouldShow } className={ TAG_RENAME_INPUT } defaultValue={ tag } 
+            onKeyDown={ (event) => {
+              let inputElement = event.target as HTMLInputElement;
+              inputElement.style.width = inputElement.value.length + "ch";
+              this.didPressedKeyIn(event) 
+            } } />
           <label onClick={ (event) => {
             event.stopPropagation();
             cellOperationHandler(tag);
@@ -145,8 +150,7 @@ class TagsToolComponent extends React.Component<any, any> {
       renderedTagsForAllCells = this.renderElementForTags(tags, ( (name) => {
         if (this.state.selected === name) {
           return <img src={ require("../static/white_minuscircle.svg") } className="tag-icon" />;
-        }
-        else {
+        } else {
           return <img src={require("../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
         }
       } ), ( (name: string) => {

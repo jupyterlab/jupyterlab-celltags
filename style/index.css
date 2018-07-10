@@ -44,6 +44,16 @@
     font-size: 12px;
 }
 
+.jp-cellTags-rename-input {
+    width: 50px;
+    min-width: 50px;
+    border: none;
+    outline: none;
+    resize: horizontal;
+    background: none;
+    color: white;
+}
+
 .add-tag-box {
     color: #828282;
 }
