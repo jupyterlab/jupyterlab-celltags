@@ -98,7 +98,9 @@ class TagsToolComponent extends React.Component<any, any> {
     return (this.props.widget as TagsWidget).activeCellContainsTag(name);
   }
 
-  renderElementForTags(tags: string[], cellButton: (name: string) => JSX.Element, cellOperationHandler: (name: string) => void) {
+  renderElementForTags(tags: string[], 
+                      cellButton: (name: string, operation: (event: React.MouseEvent<any>) => void) => JSX.Element, 
+                      cellOperationHandler: (name: string) => void) {
     const selectedTag = this.state.selected as string;
     return tags.map((tag, index) => {
       const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
@@ -123,20 +125,10 @@ class TagsToolComponent extends React.Component<any, any> {
               this.setState({ editingSelectedTag: false });
             } }
           >{ tag }</label>
-          { /* <input hidden={ !inputShouldShow } className={ TAG_RENAME_INPUT } defaultValue={ tag }
-            onKeyDown={ (event) => {
-              let inputElement = event.target as HTMLInputElement;
-              inputElement.style.width = inputElement.value.length + "ch";
-              this.didPressedKeyIn(event) 
-            } } 
-            onBlur = { (event) => {
-              let inputElement = event.target as HTMLInputElement;
-              inputElement.value = tag;
-              this.setState({editingSelectedTag:false});*/ }
-          <label onClick={ (event) => {
+          <label>{ cellButton(tag, ((event: React.MouseEvent<any>) => {
             event.stopPropagation();
-            cellOperationHandler(tag);
-          } }>{ cellButton(tag) }</label>
+            cellOperationHandler(tag); 
+          })) }</label>
         </div>
       );
     });
@@ -155,22 +147,22 @@ class TagsToolComponent extends React.Component<any, any> {
     }
     var renderedTagsForActiveCell = null;
     if (otherTagsList != null) {
-      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, ( (name) => {
+      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, ( (name, operation) => {
         if (this.state.selected === name) {
-          return <img src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
+          return <img onClick={ (event) => operation(event) } src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
         } else {
-          return <img src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
+          return <img onClick={ (event) => operation(event) } src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
         }
       } ), ( (name: string) => (this.props.widget as TagsWidget).addTagToActiveCell(name) ));
     }
     var renderedTagsForAllCells = null;
     if (this.props.tagsList != null) {
       let tags = (this.props.tagsList as string).toString().split(',');
-      renderedTagsForAllCells = this.renderElementForTags(tags, ( (name) => {
+      renderedTagsForAllCells = this.renderElementForTags(tags, ( (name, operation) => {
         if (this.state.selected === name) {
-          return <img src={ require("../static/white_minuscircle.svg") } className="tag-icon" />;
+          return <img onClick={ (event) => operation(event) } src={ require("../static/white_minuscircle.svg") } className="tag-icon" />;
         } else {
-          return <img src={require("../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
+          return <img onClick={ (event) => operation(event) } src={require("../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
         }
       } ), ( (name: string) => {
         this.setState({ selected: null });
