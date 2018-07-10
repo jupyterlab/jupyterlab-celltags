@@ -136,7 +136,6 @@ class TagsToolComponent extends React.Component<any, any> {
 
   render() {
     let allTagsList = this.props.allTagsList as string[];
-
     let otherTagsList: string[] =[];
     if (allTagsList) {
       for (let i=0; i < allTagsList.length; i++) {
@@ -171,6 +170,34 @@ class TagsToolComponent extends React.Component<any, any> {
         }
       } ));
     }
+    function addTagOnClick(event: React.MouseEvent<HTMLInputElement>) {
+      this.setState({ plusIconShouldHide: true });
+      let inputElement = event.target as HTMLInputElement;
+      if (inputElement.value === 'Add Tag') {
+        inputElement.value = '';
+        inputElement.style.width = '63px';
+        inputElement.style.minWidth = '63px';
+      }
+    }
+    function addTagOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+      let inputElement = event.target as HTMLInputElement;
+      inputElement.style.width = inputElement.value.length + "ch";
+      if (this.didPressedKeyIn(event) == 13) {
+        inputElement.value = 'Add Tag';
+        inputElement.style.width = '50px';
+        inputElement.style.minWidth = '50px';
+        inputElement.blur();
+        this.setState({ plusIconShouldHide: false });
+      }
+    }
+    function addTagOnBlur(event:React.FocusEvent<HTMLInputElement>) {
+      let inputElement = event.target as HTMLInputElement;
+      inputElement.value = 'Add Tag';
+      inputElement.style.width = '50px';
+      inputElement.style.minWidth = '50px';
+      inputElement.blur();
+      this.setState({ plusIconShouldHide: false });
+    }
     const operationClass = (this.state.selected === null) ? "tag-operations-no-selected": "tag-operations-option";
     return (
       <div>
@@ -181,35 +208,9 @@ class TagsToolComponent extends React.Component<any, any> {
           <div className={ TAG_ADD_DIV } >
             <input className={ TAG_INPUT }
               defaultValue='Add Tag'
-              onClick={ (event) => {
-                this.setState({ plusIconShouldHide: true });
-                let inputElement = event.target as HTMLInputElement;
-                if (inputElement.value === 'Add Tag') {
-                  inputElement.value = '';
-                  inputElement.style.width = '63px';
-                  inputElement.style.minWidth = '63px';
-                }
-              } }
-              onKeyDown={ (event) => {
-                let inputElement = event.target as HTMLInputElement;
-                inputElement.style.width = inputElement.value.length + "ch";
-                if (this.didPressedKeyIn(event) == 13) {
-                  inputElement.value = 'Add Tag';
-                  inputElement.style.width = '50px';
-                  inputElement.style.minWidth = '50px';
-                  inputElement.blur();
-                  this.setState({ plusIconShouldHide: false });
-                }
-              } }
-              onBlur = { (event) => {
-                let inputElement = event.target as HTMLInputElement;
-                inputElement.value = 'Add Tag';
-                inputElement.style.width = '50px';
-                inputElement.style.minWidth = '50px';
-                inputElement.blur();
-                this.setState({ plusIconShouldHide: false });
-                }
-              } 
+              onClick={(event) => addTagOnClick(event)}
+              onKeyDown={ (event) => addTagOnKeyDown(event)}
+              onBlur = { (event) => addTagOnBlur(event)} 
             />
             <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
           </div>
@@ -221,22 +222,10 @@ class TagsToolComponent extends React.Component<any, any> {
           </div>
         </div>
         <div>
-          {/* <div 
-            className={ "tag-operations-option" }
-            onClick={ () => (this.props.widget as TagsWidget).selectAll(this.props.selected) }
-          >
-            Select All Cells with this Tag
-          </div> */}
-          <div 
-            className={ operationClass}
-            onClick={ () => this.didClickRenameTag() }
-          >
+          <div className={ operationClass} onClick={ () => this.didClickRenameTag() }>
             Rename Tag for All Cells
           </div> 
-          <div 
-            className={ operationClass }
-            onClick={ () => this.didClickDeleteTag() }
-          >
+          <div className={ operationClass } onClick={ () => this.didClickDeleteTag() }>
             Delete Tag from All Cells
           </div> 
         </div>
