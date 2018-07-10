@@ -17,6 +17,7 @@
 .jp-cellTags-tag-add {
     background-color: white;
     border: 1px solid #828282;
+    max-width: 95%;
 }
 .tag-icon {
     margin-left: 10px;
@@ -34,6 +35,7 @@
     border: none;
     outline: none;
     resize: horizontal;
+    max-width: 100%;
 }
 .jp-cellTags-rename-input {
     background: transparent; 

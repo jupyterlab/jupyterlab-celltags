@@ -37,7 +37,6 @@ const TAG_LABEL_DIV_CLASS = 'jp-cellTags-unselected-tag';
 const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag';
 const TAG_ADD_DIV = 'jp-cellTags-tag-add';
 const TAG_INPUT = 'jp-cellTags-tag-input';
-// const TAG_RENAME_INPUT = 'jp-cellTags-rename-input';
 
 class TagsToolComponent extends React.Component<any, any> {
 
@@ -106,7 +105,12 @@ class TagsToolComponent extends React.Component<any, any> {
 
   addTagOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     let inputElement = event.target as HTMLInputElement;
-    inputElement.style.width = inputElement.value.length + "ch";
+    let tmp = document.createElement('span');
+    tmp.className = TAG_INPUT;
+    tmp.innerHTML = inputElement.value;
+    document.body.appendChild(tmp);
+    inputElement.style.width = (tmp.getBoundingClientRect().width + 8) + "px";
+    document.body.removeChild(tmp);
     if (this.didPressedKeyIn(event) == 13) {
       inputElement.value = 'Add Tag';
       inputElement.style.width = '50px';
