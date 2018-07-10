@@ -106,19 +106,11 @@ class TagsToolComponent extends React.Component<any, any> {
       const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
       const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
       return (
-        <div
-          key={ tag }
-          className={ tagClass }
-          onClick={ (event) =>
-            this.didSelectTagWithName(tag)
-          }
-        >
+        <div key={ tag } className={ tagClass } onClick={ (event) => this.didSelectTagWithName(tag)}>
           <label ref={ (label) => inputShouldShow && label && label.focus() }
             contentEditable={ inputShouldShow } 
             onFocus={ (event) => document.execCommand('selectAll', false, null) }
-            onKeyDown={ (event) => {
-              this.didPressedKeyIn(event);
-            } }
+            onKeyDown={ (event) => {this.didPressedKeyIn(event);} }
             onBlur={ (event) => {
               let inputElement = event.target as HTMLLabelElement;
               inputElement.innerHTML = tag;
