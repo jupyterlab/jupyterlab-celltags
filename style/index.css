@@ -105,6 +105,10 @@
     padding:5px;
 }
 
+.tag-operations-option:hover { 
+    background-color: #EEEEEE;
+}
+
 .jp-CellTools-tool {
     overflow: visible;
 }
