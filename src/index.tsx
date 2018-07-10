@@ -136,7 +136,7 @@ class TagsToolComponent extends React.Component<any, any> {
           <label onClick={ (event) => {
             event.stopPropagation();
             cellOperationHandler(tag);
-          } }>{ cellButton(tag) }</div>
+          } }>{ cellButton(tag) }</label>
         </div>
       );
     });
