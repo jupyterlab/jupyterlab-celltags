@@ -66,7 +66,7 @@
 .tag-sub-header {
     padding-left:10px;
     margin-bottom: 3px;
-    color: #828282;
+    color: black;
 }
 .tag-header-hr {
     height:0;
@@ -85,7 +85,7 @@
     background-color: #EEEEEE;
 }
 .tag-operations-no-selected {
-    color:#828282;
+    color:#A8A8A8;
 }
 
 .jp-CellTools-tool {
