@@ -25,6 +25,12 @@
     margin-bottom:-1px;
     height: 13px;
 }
+.input-icon {
+    margin-left: 5px;
+    margin-top: 2px;
+    margin-bottom:-1px;
+    height: 13px;
+}
 
 .jp-cellTags-tag-input{
     padding: 0px;
@@ -63,7 +69,7 @@
     padding-top: 10px;
     padding-bottom: 4px;
     text-transform: uppercase;
-    font-size: 10pt;
+    font-size: 13px;
 }
 .tag-sub-header {
     padding-left:10px;
@@ -88,6 +94,7 @@
 }
 .tag-operations-no-selected {
     color:#A8A8A8;
+    font-weight: lighter;
 }
 
 .jp-CellTools-tool {
@@ -98,4 +105,8 @@
 }
 .jp-ActiveCellTool {
     min-height: 54px;
+}
+
+#bottom {
+    margin-bottom:20px;
 }
