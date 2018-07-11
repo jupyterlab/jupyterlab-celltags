@@ -312,7 +312,7 @@ class TagsToolComponent extends React.Component<any, any> {
           <div className={ operationClass} onClick={ () => this.didClickRenameTag() }>
             Rename Tag for All Cells
           </div> 
-          <div className={ operationClass } onClick={ () => this.didClickDeleteTag() }>
+          <div id= {"bottom"} className={ operationClass } onClick={ () => this.didClickDeleteTag() }>
             Delete Tag from All Cells
           </div> 
         </div>
