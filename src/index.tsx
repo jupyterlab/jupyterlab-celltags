@@ -38,59 +38,89 @@ const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag';
 const TAG_ADD_DIV = 'jp-cellTags-tag-add';
 const TAG_INPUT = 'jp-cellTags-tag-input';
 
-class TagsToolComponent extends React.Component<any, any> {
+abstract class TagComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { selected: null, editingSelectedTag: false, plusIconShouldHide: false };
   }
 
-  didSelectTagWithName(name: string) {
-    if ((!this.state.editingSelectedTag) || (this.state.selected != name)) {
-      this.setState({ selected: name, editingSelectedTag: false });
-    }
-    if (this.state.selected === name && (!this.state.editingSelectedTag)) {
-      this.setState({ selected: null, editingSelectedTag: false });
+  abstract singleCellOperationHandler(name: string): void;
+  abstract singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void): JSX.Element;
+
+  render() {
+    const inputShouldShow = this.props.inputShouldShow as boolean;
+    const tag = this.props.tag as string;
+    return (
+      <div>
+        <label ref={ (label) => inputShouldShow && label && label.focus() }
+          contentEditable={ inputShouldShow } 
+          onFocus={ (event) => document.execCommand('selectAll', false, null) }
+          onKeyDown={ (event) => {
+            if (event.keyCode == 13) {
+              let value = (event.target as HTMLLabelElement).innerHTML;
+              this.props.finishEditingHandler(value);
+            }
+          } }
+          onBlur={ (event) => {
+            let inputElement = event.target as HTMLLabelElement;
+            inputElement.innerHTML = tag;
+            this.setState({ editingSelectedTag: false });
+          } }
+        >{ tag }</label>
+        <label>{ this.singleCellOperationButton(tag, ((event: React.MouseEvent<any>) => {
+          event.stopPropagation();
+          this.singleCellOperationHandler(tag); 
+        })) }</label>
+      </div>
+    )
+  }
+
+}
+
+class TagForActiveCellComponent extends TagComponent {
+
+  singleCellOperationHandler(name: string) {
+    (this.props.widget as TagsWidget).addTagToActiveCell(name);
+  }
+
+  singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
+    if (this.props.selectedTag as string === name) {
+      return <img onClick={ (event) => operation(event) } src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
+    } else {
+      return <img onClick={ (event) => operation(event) } src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
     }
   }
 
-  didClickDeleteTag() {
-    this.setState({ selected: null });
-    (this.props.widget as TagsWidget).removeTagFromAllCells(this.state.selected);
+}
+
+class TagForAllCellsComponent extends TagComponent {
+
+  singleCellOperationHandler(name: string) {
+    // TODO: set state to null
+    if (name !== null) {
+      (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
+    }
+  }
+
+  singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
+    if (this.props.selectedTag as string === name) {
+      return <img onClick={ (event) => operation(event) } src={ require("../static/white_minuscircle.svg") } className="tag-icon" />;
+    } else {
+      return <img onClick={ (event) => operation(event) } src={require("../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
+    }
+  }
+
+}
+
+class AddTagComponent extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = { plusIconShouldHide: false };
   }
 
   didFinishAddingTagWithName(name: string) {
     (this.props.widget as TagsWidget).didFinishAddingTags(name);
-  }
-
-  didClickRenameTag() {
-    if (this.state.selected as string != null) {
-      if (this.state.editingSelectedTag === false) {
-        this.setState({ editingSelectedTag: true });
-      } else {
-        this.setState({editingSelectedTag: false});
-      }
-    }
-  }
-
-  didfinishEditingTagName(newName: string) {
-    this.setState({ editingSelectedTag: false });
-    (this.props.widget as TagsWidget).replaceName(this.state.selected, newName);
-    this.setState({ selected: newName });
-  }
-
-  didPressedKeyIn(event: React.KeyboardEvent<any>) {
-    if (event.keyCode == 13) {
-      if (this.state.editingSelectedTag) {
-        let value = (event.target as HTMLLabelElement).innerHTML;
-        this.didfinishEditingTagName(value);
-      } else {
-        let value = (event.target as HTMLInputElement).value;
-        (event.target as HTMLInputElement).value = '';
-        this.didFinishAddingTagWithName(value);
-      }
-    }
-    return event.keyCode;
   }
 
   addTagOnClick(event: React.MouseEvent<HTMLInputElement>) {
@@ -111,7 +141,10 @@ class TagsToolComponent extends React.Component<any, any> {
     document.body.appendChild(tmp);
     inputElement.style.width = (tmp.getBoundingClientRect().width + 8) + "px";
     document.body.removeChild(tmp);
-    if (this.didPressedKeyIn(event) == 13) {
+    if (event.keyCode == 13) {
+      let value = inputElement.value;
+      inputElement.value = '';
+      this.didFinishAddingTagWithName(value);
       inputElement.value = 'Add Tag';
       inputElement.style.width = '50px';
       inputElement.style.minWidth = '50px';
@@ -129,33 +162,64 @@ class TagsToolComponent extends React.Component<any, any> {
     this.setState({ plusIconShouldHide: false });
   }
 
+  render() {
+    return (
+      <div className={ TAG_ADD_DIV } >
+        <input className={ TAG_INPUT }
+          defaultValue='Add Tag'
+          onClick={(event) => this.addTagOnClick(event)}
+          onKeyDown={ (event) => this.addTagOnKeyDown(event)}
+          onBlur = { (event) => this.addTagOnBlur(event)} 
+        />
+        <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
+      </div>
+    );
+  }
+
+}
+
+class TagListComponent extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props);
+    this.didfinishEditingTagName = this.didfinishEditingTagName.bind(this);
+    this.state = { selected: this.props.selectedTag };
+  }
+
+  didSelectTagWithName(name: string) {
+    if ((!(this.props.editingSelectedTag)) || (this.props.selectedTag != name)) {
+      this.props.selectionStateHandler(name);
+      this.props.editingStateHandler(false);
+    }
+    if (this.props.selectedTag === name && (!(this.props.editingSelectedTag as boolean))) {
+      this.props.selectionStateHandler(null);
+      this.props.editingStateHandler(false);
+    }
+  }
+
+  didfinishEditingTagName(newName: string) {
+    this.props.editingStateHandler(false);
+    (this.props.widget as TagsWidget).replaceName(this.props.selectedTag, newName);
+    this.props.selectionStateHandler(newName);
+  }
+
   tagAlreadyInActiveCellTagsList(name: string) {
     return (this.props.widget as TagsWidget).activeCellContainsTag(name);
   }
 
-  renderElementForTags(tags: string[], 
-                      cellButton: (name: string, operation: (event: React.MouseEvent<any>) => void) => JSX.Element, 
-                      cellOperationHandler: (name: string) => void) {
-    const selectedTag = this.state.selected as string;
+  renderElementForTags(tags: string[], TagType: typeof TagComponent) {
+    const selectedTag = this.props.selectedTag;
     return tags.map((tag, index) => {
       const tagClass = (selectedTag === tag) ? TAG_SELECTED_LABEL_DIV_CLASS : TAG_LABEL_DIV_CLASS;
-      const inputShouldShow = (selectedTag === tag) && (this.state.editingSelectedTag);
+      const inputShouldShow = (selectedTag === tag) && (this.props.editingSelectedTag as boolean);
       return (
         <div key={ tag } className={ tagClass } onClick={ (event) => this.didSelectTagWithName(tag)}>
-          <label ref={ (label) => inputShouldShow && label && label.focus() }
-            contentEditable={ inputShouldShow } 
-            onFocus={ (event) => document.execCommand('selectAll', false, null) }
-            onKeyDown={ (event) => {this.didPressedKeyIn(event);} }
-            onBlur={ (event) => {
-              let inputElement = event.target as HTMLLabelElement;
-              inputElement.innerHTML = tag;
-              this.setState({ editingSelectedTag: false });
-            } }
-          >{ tag }</label>
-          <label>{ cellButton(tag, ((event: React.MouseEvent<any>) => {
-            event.stopPropagation();
-            cellOperationHandler(tag); 
-          })) }</label>
+          <TagType widget={ this.props.widget }
+            finishEditingHandler={ this.didfinishEditingTagName } 
+            selectedTag={ this.props.selectedTag }
+            inputShouldShow={ inputShouldShow }
+            tag={ tag }
+          />
         </div>
       );
     });
@@ -173,46 +237,19 @@ class TagsToolComponent extends React.Component<any, any> {
     }
     var renderedTagsForActiveCell = null;
     if (otherTagsList != null) {
-      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, ( (name, operation) => {
-        if (this.state.selected === name) {
-          return <img onClick={ (event) => operation(event) } src={ require("../static/white_addcircle.svg") } className="tag-icon"/>;
-        } else {
-          return <img onClick={ (event) => operation(event) } src={ require("../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
-        }
-      } ), ( (name: string) => (this.props.widget as TagsWidget).addTagToActiveCell(name) ));
+      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, TagForActiveCellComponent);
     }
     var renderedTagsForAllCells = null;
     if (this.props.tagsList != null) {
       let tags = (this.props.tagsList as string).toString().split(',');
-      renderedTagsForAllCells = this.renderElementForTags(tags, ( (name, operation) => {
-        if (this.state.selected === name) {
-          return <img onClick={ (event) => operation(event) } src={ require("../static/white_minuscircle.svg") } className="tag-icon" />;
-        } else {
-          return <img onClick={ (event) => operation(event) } src={require("../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
-        }
-      } ), ( (name: string) => {
-        this.setState({ selected: null });
-        if (name !== null) {
-          (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
-        }
-      } ));
+      renderedTagsForAllCells = this.renderElementForTags(tags, TagForAllCellsComponent);
     }
-    const operationClass = (this.state.selected === null) ? "tag-operations-no-selected": "tag-operations-option";
     return (
       <div>
-        <span><div className="tag-header">Tags</div><hr className={"tag-header-hr"}/></span>
         <div className="tag-sub-header">Tags in Active Cell</div>
         <div className="tag-holder">
-        { renderedTagsForAllCells }
-          <div className={ TAG_ADD_DIV } >
-            <input className={ TAG_INPUT }
-              defaultValue='Add Tag'
-              onClick={(event) => this.addTagOnClick(event)}
-              onKeyDown={ (event) => this.addTagOnKeyDown(event)}
-              onBlur = { (event) => this.addTagOnBlur(event)} 
-            />
-            <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
-          </div>
+          { renderedTagsForAllCells }
+          <AddTagComponent widget={ this.props.widget } />
         </div>
         <div className="tag-sub-header">Other Tags in Notebook</div>
         <div>
@@ -220,6 +257,57 @@ class TagsToolComponent extends React.Component<any, any> {
           { renderedTagsForActiveCell }
           </div>
         </div>
+      </div>
+    );
+  }
+
+}
+
+class TagsToolComponent extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = { selected: null, editingSelectedTag: false };
+    this.changeEditingState = this.changeEditingState.bind(this);
+    this.changeSelectionState = this.changeSelectionState.bind(this);
+  }
+
+  didClickDeleteTag() {
+    this.setState({ selected: null });
+    (this.props.widget as TagsWidget).removeTagFromAllCells(this.state.selected);
+  }
+
+  didClickRenameTag() {
+    if (this.state.selected as string != null) {
+      if (this.state.editingSelectedTag === false) {
+        this.setState({ editingSelectedTag: true });
+      } else {
+        this.setState({ editingSelectedTag: false });
+      }
+    }
+  }
+
+  changeSelectionState(newState: string) {
+    this.setState({ selected: newState });
+  }
+
+  changeEditingState(newState: boolean) {
+    this.setState({ editingSelectedTag: newState });
+  }
+
+  render() {
+    const operationClass = (this.state.selected === null) ? "tag-operations-no-selected": "tag-operations-option";
+    return (
+      <div>
+        <span><div className="tag-header">Tags</div><hr className={"tag-header-hr"}/></span>
+        <TagListComponent widget={ this.props.widget }
+          allTagsList={ this.props.allTagsList }
+          tagsList={ this.props.tagsList }
+          selectionStateHandler={ this.changeSelectionState }
+          editingStateHandler={ this.changeEditingState }
+          selectedTag={ this.state.selected }
+          editingSelectedTag={ this.state.editingSelectedTag }
+        />
         <div>
           <div className={ operationClass} onClick={ () => this.didClickRenameTag() }>
             Rename Tag for All Cells
@@ -278,7 +366,6 @@ class TagsWidget extends Widget {
         }
       }
     }
-    console.log('selected all');
   }
 
   replaceName(oldTag: string, newTag: string) {
@@ -334,7 +421,7 @@ class TagsWidget extends Widget {
 
   addTagIntoAllTagsList(name: string) {
     if (name === "") {
-      //do nothing;
+      return;
     } else if (this.allTagsInNotebook == null) {
       this.allTagsInNotebook = [name];
     } else {
