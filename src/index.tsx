@@ -200,7 +200,7 @@ class TagsToolComponent extends React.Component<any, any> {
     const operationClass = (this.state.selected === null) ? "tag-operations-no-selected": "tag-operations-option";
     return (
       <div>
-        <span><div className="tag-header">Tags</div><hr className={"tag-header-hr"}/></span>
+        <span><div className="tag-header">Cell Tagging</div><hr className={"tag-header-hr"}/></span>
         <div className="tag-sub-header">Tags in Active Cell</div>
         <div className="tag-holder">
         { renderedTagsForAllCells }
@@ -211,7 +211,7 @@ class TagsToolComponent extends React.Component<any, any> {
               onKeyDown={ (event) => this.addTagOnKeyDown(event)}
               onBlur = { (event) => this.addTagOnBlur(event)} 
             />
-            <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
+            <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }><img src = {require("../static/add_icon.svg")} className="input-icon"/></label>
           </div>
         </div>
         <div className="tag-sub-header">Other Tags in Notebook</div>
@@ -224,7 +224,7 @@ class TagsToolComponent extends React.Component<any, any> {
           <div className={ operationClass} onClick={ () => this.didClickRenameTag() }>
             Rename Tag for All Cells
           </div> 
-          <div className={ operationClass } onClick={ () => this.didClickDeleteTag() }>
+          <div id= {"bottom"} className={ operationClass } onClick={ () => this.didClickDeleteTag() }>
             Delete Tag from All Cells
           </div> 
         </div>
