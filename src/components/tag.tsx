@@ -36,7 +36,7 @@ abstract class TagComponent extends React.Component<any, any> {
           onBlur={ (event) => {
             let inputElement = event.target as HTMLLabelElement;
             inputElement.innerHTML = tag;
-            this.setState({ editingSelectedTag: false });
+            this.props.editingStateHandler(false);
           } }
         >{ tag }</label>
         <label className="jp-cellTags-tag-icon-label">
@@ -63,11 +63,13 @@ class TagForActiveCellComponent extends TagComponent {
   singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
     if (this.props.selectedTag as string === name) {
       return <img onClick={ (event) => operation(event) } 
+               alt="Add Tag To Active Cell" 
                src={ require("../../static/white_addcircle.svg") } 
                className="tag-icon"
              />;
     } else {
       return <img onClick={ (event) => operation(event) } 
+               alt="Add Tag To Active Cell"                
                src={ require("../../static/darkgrey_addcircle.svg") }
                className="tag-icon"
              />;
@@ -89,11 +91,13 @@ class TagForAllCellsComponent extends TagComponent {
   singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
     if (this.props.selectedTag as string === name) {
       return <img onClick={ (event) => operation(event) } 
+               alt="Remove Tag From Active Cell"
                src={ require("../../static/white_minuscircle.svg") } 
                className="tag-icon"
              />;
     } else {
       return <img onClick={ (event) => operation(event) } 
+               alt="Remove Tag From Active Cell"
                src={require("../../static/darkgrey_minuscircle.svg")}
                className="tag-icon"
              />;
