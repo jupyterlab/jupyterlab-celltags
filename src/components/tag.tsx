@@ -6,6 +6,7 @@ import * as React from 'react';
 
 const TAG_ADD_DIV = 'jp-cellTags-tag-add';
 const TAG_INPUT = 'jp-cellTags-tag-input';
+const TAG_LABEL = 'jp-cellTags-tag-label';
 
 export
 abstract class TagComponent extends React.Component<any, any> {
@@ -22,7 +23,8 @@ abstract class TagComponent extends React.Component<any, any> {
     const tag = this.props.tag as string;
     return (
       <div>
-        <label ref={ (label) => inputShouldShow && label && label.focus() }
+        <label className={ TAG_LABEL }
+          ref={ (label) => inputShouldShow && label && label.focus() }
           contentEditable={ inputShouldShow } 
           onFocus={ (event) => document.execCommand('selectAll', false, null) }
           onKeyDown={ (event) => {
