@@ -102,7 +102,7 @@
     margin-top: 0px;
 } 
 
-.tag-operations-option, .tag-operations-no-selected{
+.tag-operations-option, .tag-operations-popup, .tag-operations-no-selected{
     padding:5px;
     padding-left: 10px;
     font-size:13px;
