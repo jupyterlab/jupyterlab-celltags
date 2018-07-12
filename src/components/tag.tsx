@@ -146,7 +146,7 @@ class AddTagComponent extends React.Component<any, any> {
           onKeyDown={ (event) => this.addTagOnKeyDown(event)}
           onBlur = { (event) => this.addTagOnBlur(event)} 
         />
-        <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>  +</label>
+        <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }><img src={require("../../static/add_icon.svg")} className="input-icon" /></label>
       </div>
     );
   }

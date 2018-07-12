@@ -105,5 +105,4 @@ class TagListComponent extends React.Component<any, any> {
       </div>
     );
   }
-
 }
