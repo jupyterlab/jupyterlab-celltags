@@ -151,7 +151,7 @@ class TagsWidget extends Widget {
         }
       }
     }
-    this.renderTagLabelsForAllTagsInNotebook(this.allTagsInNotebook);
+    this.renderAllTagLabels(this.allTagsInNotebook);
   }
 
   loadTagsForActiveCell() {
@@ -161,7 +161,7 @@ class TagsWidget extends Widget {
     }
   }
 
-  renderTagLabelsForAllTagsInNotebook(tags: string[]) {
+  renderAllTagLabels(tags: string[]) {
     Private.setTagsListFor(Private.ALL_TAGS, tags);
   }
 

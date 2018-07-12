@@ -19,11 +19,11 @@ class TagListComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.didfinishEditingTagName = this.didfinishEditingTagName.bind(this);
+    this.editedTagName = this.editedTagName.bind(this);
     this.state = { selected: this.props.selectedTag };
   }
 
-  didSelectTagWithName(name: string) {
+  selectedTagWithName(name: string) {
     if ((!(this.props.editingSelectedTag)) 
       || (this.props.selectedTag != name)) {
       this.props.selectionStateHandler(name);
@@ -37,13 +37,13 @@ class TagListComponent extends React.Component<any, any> {
     this.props.deletingStateHandler(false);
   }
 
-  didfinishEditingTagName(newName: string) {
+  editedTagName(newName: string) {
     this.props.editingStateHandler(false);
     (this.props.widget as TagsWidget).replaceName(this.props.selectedTag, newName);
     this.props.selectionStateHandler(newName);
   }
 
-  tagAlreadyInActiveCellTagsList(name: string) {
+  tagInActiveCell(name: string) {
     return (this.props.widget as TagsWidget).activeCellContainsTag(name);
   }
 
@@ -58,10 +58,10 @@ class TagListComponent extends React.Component<any, any> {
       return (
         <div key={ tag } 
           className={ tagClass } 
-          onClick={ (event) => this.didSelectTagWithName(tag) }
+          onClick={ (event) => this.selectedTagWithName(tag) }
         >
           <TagType widget={ this.props.widget }
-            finishEditingHandler={ this.didfinishEditingTagName } 
+            finishEditingHandler={ this.editedTagName } 
             selectedTag={ this.props.selectedTag }
             inputShouldShow={ inputShouldShow }
             tag={ tag }
@@ -76,7 +76,7 @@ class TagListComponent extends React.Component<any, any> {
     let otherTagsList: string[] =[];
     if (allTagsList) {
       for (let i=0; i < allTagsList.length; i++) {
-        if (!this.tagAlreadyInActiveCellTagsList(allTagsList[i])) {
+        if (!this.tagInActiveCell(allTagsList[i])) {
           otherTagsList.push(allTagsList[i])
         }
       }

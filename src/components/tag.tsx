@@ -60,9 +60,9 @@ class TagForActiveCellComponent extends TagComponent {
 
   singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
     if (this.props.selectedTag as string === name) {
-      return <img onClick={ (event) => operation(event) } src={ require("../../static/white_addcircle.svg") } className="tag-icon"/>;
+      return <img onClick={ (event) => operation(event) } src={ require("../../static/white_addcircle.svg") } className="tag-icon" alt="Add tag"/>;
     } else {
-      return <img onClick={ (event) => operation(event) } src={ require("../../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
+      return <img onClick={ (event) => operation(event) } src={ require("../../static/darkgrey_addcircle.svg") } className="tag-icon" alt="Add tag"/>;
     }
   }
 
@@ -96,7 +96,7 @@ class AddTagComponent extends React.Component<any, any> {
     this.state = { plusIconShouldHide: false };
   }
 
-  didFinishAddingTagWithName(name: string) {
+  finishedAddingTag(name: string) {
     (this.props.widget as TagsWidget).didFinishAddingTags(name);
   }
 
@@ -121,7 +121,7 @@ class AddTagComponent extends React.Component<any, any> {
     if (event.keyCode == 13) {
       let value = inputElement.value;
       inputElement.value = '';
-      this.didFinishAddingTagWithName(value);
+      this.finishedAddingTag(value);
       inputElement.value = 'Add Tag';
       inputElement.style.width = '50px';
       inputElement.style.minWidth = '50px';

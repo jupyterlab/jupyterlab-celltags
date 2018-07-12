@@ -47,13 +47,13 @@ class TagsToolComponent extends React.Component<any, any> {
     }
   }
 
-  didClickDeleteTag() {
+  clickedDeleteTag() {
     this.setState({deletingTag: false});
     this.setState({ selected: null });
     (this.props.widget as TagsWidget).removeTagFromAllCells(this.state.selected);
   }
 
-  didClickRenameTag() {
+  clickedRenameTag() {
     if (this.state.selected as string != null) {
       if (this.state.editingSelectedTag === false) {
         this.setState({ editingSelectedTag: true });
@@ -82,8 +82,8 @@ class TagsToolComponent extends React.Component<any, any> {
     var deleteDiv = (this.state.deletingTag === true) 
                   ? (<div id= { "bottom" } className={ "tag-operations-popup" }>
                       Are you sure you want to delete this tag? <br />
-                      <button onClick={ () => this.setState({ deletingTag: false }) }> Cancel </button> 
-                      <button onClick={ () => this.didClickDeleteTag() }> Delete Tag </button> 
+                      <button onClick={ () => this.setState({ deletingTag: false }) } className={"cancel"}> Cancel </button> 
+                      <button onClick={ () => this.clickedDeleteTag() } className={"delete"}> Delete Tag </button> 
                     </div>)
                   : (<div id= { "bottom" } className={ operationClass } onClick={ () => this.deletingTag() }>
                       Delete Tag from All Cells
@@ -105,7 +105,7 @@ class TagsToolComponent extends React.Component<any, any> {
         />
         <div>
           <div className={ operationClass} onClick={ 
-              () => this.didClickRenameTag() 
+              () => this.clickedRenameTag() 
           }>
             Rename Tag for All Cells
           </div> 
