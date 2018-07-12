@@ -38,11 +38,12 @@ class TagsToolComponent extends React.Component<any, any> {
     this.state = { selected: null, editingSelectedTag: false, deletingTag: false };
     this.changeEditingState = this.changeEditingState.bind(this);
     this.changeSelectionState = this.changeSelectionState.bind(this);
+    this.changeDeletingState = this.changeDeletingState.bind(this);
   }
 
   deletingTag() {
     if (this.state.selected !== null) {
-      this.setState({deletingTag: true});
+      this.setState({ deletingTag: true });
     }
   }
 
@@ -70,26 +71,23 @@ class TagsToolComponent extends React.Component<any, any> {
     this.setState({ editingSelectedTag: newState });
   }
 
-  deleteOff() {
-    this.setState({deletingTag: false})
+  changeDeletingState(newState: boolean) {
+    this.setState({ deletingTag: newState });
   }
 
   render() {
     const operationClass = (this.state.selected === null) 
                          ? "tag-operations-no-selected"
                          : "tag-operations-option";
-    if (this.state.selected === null) {
-      console.log("selected is null");
-      this.setState({deletingTag: false});
-    }
-    var deleteDiv = this.state.deletingTag === true ? 
-    <div id= { "bottom" } className={ operationClass }>
-    Are you sure? <button onClick={ () => this.didClickDeleteTag() }> Yes </button> 
-    <button onClick={ () => this.setState({deletingTag: false})}> No </button> 
-    </div> :
-   <div id= { "bottom" } className={ operationClass } onClick={ () => this.deletingTag() }>
-    Delete Tag from All Cells
-    </div>
+    var deleteDiv = (this.state.deletingTag === true) 
+                  ? (<div id= { "bottom" } className={ operationClass }>
+                      Are you sure?
+                      <button onClick={ () => this.didClickDeleteTag() }> Yes </button> 
+                      <button onClick={ () => this.setState({ deletingTag: false }) }> No </button> 
+                    </div>)
+                  : (<div id= { "bottom" } className={ operationClass } onClick={ () => this.deletingTag() }>
+                      Delete Tag from All Cells
+                    </div>);
     return (
       <div>
         <span>
@@ -101,6 +99,7 @@ class TagsToolComponent extends React.Component<any, any> {
           tagsList={ this.props.tagsList }
           selectionStateHandler={ this.changeSelectionState }
           editingStateHandler={ this.changeEditingState }
+          deletingStateHandler={ this.changeDeletingState }
           selectedTag={ this.state.selected }
           editingSelectedTag={ this.state.editingSelectedTag }
         />
@@ -110,7 +109,7 @@ class TagsToolComponent extends React.Component<any, any> {
           }>
             Rename Tag for All Cells
           </div> 
-          {deleteDiv}
+          { deleteDiv }
         </div>
       </div>
     );

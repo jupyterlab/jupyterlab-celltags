@@ -171,6 +171,7 @@ class TagsWidget extends Widget {
   tagsListShallNotRefresh = false;
 
 }
+
 namespace Private {
   let widget: TagsWidget = null;
   let tagsList: any = [];
