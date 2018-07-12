@@ -35,7 +35,11 @@ class TagsToolComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { selected: null, editingSelectedTag: false, deletingTag: false };
+    this.state = { 
+      selected: null, 
+      editingSelectedTag: false, 
+      deletingTag: false 
+    };
     this.changeEditingState = this.changeEditingState.bind(this);
     this.changeSelectionState = this.changeSelectionState.bind(this);
     this.changeDeletingState = this.changeDeletingState.bind(this);
@@ -76,7 +80,8 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   render() {
-    const operationClass = (this.state.selected === null || this.state.deletingTag === true) 
+    const operationClass = (this.state.selected === null 
+                          || this.state.deletingTag === true) 
                          ? "tag-operations-no-selected"
                          : "tag-operations-option";
     var deleteDiv = (this.state.deletingTag === true) 
@@ -85,7 +90,10 @@ class TagsToolComponent extends React.Component<any, any> {
                       <button onClick={ () => this.setState({ deletingTag: false }) } className={"cancel"}> Cancel </button> 
                       <button onClick={ () => this.clickedDeleteTag() } className={"delete"}> Delete Tag </button> 
                     </div>)
-                  : (<div id= { "bottom" } className={ operationClass } onClick={ () => this.deletingTag() }>
+                  : (<div id= { "bottom" }
+                      className={ operationClass }
+                      onClick={ () => this.deletingTag() }
+                     >
                       Delete Tag from All Cells
                     </div>);
     return (

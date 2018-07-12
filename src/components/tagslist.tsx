@@ -38,8 +38,9 @@ class TagListComponent extends React.Component<any, any> {
   }
 
   editedTagName(newName: string) {
+    let widget = (this.props.widget as TagsWidget);
     this.props.editingStateHandler(false);
-    (this.props.widget as TagsWidget).replaceName(this.props.selectedTag, newName);
+    widget.replaceName(this.props.selectedTag, newName);
     this.props.selectionStateHandler(newName);
   }
 
@@ -62,6 +63,7 @@ class TagListComponent extends React.Component<any, any> {
         >
           <TagType widget={ this.props.widget }
             finishEditingHandler={ this.editedTagName } 
+            editingStateHandler={ this.props.editingStateHandler }
             selectedTag={ this.props.selectedTag }
             inputShouldShow={ inputShouldShow }
             tag={ tag }
@@ -83,12 +85,14 @@ class TagListComponent extends React.Component<any, any> {
     }
     var renderedTagsForActiveCell = null;
     if (otherTagsList != null) {
-      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, TagForActiveCellComponent);
+      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, 
+                                                    TagForActiveCellComponent);
     }
     var renderedTagsForAllCells = null;
     if (this.props.tagsList != null) {
       let tags = (this.props.tagsList as string).toString().split(',');
-      renderedTagsForAllCells = this.renderElementForTags(tags, TagForAllCellsComponent);
+      renderedTagsForAllCells = this.renderElementForTags(tags, 
+                                              TagForAllCellsComponent);
     }
     return (
       <div>
