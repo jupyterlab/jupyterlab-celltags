@@ -15,19 +15,19 @@
 }
 
 .jp-cellTags-unselected-tag {
-    background-color: #E2E2E2;
+    background-color: var(--jp-layout-color2);
 }
 
 .jp-cellTags-tag-label {
-    max-width: 90%;
+    max-width: calc(100% - 25px);
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
 }
 
 .jp-cellTags-tag-add {
-    background-color: white;
-    border: 1px solid #828282;
+    background-color: var(--jp-layout-color1);
+    border: 1px solid var(--jp-layout-color4);
     max-width: 95%;
 }
 
@@ -47,7 +47,7 @@
 
 .jp-cellTags-tag-input{
     padding: 0px;
-    color:#828282;
+    color: var(--jp-layout-color4);
     font-size: 12px;
     width: 50px;
     min-width: 50px;
@@ -55,6 +55,7 @@
     outline: none;
     resize: horizontal;
     max-width: 100%;
+    background-color: var(--jp-layout-color1);
 }
 
 .jp-cellTags-rename-input {
@@ -74,9 +75,10 @@
 .tag-holder {
     display: flex;
     flex-wrap:wrap;
-    padding:4px;
+    padding: 4px;
     height:fit-content; 
     margin-bottom: 20px;
+    padding-right: 10px;
 }
 
 .tag-header {
@@ -90,15 +92,14 @@
 .tag-sub-header {
     padding-left:10px;
     margin-bottom: 3px;
-    color: black;
 }
 
 .tag-header-hr {
-    height:0;
-    border:0; 
-    border-top:1px solid #E2E2E2; 
+    height: 0;
+    border: 0; 
+    border-top: var(--jp-border-width) solid var(--jp-border-color2);
     padding-top: 0px;
-    margin-top:0px;
+    margin-top: 0px;
 } 
 
 .tag-operations-option, .tag-operations-no-selected{
@@ -109,7 +110,7 @@
 }
 
 .tag-operations-option:hover { 
-    background-color: #EEEEEE;
+    background-color: var(--jp-layout-color2);
 }
 
 .tag-operations-no-selected {
