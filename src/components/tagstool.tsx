@@ -78,10 +78,6 @@ class TagsToolComponent extends React.Component<any, any> {
     const operationClass = (this.state.selected === null) 
                          ? "tag-operations-no-selected"
                          : "tag-operations-option";
-    if (this.state.selected === null) {
-      console.log("selected is null");
-      this.setState({deletingTag: false});
-    }
     var deleteDiv = this.state.deletingTag === true ? 
     <div id= { "bottom" } className={ operationClass }>
     Are you sure? <button onClick={ () => this.didClickDeleteTag() }> Yes </button> 
