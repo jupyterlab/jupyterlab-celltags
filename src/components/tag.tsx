@@ -103,8 +103,8 @@ class AddTagComponent extends React.Component<any, any> {
     let inputElement = event.target as HTMLInputElement;
     if (inputElement.value === 'Add Tag') {
       inputElement.value = '';
-      inputElement.style.width = '63px';
-      inputElement.style.minWidth = '63px';
+      inputElement.style.width = '62px';
+      inputElement.style.minWidth = '62px';
     }
   }
 
