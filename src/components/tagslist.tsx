@@ -34,6 +34,7 @@ class TagListComponent extends React.Component<any, any> {
       this.props.selectionStateHandler(null);
       this.props.editingStateHandler(false);
     }
+    this.props.deletingStateHandler(false);
   }
 
   didfinishEditingTagName(newName: string) {
