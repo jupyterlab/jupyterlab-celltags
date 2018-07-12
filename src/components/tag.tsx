@@ -38,7 +38,7 @@ abstract class TagComponent extends React.Component<any, any> {
             inputElement.innerHTML = tag;
             this.setState({ editingSelectedTag: false });
           } }
-        >{ tag }</label>
+        > { tag }</label>
         <label>{ this.singleCellOperationButton(tag, ((event: React.MouseEvent<any>) => {
           event.stopPropagation();
           this.singleCellOperationHandler(tag); 

@@ -6,7 +6,7 @@
     padding-right: 10px;
     margin:4px;
     width:fit-content;
-    max-width: 100%;
+    max-width: calc(100% - 25px);
 }
 
 .jp-cellTags-selected-tag {
@@ -19,11 +19,13 @@
 }
 
 .jp-cellTags-tag-label {
-    max-width: calc(100% - 25px);
+    white-space: nowrap; 
+    max-width: 100%;
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
 }
+
 
 .jp-cellTags-tag-add {
     background-color: var(--jp-layout-color1);
