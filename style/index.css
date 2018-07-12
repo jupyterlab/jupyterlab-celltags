@@ -19,10 +19,17 @@
 }
 
 .jp-cellTags-tag-label {
-    max-width: calc(100% - 25px);
+    max-width: 100%;
+    white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
+    box-sizing: border-box;
+    padding-right: 25px;
+}
+
+.jp-cellTags-tag-icon-label {
+    position: absolute;
 }
 
 .jp-cellTags-tag-add {
@@ -34,8 +41,10 @@
 .tag-icon {
     margin-left: 10px;
     margin-top: 2px;
+    right: 0px;
     margin-bottom:-1px;
     height: 13px;
+    position: absolute;
 }
 
 .input-icon {
