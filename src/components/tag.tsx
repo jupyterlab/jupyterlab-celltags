@@ -39,10 +39,12 @@ abstract class TagComponent extends React.Component<any, any> {
             this.setState({ editingSelectedTag: false });
           } }
         >{ tag }</label>
-        <label>{ this.singleCellOperationButton(tag, ((event: React.MouseEvent<any>) => {
-          event.stopPropagation();
-          this.singleCellOperationHandler(tag); 
-        })) }</label>
+        <label className="jp-cellTags-tag-icon-label">
+          { this.singleCellOperationButton(tag, ((event: React.MouseEvent<any>) => {
+            event.stopPropagation();
+            this.singleCellOperationHandler(tag); 
+          })) }
+        </label>
       </div>
     )
   }
@@ -146,7 +148,9 @@ class AddTagComponent extends React.Component<any, any> {
           onKeyDown={ (event) => this.addTagOnKeyDown(event)}
           onBlur = { (event) => this.addTagOnBlur(event)} 
         />
-        <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }><img src={require("../../static/add_icon.svg")} className="input-icon" /></label>
+        <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>
+          <img src={require("../../static/add_icon.svg")} className="input-icon" />
+        </label>
       </div>
     );
   }
