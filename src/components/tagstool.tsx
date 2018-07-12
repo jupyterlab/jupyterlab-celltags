@@ -76,14 +76,14 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   render() {
-    const operationClass = (this.state.selected === null) 
+    const operationClass = (this.state.selected === null || this.state.deletingTag === true) 
                          ? "tag-operations-no-selected"
                          : "tag-operations-option";
     var deleteDiv = (this.state.deletingTag === true) 
-                  ? (<div id= { "bottom" } className={ operationClass }>
-                      Are you sure?
-                      <button onClick={ () => this.didClickDeleteTag() }> Yes </button> 
-                      <button onClick={ () => this.setState({ deletingTag: false }) }> No </button> 
+                  ? (<div id= { "bottom" } className={ "tag-operations-popup" }>
+                      Are you sure you want to delete this tag? <br />
+                      <button onClick={ () => this.setState({ deletingTag: false }) }> Cancel </button> 
+                      <button onClick={ () => this.didClickDeleteTag() }> Delete Tag </button> 
                     </div>)
                   : (<div id= { "bottom" } className={ operationClass } onClick={ () => this.deletingTag() }>
                       Delete Tag from All Cells
