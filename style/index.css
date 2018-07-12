@@ -15,7 +15,7 @@
 }
 
 .jp-cellTags-unselected-tag {
-    background-color: var(--jp-layout-color2);
+    background-color:var(--jp-layout-color2);
 }
 
 .jp-cellTags-tag-label {
@@ -138,6 +138,29 @@
 
 .jp-ActiveCellTool {
     min-height: 54px;
+}
+
+
+.cancel, .delete {
+    border-radius:3px;
+    background-color: var(--jp-layout-color1);
+    border: 1px solid #bdbdbd;
+    margin:5px;
+    margin-top:7px;
+    padding-left:7px;
+    padding-right:7px;
+    padding-top: 4px;
+    padding-bottom:4px;
+    font-size:12px;
+}
+
+.cancel {
+    color: var(--jp-content-font-color0);
+}
+
+.delete {
+    color: var(--jp-ui-inverse-font-color0);
+    background-color: #bdbdbd;
 }
 
 #bottom {

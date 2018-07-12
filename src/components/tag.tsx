@@ -114,7 +114,7 @@ class AddTagComponent extends React.Component<any, any> {
     this.state = { plusIconShouldHide: false };
   }
 
-  didFinishAddingTagWithName(name: string) {
+  finishedAddingTag(name: string) {
     (this.props.widget as TagsWidget).didFinishAddingTags(name);
   }
 
@@ -139,7 +139,7 @@ class AddTagComponent extends React.Component<any, any> {
     if (event.keyCode == 13) {
       let value = inputElement.value;
       inputElement.value = '';
-      this.didFinishAddingTagWithName(value);
+      this.finishedAddingTag(value);
       inputElement.value = 'Add Tag';
       inputElement.style.width = '50px';
       inputElement.style.minWidth = '50px';
