@@ -35,7 +35,11 @@ class TagsToolComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { selected: null, editingSelectedTag: false, deletingTag: false };
+    this.state = { 
+      selected: null, 
+      editingSelectedTag: false, 
+      deletingTag: false 
+    };
     this.changeEditingState = this.changeEditingState.bind(this);
     this.changeSelectionState = this.changeSelectionState.bind(this);
     this.changeDeletingState = this.changeDeletingState.bind(this);
@@ -76,16 +80,28 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   render() {
-    const operationClass = (this.state.selected === null || this.state.deletingTag === true) 
+    const operationClass = (this.state.selected === null 
+                          || this.state.deletingTag === true) 
                          ? "tag-operations-no-selected"
                          : "tag-operations-option";
     var deleteDiv = (this.state.deletingTag === true) 
                   ? (<div id= { "bottom" } className={ "tag-operations-popup" }>
                       Are you sure you want to delete this tag? <br />
-                      <button onClick={ () => this.setState({ deletingTag: false }) }> Cancel </button> 
-                      <button onClick={ () => this.didClickDeleteTag() }> Delete Tag </button> 
+                      <button onClick={ () => 
+                        this.setState({ deletingTag: false }) 
+                      }>
+                        Cancel
+                      </button> 
+                      <button onClick={ () => 
+                        this.didClickDeleteTag()
+                      }>
+                        Delete Tag
+                      </button> 
                     </div>)
-                  : (<div id= { "bottom" } className={ operationClass } onClick={ () => this.deletingTag() }>
+                  : (<div id= { "bottom" }
+                      className={ operationClass }
+                      onClick={ () => this.deletingTag() }
+                     >
                       Delete Tag from All Cells
                     </div>);
     return (
