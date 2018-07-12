@@ -40,10 +40,12 @@ abstract class TagComponent extends React.Component<any, any> {
           } }
         >{ tag }</label>
         <label className="jp-cellTags-tag-icon-label">
-          { this.singleCellOperationButton(tag, ((event: React.MouseEvent<any>) => {
-            event.stopPropagation();
-            this.singleCellOperationHandler(tag); 
-          })) }
+          { this.singleCellOperationButton(tag, (
+            (event: React.MouseEvent<any>) => {
+              event.stopPropagation();
+              this.singleCellOperationHandler(tag); 
+            }
+          )) }
         </label>
       </div>
     )
@@ -60,9 +62,15 @@ class TagForActiveCellComponent extends TagComponent {
 
   singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
     if (this.props.selectedTag as string === name) {
-      return <img onClick={ (event) => operation(event) } src={ require("../../static/white_addcircle.svg") } className="tag-icon"/>;
+      return <img onClick={ (event) => operation(event) } 
+               src={ require("../../static/white_addcircle.svg") } 
+               className="tag-icon"
+             />;
     } else {
-      return <img onClick={ (event) => operation(event) } src={ require("../../static/darkgrey_addcircle.svg") } className="tag-icon"/>;
+      return <img onClick={ (event) => operation(event) } 
+               src={ require("../../static/darkgrey_addcircle.svg") }
+               className="tag-icon"
+             />;
     }
   }
 
@@ -80,9 +88,15 @@ class TagForAllCellsComponent extends TagComponent {
 
   singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void) {
     if (this.props.selectedTag as string === name) {
-      return <img onClick={ (event) => operation(event) } src={ require("../../static/white_minuscircle.svg") } className="tag-icon" />;
+      return <img onClick={ (event) => operation(event) } 
+               src={ require("../../static/white_minuscircle.svg") } 
+               className="tag-icon"
+             />;
     } else {
-      return <img onClick={ (event) => operation(event) } src={require("../../static/darkgrey_minuscircle.svg")} className="tag-icon"/>;
+      return <img onClick={ (event) => operation(event) } 
+               src={require("../../static/darkgrey_minuscircle.svg")}
+               className="tag-icon"
+             />;
     }
   }
 
@@ -148,8 +162,12 @@ class AddTagComponent extends React.Component<any, any> {
           onKeyDown={ (event) => this.addTagOnKeyDown(event)}
           onBlur = { (event) => this.addTagOnBlur(event)} 
         />
-        <label className={"add-tag-box"} hidden={ this.state.plusIconShouldHide }>
-          <img src={require("../../static/add_icon.svg")} className="input-icon" />
+        <label className={"add-tag-box"} 
+          hidden={ this.state.plusIconShouldHide }
+        >
+          <img src={require("../../static/add_icon.svg")} 
+            className="input-icon"
+          />
         </label>
       </div>
     );
