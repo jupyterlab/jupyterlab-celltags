@@ -188,3 +188,4 @@ class AddTagComponent extends React.Component<any, any> {
   }
 
 }
+//--jp-icon-ellipses
