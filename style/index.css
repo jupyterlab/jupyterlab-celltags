@@ -174,3 +174,24 @@
 #bottom {
     margin-bottom:20px;
 }
+
+.options-div {
+    float:right;
+    width:100;
+    margin-right:3px;
+}
+
+.overlay-section {
+    border: 1px solid #bdbdbd;
+    width: 230px;
+    height: 20px;
+    padding:3px;
+}
+
+#options-overlay {
+    z-index: 100;
+    position:absolute;
+    top: 55px;
+    right: 3px;
+    background-color: var(--jp-layout-color1);
+}
