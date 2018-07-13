@@ -22,13 +22,12 @@ abstract class TagComponent extends React.Component<any, any> {
   render() {
     const inputShouldShow = this.props.inputShouldShow as boolean;
     const tag = this.props.tag as string;
-    console.log("CHANGE");
-    console.log(tag);
     return (
       <div>
         <label className={ TAG_LABEL }
           ref={ (label) => inputShouldShow && label && label.focus() }
           contentEditable={ inputShouldShow } 
+          key={ new Date().toLocaleTimeString() }
           onFocus={ (event) => document.execCommand('selectAll', false, null) }
           onKeyDown={ (event) => {
             if (event.keyCode == 13) {
