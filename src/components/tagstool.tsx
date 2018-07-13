@@ -206,4 +206,5 @@ class TagsTool extends CellTools.Tool {
 
   private widget: TagsWidget = null;
   public notebookTracker: INotebookTracker = null;
+  
 }
