@@ -90,12 +90,15 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   handleClick = (e:any) => {
-    if (this.node.contains(e.target)) {
-      return;
+    if (this.node) {
+      if (this.node.contains(e.target)) {
+        return;
+      }
+      this.setState({deletingTag:false});
+      this.node=null;
     }
-    this.setState({deletingTag:false});
   }
-  
+
   render() {
     const operationClass = (this.state.selected === null 
                           || this.state.deletingTag === true) 

@@ -41,9 +41,7 @@ abstract class TagComponent extends React.Component<any, any> {
             this.props.editingStateHandler(false);
           } }
         >
-        {console.log("pre-render: tag should be " + tag)}
           { tag }
-          {console.log("post-render: tag should be " + tag)}
         </label>
         <label className="jp-cellTags-tag-icon-label">
           { this.singleCellOperationButton(tag, (
@@ -186,3 +184,4 @@ class AddTagComponent extends React.Component<any, any> {
   }
 
 }
+//--jp-icon-ellipses
