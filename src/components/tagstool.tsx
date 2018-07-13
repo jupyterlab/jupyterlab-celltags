@@ -38,12 +38,14 @@ class TagsToolComponent extends React.Component<any, any> {
     this.state = { 
       selected: null, 
       editingSelectedTag: false, 
-      deletingTag: false 
+      deletingTag: false
     };
+    this.node =null;
     this.changeEditingState = this.changeEditingState.bind(this);
     this.changeSelectionState = this.changeSelectionState.bind(this);
     this.changeDeletingState = this.changeDeletingState.bind(this);
   }
+  private node: any;
 
   deletingTag() {
     if (this.state.selected !== null) {
@@ -79,13 +81,28 @@ class TagsToolComponent extends React.Component<any, any> {
     this.setState({ deletingTag: newState });
   }
 
+  componentWillMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClick, false);
+  }
+
+  handleClick = (e:any) => {
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.setState({deletingTag:false});
+  }
+  
   render() {
     const operationClass = (this.state.selected === null 
                           || this.state.deletingTag === true) 
                          ? "tag-operations-no-selected"
                          : "tag-operations-option";
     var deleteDiv = (this.state.deletingTag === true) 
-                  ? (<div id= { "bottom" } className={ "tag-operations-popup" }>
+                  ? (<div id= { "bottom" } className={ "tag-operations-popup" } ref={node => this.node=node}>
                       Are you sure you want to delete this tag? <br />
                       <button onClick={ () => this.setState({ deletingTag: false }) } className={"cancel"}> Cancel </button> 
                       <button onClick={ () => this.clickedDeleteTag() } className={"delete"}> Delete Tag </button> 

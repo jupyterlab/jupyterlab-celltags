@@ -22,8 +22,6 @@ abstract class TagComponent extends React.Component<any, any> {
   render() {
     const inputShouldShow = this.props.inputShouldShow as boolean;
     const tag = this.props.tag as string;
-    console.log("CHANGE");
-    console.log(tag);
     return (
       <div>
         <label className={ TAG_LABEL }
@@ -42,7 +40,9 @@ abstract class TagComponent extends React.Component<any, any> {
             this.props.editingStateHandler(false);
           } }
         >
+        {console.log("pre-render: tag should be " + tag)}
           { tag }
+          {console.log("post-render: tag should be " + tag)}
         </label>
         <label className="jp-cellTags-tag-icon-label">
           { this.singleCellOperationButton(tag, (
