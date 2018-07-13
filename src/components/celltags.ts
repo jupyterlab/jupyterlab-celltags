@@ -14,7 +14,6 @@ function write_tag(cell: Cell, name:string, add:boolean) {
     // Add to metadata
     let wtaglist = <string[]>cell.model.metadata.get('tags');
     let new_tags = preprocess_input(name);
-    console.log(new_tags);
     if (wtaglist === undefined) {
       var arr : string[] = [];
       wtaglist = arr;

@@ -83,7 +83,7 @@ class TagsWidget extends Widget {
       if (cellTagsData) {
         let results: string[] = [];
         for (var j=0; j<cellTagsData.length; j++) {
-          if (cellTagsData[j] == oldTag) {
+          if (cellTagsData[j] === oldTag) {
             preprocess_input(newTag).forEach((tag: string) => {
               if (!this.cellModelContainsTag(tag, cells.get(i)) 
                 || tag === oldTag) {
