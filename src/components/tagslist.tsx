@@ -63,6 +63,7 @@ class TagListComponent extends React.Component<any, any> {
         >
           <TagType widget={ this.props.widget }
             finishEditingHandler={ this.editedTagName } 
+            selectionStateHandler={ this.props.selectionStateHandler }
             editingStateHandler={ this.props.editingStateHandler }
             selectedTag={ this.props.selectedTag }
             inputShouldShow={ inputShouldShow }
