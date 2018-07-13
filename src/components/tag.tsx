@@ -85,7 +85,7 @@ export
 class TagForAllCellsComponent extends TagComponent {
 
   singleCellOperationHandler(name: string) {
-    // TODO: set state to null
+    this.props.selectionStateHandler(null);
     if (name !== null) {
       (this.props.widget as TagsWidget).removeTagForSelectedCellWithName(name);
     }

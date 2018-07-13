@@ -56,7 +56,7 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   clickedDeleteTag() {
-    this.setState({deletingTag: false});
+    this.setState({ deletingTag: false });
     this.setState({ selected: null });
     (this.props.widget as TagsWidget).removeTagFromAllCells(this.state.selected);
   }
@@ -191,6 +191,9 @@ class TagsTool extends CellTools.Tool {
     });
     this.notebookTracker.currentChanged.connect(() => {
       this.widget.getAllTagsInNotebook(); 
+    });
+    this.notebookTracker.currentWidget.model.cells.changed.connect(() => {
+      this.widget.getAllTagsInNotebook();
     });
   }
 
