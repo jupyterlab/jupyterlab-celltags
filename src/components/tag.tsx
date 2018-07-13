@@ -3,10 +3,9 @@ import {
 } from './tagswidget';
 
 import * as React from 'react';
+import StyleClasses from './styles';
 
-const TAG_ADD_DIV = 'jp-cellTags-tag-add';
-const TAG_INPUT = 'jp-cellTags-tag-input';
-const TAG_LABEL = 'jp-cellTags-tag-label';
+const TagStyleClasses = StyleClasses.TagStyleClasses;
 
 export
 abstract class TagComponent extends React.Component<any, any> {
@@ -24,7 +23,7 @@ abstract class TagComponent extends React.Component<any, any> {
     const tag = this.props.tag as string;
     return (
       <div>
-        <label className={ TAG_LABEL }
+        <label className={ TagStyleClasses.tagLabelStyleClass }
           ref={ (label) => inputShouldShow && label && label.focus() }
           contentEditable={ inputShouldShow } 
           key={ new Date().toLocaleTimeString() }
@@ -43,7 +42,7 @@ abstract class TagComponent extends React.Component<any, any> {
         >
           { tag }
         </label>
-        <label className="jp-cellTags-tag-icon-label">
+        <label className={ TagStyleClasses.tagIconLabelStyleClass }>
           { this.singleCellOperationButton(tag, (
             (event: React.MouseEvent<any>) => {
               event.stopPropagation();
@@ -69,13 +68,13 @@ class TagForActiveCellComponent extends TagComponent {
       return <img onClick={ (event) => operation(event) } 
                alt="Add Tag To Active Cell" 
                src={ require("../../static/white_addcircle.svg") } 
-               className="tag-icon"
+               className={ TagStyleClasses.tagIconStyleClass }
              />;
     } else {
       return <img onClick={ (event) => operation(event) } 
                alt="Add Tag To Active Cell"                
                src={ require("../../static/darkgrey_addcircle.svg") }
-               className="tag-icon"
+               className={ TagStyleClasses.tagIconStyleClass }
              />;
     }
   }
@@ -97,13 +96,13 @@ class TagForAllCellsComponent extends TagComponent {
       return <img onClick={ (event) => operation(event) } 
                alt="Remove Tag From Active Cell"
                src={ require("../../static/white_minuscircle.svg") } 
-               className="tag-icon"
+               className={ TagStyleClasses.tagIconStyleClass }
              />;
     } else {
       return <img onClick={ (event) => operation(event) } 
                alt="Remove Tag From Active Cell"
                src={require("../../static/darkgrey_minuscircle.svg")}
-               className="tag-icon"
+               className={ TagStyleClasses.tagIconStyleClass }
              />;
     }
   }
@@ -135,7 +134,7 @@ class AddTagComponent extends React.Component<any, any> {
   addTagOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     let inputElement = event.target as HTMLInputElement;
     let tmp = document.createElement('span');
-    tmp.className = TAG_INPUT;
+    tmp.className = TagStyleClasses.defaultAddInputStyleClass;
     tmp.innerHTML = inputElement.value;
     document.body.appendChild(tmp);
     inputElement.style.width = (tmp.getBoundingClientRect().width + 8) + "px";
@@ -163,21 +162,26 @@ class AddTagComponent extends React.Component<any, any> {
 
   render() {
     var inputBox = (this.state.addingNewTag === true) 
-                ? (<div><input className={ TAG_INPUT }
-                  onClick={(event) => this.addTagOnClick(event)}
-                  onKeyDown={ (event) => this.addTagOnKeyDown(event)}
-                  onBlur = { (event) => this.addTagOnBlur(event)} autoFocus
-                /> </div>)
-                : (<div className={ "blank-tag-input" }
-                    onClick={(event) => this.setState({addingNewTag: true})}
-                  >
-                  Add Tag
-                  <img src={require("../../static/add_icon.svg")} 
-                  className="input-icon" onClick={(event) => 
-                   this.setState({addingNewTag:true})}
-                   /></div>);
+                 ? (<div>
+                      <input className={ TagStyleClasses.defaultAddInputStyleClass }
+                        onClick={ (event) => this.addTagOnClick(event) }
+                        onKeyDown={ (event) => this.addTagOnKeyDown(event) }
+                        onBlur = { (event) => this.addTagOnBlur(event) } autoFocus
+                      />
+                    </div>)
+                 : (<div className={ TagStyleClasses.blankAddInputStyleClass }
+                     onClick={(event) => this.setState({ addingNewTag: true })}
+                    >
+                      Add Tag
+                      <img src={ require("../../static/add_icon.svg") } 
+                        className={ TagStyleClasses.inputIconStyleClass } 
+                        onClick={ (event) => 
+                          this.setState({ addingNewTag:true })
+                        }
+                     />
+                    </div>);
     return (
-      <div className={ TAG_ADD_DIV } >
+      <div className={ TagStyleClasses.addTagStyleClass } >
         {inputBox}
       </div>
     );

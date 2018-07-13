@@ -27,8 +27,10 @@ import {
 } from '@jupyterlab/application';
 
 import * as React from 'react';
+import StyleClasses from './styles';
 
 const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
+const TagsToolStyleClasses = StyleClasses.TagsToolStyleClasses;
 
 export
 class TagsToolComponent extends React.Component<any, any> {
@@ -99,16 +101,33 @@ class TagsToolComponent extends React.Component<any, any> {
   render() {
     const operationClass = (this.state.selected === null 
                           || this.state.deletingTag === true) 
-                         ? "tag-operations-no-selected"
-                         : "tag-operations-option";
+                         ? TagsToolStyleClasses.tagOperationsNoSelectedStyleClass
+                         : TagsToolStyleClasses.tagOperationsOptionStyleClass;
     var deleteDiv = (this.state.deletingTag === true) 
-                  ? (<div id= { "bottom" } className={ "tag-operations-popup" } ref={node => this.node=node}>
+                  ? (<div className={ [
+                        TagsToolStyleClasses.bottomElementStyleClass,
+                        TagsToolStyleClasses.tagOperationsPopUpStyleClass
+                      ].join(' ') } 
+                      ref={ node => this.node=node }
+                     >
                       Are you sure you want to delete this tag? <br />
-                      <button onClick={ () => this.setState({ deletingTag: false }) } className={"cancel"}> Cancel </button> 
-                      <button onClick={ () => this.clickedDeleteTag() } className={"delete"}> Delete Tag </button> 
+                      <button 
+                        onClick={ () => this.setState({ deletingTag: false }) } 
+                        className={ TagsToolStyleClasses.cancelButtonStyleClass }
+                      > 
+                       Cancel 
+                      </button> 
+                      <button 
+                        onClick={ () => this.clickedDeleteTag() } 
+                        className={ TagsToolStyleClasses.deleteButtonStyleClass }
+                      >
+                       Delete Tag 
+                      </button> 
                     </div>)
-                  : (<div id= { "bottom" }
-                      className={ operationClass }
+                  : (<div className={ [
+                        operationClass,
+                        TagsToolStyleClasses.bottomElementStyleClass
+                      ].join(' ') }
                       onClick={ () => this.deletingTag() }
                      >
                       Delete Tag from All Cells
@@ -116,8 +135,10 @@ class TagsToolComponent extends React.Component<any, any> {
     return (
       <div>
         <span>
-            <div className="tag-header">Tags</div>
-            <hr className={ "tag-header-hr" }/>
+            <div className={ TagsToolStyleClasses.tagHeaderStyleClass }>
+              Tags
+            </div>
+            <hr className={ TagsToolStyleClasses.tagHeaderHrStyleClass }/>
         </span>
         <TagListComponent widget={ this.props.widget }
           allTagsList={ this.props.allTagsList }
