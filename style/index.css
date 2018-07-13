@@ -55,17 +55,25 @@
     height: 13px;
 }
 
-.jp-cellTags-tag-input{
+.jp-cellTags-tag-input, .blank-tag-input{
     padding: 0px;
     color: var(--jp-layout-color4);
     font-size: 12px;
-    width: 50px;
-    min-width: 50px;
     border: none;
     outline: none;
     resize: horizontal;
     max-width: 100%;
     background-color: var(--jp-layout-color1);
+}
+
+.jp-cellTags-tag-input {
+    width: 64.52px;
+    min-width: 64.52px;
+}
+
+.blank-tag-input {
+    display:inline;
+    white-space:nowrap;
 }
 
 .jp-cellTags-rename-input {

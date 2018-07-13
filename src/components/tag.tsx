@@ -13,6 +13,7 @@ abstract class TagComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
+    this.state = {addingNewTag: false};
   }
 
   abstract singleCellOperationHandler(name: string): void;
@@ -111,7 +112,7 @@ class AddTagComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { plusIconShouldHide: false };
+    this.state = { plusIconShouldHide: false,addingNewTag:false };
   }
 
   finishedAddingTag(name: string) {
@@ -119,7 +120,7 @@ class AddTagComponent extends React.Component<any, any> {
   }
 
   addTagOnClick(event: React.MouseEvent<HTMLInputElement>) {
-    this.setState({ plusIconShouldHide: true });
+    this.setState({ plusIconShouldHide: true,addingNewTag:true });
     let inputElement = event.target as HTMLInputElement;
     if (inputElement.value === 'Add Tag') {
       inputElement.value = '';
@@ -144,7 +145,7 @@ class AddTagComponent extends React.Component<any, any> {
       inputElement.style.width = '50px';
       inputElement.style.minWidth = '50px';
       inputElement.blur();
-      this.setState({ plusIconShouldHide: false });
+      this.setState({ plusIconShouldHide: false, addingNewTag:false});
     }
   }
 
@@ -154,25 +155,27 @@ class AddTagComponent extends React.Component<any, any> {
     inputElement.style.width = '50px';
     inputElement.style.minWidth = '50px';
     inputElement.blur();
-    this.setState({ plusIconShouldHide: false });
+    this.setState({ plusIconShouldHide: false, addingNewTag:false });
   }
 
   render() {
+    var inputBox = (this.state.addingNewTag === true) 
+                ? (<div><input className={ TAG_INPUT }
+                  onClick={(event) => this.addTagOnClick(event)}
+                  onKeyDown={ (event) => this.addTagOnKeyDown(event)}
+                  onBlur = { (event) => this.addTagOnBlur(event)} autoFocus
+                /> </div>)
+                : (<div className={ "blank-tag-input" }
+                    onClick={(event) => this.setState({addingNewTag: true})}
+                  >
+                  Add Tag
+                  <img src={require("../../static/add_icon.svg")} 
+                  className="input-icon" onClick={(event) => 
+                   this.setState({addingNewTag:true})}
+                   /></div>);
     return (
       <div className={ TAG_ADD_DIV } >
-        <input className={ TAG_INPUT }
-          defaultValue='Add Tag'
-          onClick={(event) => this.addTagOnClick(event)}
-          onKeyDown={ (event) => this.addTagOnKeyDown(event)}
-          onBlur = { (event) => this.addTagOnBlur(event)} 
-        />
-        <label className={"add-tag-box"} 
-          hidden={ this.state.plusIconShouldHide }
-        >
-          <img src={require("../../static/add_icon.svg")} 
-            className="input-icon"
-          />
-        </label>
+        {inputBox}
       </div>
     );
   }
