@@ -41,7 +41,7 @@ class TagListComponent extends React.Component<any, any> {
     let widget = (this.props.widget as TagsWidget);
     this.props.editingStateHandler(false);
     widget.replaceName(this.props.selectedTag, newName);
-    this.props.selectionStateHandler(newName);
+    this.props.selectionStateHandler(null);
   }
 
   tagInActiveCell(name: string) {

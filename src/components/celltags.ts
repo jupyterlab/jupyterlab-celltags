@@ -67,9 +67,10 @@ function write_tag(cell: Cell, name:string, add:boolean) {
   return true;
 };
 
+export
 function preprocess_input(input:string) {
   // Split on whitespace + commas:
-  return input.split(/[,\s]+/)
+  return input.split(/[,\s]+/);
 }; 
 
 function contains_tag(tag:string, taglist:string[]){
