@@ -10,9 +10,9 @@ import {
 } from './tagswidget';
 
 import * as React from 'react';
+import StyleClasses from './styles';
 
-const TAG_LABEL_DIV_CLASS = 'jp-cellTags-unselected-tag';
-const TAG_SELECTED_LABEL_DIV_CLASS = 'jp-cellTags-selected-tag';
+const TagListStyleClasses = StyleClasses.TagListStyleClasses;
 
 export
 class TagListComponent extends React.Component<any, any> {
@@ -52,8 +52,8 @@ class TagListComponent extends React.Component<any, any> {
     const selectedTag = this.props.selectedTag;
     return tags.map((tag, index) => {
       const tagClass = (selectedTag === tag) 
-                     ? TAG_SELECTED_LABEL_DIV_CLASS 
-                     : TAG_LABEL_DIV_CLASS;
+                     ? TagListStyleClasses.selectedTagStyleClass
+                     : TagListStyleClasses.unselectedTagStyleClass;
       const inputShouldShow = (selectedTag === tag) 
                              && (this.props.editingSelectedTag as boolean);
       return (
@@ -96,18 +96,23 @@ class TagListComponent extends React.Component<any, any> {
     }
     return (
       <div>
-        <div className="tag-sub-header">Tags in Active Cell</div>
-        <div className="tag-holder">
+        <div className={ TagListStyleClasses.tagSubHeaderStyleClass }>
+          Tags in Active Cell
+        </div>
+        <div className={ TagListStyleClasses.tagHolderStyleClass }>
           { renderedTagsForAllCells }
           <AddTagComponent widget={ this.props.widget } />
         </div>
-        <div className="tag-sub-header">Other Tags in Notebook</div>
+        <div className={ TagListStyleClasses.tagSubHeaderStyleClass }>
+          Other Tags in Notebook
+        </div>
         <div>
-          <div className="tag-holder">
+          <div className={ TagListStyleClasses.tagHolderStyleClass }>
           { renderedTagsForActiveCell }
           </div>
         </div>
       </div>
     );
   }
+
 }
