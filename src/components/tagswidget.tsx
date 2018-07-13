@@ -1,5 +1,5 @@
 import {
-  Cell
+  Cell, ICellModel
 } from '@jupyterlab/cells';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '@phosphor/widgets';
 
 import {
-  write_tag
+  write_tag, preprocess_input
 } from './celltags';
 
 import {
@@ -31,11 +31,8 @@ class TagsWidget extends Widget {
     Private.renderAllTagsNode();
   }
 
-  containsTag(tag:string, cell: Cell) {
-    if (cell === null) {
-      return false;
-    }
-    let tagList = cell.model.metadata.get("tags") as string[];
+  cellModelContainsTag(tag: string, cellModel: ICellModel) {
+    let tagList = cellModel.metadata.get("tags") as string[];
     if (tagList) {
       for (let i=0; i< tagList.length; i++){
         if (tagList[i] === tag) {
@@ -44,6 +41,13 @@ class TagsWidget extends Widget {
       }
       return false;
     }
+  }
+
+  containsTag(tag:string, cell: Cell) {
+    if (cell === null) {
+      return false;
+    }
+    return this.cellModelContainsTag(tag, cell.model);
   }
 
   activeCellContainsTag(tag: string) {
@@ -80,7 +84,12 @@ class TagsWidget extends Widget {
         let results: string[] = [];
         for (var j=0; j<cellTagsData.length; j++) {
           if (cellTagsData[j] == oldTag) {
-            results.push(newTag);
+            preprocess_input(newTag).forEach((tag: string) => {
+              if (!this.cellModelContainsTag(tag, cells.get(i)) 
+                || tag === oldTag) {
+                results.push(tag);
+              }
+            });
           } else {
             results.push(cellTagsData[j]);
           }
