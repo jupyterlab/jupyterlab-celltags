@@ -11,7 +11,7 @@ import {
 } from '@phosphor/widgets';
 
 import {
-  write_tag, preprocess_input
+  write_tag, preprocess_input, cleanup_metadata
 } from './celltags';
 
 import {
@@ -172,6 +172,10 @@ class TagsWidget extends Widget {
 
   renderAllTagLabels(tags: string[]) {
     Private.setTagsListFor(Private.ALL_TAGS, tags);
+  }
+
+  validateMetadataForActiveCell() {
+    cleanup_metadata(this.currentActiveCell);
   }
 
   currentActiveCell: Cell = null;

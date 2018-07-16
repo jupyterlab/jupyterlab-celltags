@@ -70,7 +70,26 @@ export
 function preprocess_input(input:string) {
   // Split on whitespace + commas:
   return input.split(/[,\s]+/);
-}; 
+};
+
+export
+function cleanup_metadata(cell: Cell) {
+  let taglist = <string[]>cell.model.metadata.get('tags');
+  var results: string[] = [];
+  for (var i=taglist.length-1; i>=0; i--) {
+    var found = false;
+    for (var j=0; j<i; j++) {
+      if (taglist[j] === taglist[i]) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      results.push(taglist[i]);
+    }
+  }
+  cell.model.metadata.set('tags', results.reverse());
+}
 
 function contains_tag(tag:string, taglist:string[]){
   for (var i=0; i<taglist.length; i++) {
