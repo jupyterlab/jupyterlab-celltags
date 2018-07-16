@@ -4,6 +4,7 @@ import {
 
 import * as React from 'react';
 import StyleClasses from './styles';
+import { EditingStates } from './tagstool';
 
 const TagStyleClasses = StyleClasses.TagStyleClasses;
 
@@ -37,7 +38,7 @@ abstract class TagComponent extends React.Component<any, any> {
           onBlur={ (event) => {
             let inputElement = event.target as HTMLLabelElement;
             inputElement.innerHTML = tag;
-            this.props.editingStateHandler(false);
+            this.props.editingStateHandler(EditingStates.none);
           } }
         >
           { tag }
