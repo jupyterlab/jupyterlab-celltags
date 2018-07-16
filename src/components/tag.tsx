@@ -4,6 +4,7 @@ import {
 
 import * as React from 'react';
 import StyleClasses from './styles';
+import { EditingStates } from './tagstool';
 
 const TagStyleClasses = StyleClasses.TagStyleClasses;
 
@@ -37,7 +38,7 @@ abstract class TagComponent extends React.Component<any, any> {
           onBlur={ (event) => {
             let inputElement = event.target as HTMLLabelElement;
             inputElement.innerHTML = tag;
-            this.props.editingStateHandler(false);
+            this.props.editingStateHandler(EditingStates.none);
           } }
         >
           { tag }
@@ -57,7 +58,7 @@ abstract class TagComponent extends React.Component<any, any> {
 }
 
 export
-class TagForActiveCellComponent extends TagComponent {
+class TagForAllCellsComponent extends TagComponent {
 
   singleCellOperationHandler(name: string) {
     (this.props.widget as TagsWidget).addTagToActiveCell(name);
@@ -84,7 +85,7 @@ class TagForActiveCellComponent extends TagComponent {
 }
 
 export
-class TagForAllCellsComponent extends TagComponent {
+class TagForActiveCellComponent extends TagComponent {
 
   singleCellOperationHandler(name: string) {
     this.props.selectionStateHandler(null);

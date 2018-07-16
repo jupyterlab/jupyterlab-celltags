@@ -73,7 +73,28 @@ class TagsWidget extends Widget {
     }
   }
 
-  replaceName(oldTag: string, newTag: string) {
+  replaceNameForActiveCell(oldTag: string, newTag: string) {
+    let cellMetadata = this.currentActiveCell.model.metadata;
+    let cellTagsData = cellMetadata.get('tags') as string[];
+    if (cellTagsData) {
+      let results: string[] = [];
+      for (var j=0; j<cellTagsData.length; j++) {
+        if (cellTagsData[j] === oldTag) {
+          preprocess_input(newTag).forEach((tag: string) => {
+            if (!this.cellModelContainsTag(tag, this.currentActiveCell.model) 
+              || tag === oldTag) {
+              results.push(tag);
+            }
+          });
+        } else {
+          results.push(cellTagsData[j]);
+        }
+      }
+      cellMetadata.set('tags', results);
+    }
+  }
+
+  replaceNameForAllCells(oldTag: string, newTag: string) {
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.tagsListShallNotRefresh = true;

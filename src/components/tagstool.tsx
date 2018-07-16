@@ -33,21 +33,27 @@ const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TagsToolStyleClasses = StyleClasses.TagsToolStyleClasses;
 
 export
+enum EditingStates {
+  none,
+  currentCell,
+  allCells
+}
+
+export
 class TagsToolComponent extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
     this.state = { 
       selected: null, 
-      editingSelectedTag: false, 
+      editingSelectedTag: EditingStates.none, 
       deletingTag: false
     };
-    this.node =null;
+    this.node = null;
     this.changeEditingState = this.changeEditingState.bind(this);
     this.changeSelectionState = this.changeSelectionState.bind(this);
     this.changeDeletingState = this.changeDeletingState.bind(this);
   }
-  private node: any;
 
   deletingTag() {
     if (this.state.selected !== null) {
@@ -63,10 +69,10 @@ class TagsToolComponent extends React.Component<any, any> {
 
   clickedRenameTag() {
     if (this.state.selected as string != null) {
-      if (this.state.editingSelectedTag === false) {
-        this.setState({ editingSelectedTag: true });
+      if (this.state.editingSelectedTag === EditingStates.none) {
+        this.setState({ editingSelectedTag: EditingStates.allCells });
       } else {
-        this.setState({ editingSelectedTag: false });
+        this.setState({ editingSelectedTag: EditingStates.none });
       }
     }
   }
@@ -75,7 +81,7 @@ class TagsToolComponent extends React.Component<any, any> {
     this.setState({ selected: newState });
   }
 
-  changeEditingState(newState: boolean) {
+  changeEditingState(newState: EditingStates) {
     this.setState({ editingSelectedTag: newState });
   }
 
@@ -91,7 +97,7 @@ class TagsToolComponent extends React.Component<any, any> {
     document.removeEventListener('mousedown', this.handleClick, false);
   }
 
-  handleClick = (e:any) => {
+  handleClick = (e: any) => {
     if (this.node) {
       if (this.node.contains(e.target)) {
         return;
@@ -163,6 +169,9 @@ class TagsToolComponent extends React.Component<any, any> {
       </div>
     );
   }
+
+  private node: any;
+
 }
 
 export
