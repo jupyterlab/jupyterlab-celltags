@@ -57,7 +57,7 @@ class TagListComponent extends React.Component<any, any> {
     return (this.props.widget as TagsWidget).activeCellContainsTag(name);
   }
 
-  renderElementForTags(tags: string[], TagType: typeof TagComponent) {
+  renderElementForTags(tags: string[], TagType: typeof TagComponent, doubleClickAllowed: boolean) {
     const selectedTag = this.props.selectedTag;
     const _self = this;
     return tags.map((tag, index) => {
@@ -76,21 +76,18 @@ class TagListComponent extends React.Component<any, any> {
                 clearTimeout(this.timer);
               }
               this.timer = setTimeout(function() {
-                console.log('single');
                 _self.selectedTagWithName(tag);
               }, 250);
             }
           } }
           onDoubleClick={ (event) => {
-            console.log(this.props.editingSelectedTag);
             clearTimeout(this.timer);
-            if (this.props.editingSelectedTag === EditingStates.none) {
-              console.log('double');
+            if ((this.props.editingSelectedTag === EditingStates.none) 
+               && doubleClickAllowed) {
               this.props.selectionStateHandler(tag);
               this.props.editingStateHandler(EditingStates.currentCell);
             } else {
               if (!(this.props.selectedTag === tag)) {
-                console.log('single');
                 _self.selectedTagWithName(tag);
               }
             }
@@ -119,16 +116,16 @@ class TagListComponent extends React.Component<any, any> {
         }
       }
     }
-    var renderedTagsForActiveCell = null;
-    if (otherTagsList != null) {
-      renderedTagsForActiveCell = this.renderElementForTags(otherTagsList, 
-                                                    TagForActiveCellComponent);
-    }
     var renderedTagsForAllCells = null;
     if (this.props.tagsList != null) {
+      renderedTagsForAllCells = this.renderElementForTags(otherTagsList, 
+                                              TagForAllCellsComponent, false);
+    }
+    var renderedTagsForActiveCell = null;
+    if (otherTagsList != null) {
       let tags = (this.props.tagsList as string).toString().split(',');
-      renderedTagsForAllCells = this.renderElementForTags(tags, 
-                                              TagForAllCellsComponent);
+      renderedTagsForActiveCell = this.renderElementForTags(tags, 
+                                              TagForActiveCellComponent, true);
     }
     return (
       <div>
@@ -136,7 +133,7 @@ class TagListComponent extends React.Component<any, any> {
           Tags in Active Cell
         </div>
         <div className={ TagListStyleClasses.tagHolderStyleClass }>
-          { renderedTagsForAllCells }
+          { renderedTagsForActiveCell }
           <AddTagComponent widget={ this.props.widget } />
         </div>
         <div className={ TagListStyleClasses.tagSubHeaderStyleClass }>
@@ -144,7 +141,7 @@ class TagListComponent extends React.Component<any, any> {
         </div>
         <div>
           <div className={ TagListStyleClasses.tagHolderStyleClass }>
-          { renderedTagsForActiveCell }
+          { renderedTagsForAllCells }
           </div>
         </div>
       </div>

@@ -68,7 +68,6 @@ class TagsToolComponent extends React.Component<any, any> {
   }
 
   clickedRenameTag() {
-    console.log(this.state.editingSelectedTag);
     if (this.state.selected as string != null) {
       if (this.state.editingSelectedTag === EditingStates.none) {
         this.setState({ editingSelectedTag: EditingStates.allCells });

@@ -58,7 +58,7 @@ abstract class TagComponent extends React.Component<any, any> {
 }
 
 export
-class TagForActiveCellComponent extends TagComponent {
+class TagForAllCellsComponent extends TagComponent {
 
   singleCellOperationHandler(name: string) {
     (this.props.widget as TagsWidget).addTagToActiveCell(name);
@@ -85,7 +85,7 @@ class TagForActiveCellComponent extends TagComponent {
 }
 
 export
-class TagForAllCellsComponent extends TagComponent {
+class TagForActiveCellComponent extends TagComponent {
 
   singleCellOperationHandler(name: string) {
     this.props.selectionStateHandler(null);
