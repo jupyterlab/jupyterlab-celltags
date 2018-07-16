@@ -199,6 +199,7 @@ class TagsTool extends CellTools.Tool {
 
   protected onMetadataChanged(msg: ObservableJSON.ChangeMessage): void {
     if (!this.widget.tagsListShallNotRefresh) {
+      this.widget.validateMetadataForActiveCell();
       this.widget.loadTagsForActiveCell();
       this.widget.getAllTagsInNotebook();
     }
@@ -206,5 +207,5 @@ class TagsTool extends CellTools.Tool {
 
   private widget: TagsWidget = null;
   public notebookTracker: INotebookTracker = null;
-  
+
 }
