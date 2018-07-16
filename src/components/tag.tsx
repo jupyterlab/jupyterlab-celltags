@@ -67,12 +67,14 @@ class TagForActiveCellComponent extends TagComponent {
     if (this.props.selectedTag as string === name) {
       return <img onClick={ (event) => operation(event) } 
                alt="Add Tag To Active Cell" 
+               title="Add Tag To Active Cell"
                src={ require("../../static/white_addcircle.svg") } 
                className={ TagStyleClasses.tagIconStyleClass }
              />;
     } else {
       return <img onClick={ (event) => operation(event) } 
-               alt="Add Tag To Active Cell"                
+               alt="Add Tag To Active Cell"
+               title="Add Tag To Active Cell"         
                src={ require("../../static/darkgrey_addcircle.svg") }
                className={ TagStyleClasses.tagIconStyleClass }
              />;
@@ -95,12 +97,14 @@ class TagForAllCellsComponent extends TagComponent {
     if (this.props.selectedTag as string === name) {
       return <img onClick={ (event) => operation(event) } 
                alt="Remove Tag From Active Cell"
+               title="Remove Tag From Active Cell"
                src={ require("../../static/white_minuscircle.svg") } 
                className={ TagStyleClasses.tagIconStyleClass }
              />;
     } else {
       return <img onClick={ (event) => operation(event) } 
                alt="Remove Tag From Active Cell"
+               title="Remove Tag From Active Cell"
                src={require("../../static/darkgrey_minuscircle.svg")}
                className={ TagStyleClasses.tagIconStyleClass }
              />;
