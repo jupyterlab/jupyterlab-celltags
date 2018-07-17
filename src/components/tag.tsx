@@ -27,6 +27,7 @@ abstract class TagComponent extends React.Component<any, any> {
         <label className={ TagStyleClasses.tagLabelStyleClass }
           ref={ (label) => inputShouldShow && label && label.focus() }
           contentEditable={ inputShouldShow } 
+          suppressContentEditableWarning={ true }
           key={ new Date().toLocaleTimeString() }
           onFocus={ (event) => document.execCommand('selectAll', false, null) }
           onKeyDown={ (event) => {
