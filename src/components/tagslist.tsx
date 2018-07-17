@@ -117,12 +117,12 @@ class TagListComponent extends React.Component<any, any> {
       }
     }
     var renderedTagsForAllCells = null;
-    if (this.props.tagsList != null) {
+    if (otherTagsList != null) {
       renderedTagsForAllCells = this.renderElementForTags(otherTagsList, 
                                               TagForAllCellsComponent, false);
     }
     var renderedTagsForActiveCell = null;
-    if (otherTagsList != null) {
+    if (this.props.tagsList != null) {
       let tags = (this.props.tagsList as string).toString().split(',');
       renderedTagsForActiveCell = this.renderElementForTags(tags, 
                                               TagForActiveCellComponent, true);
