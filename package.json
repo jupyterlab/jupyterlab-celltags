@@ -35,7 +35,8 @@
     "@jupyterlab/notebook": "^0.17.0-0",
     "@jupyterlab/notebook-extension": "^0.17.0-0",
     "@types/node": "^10.5.1",
-    "@types/react-dom": "^16.4.0",
+    "@types/react-dom": "^16.0.6",
+    "react":"~16.4.0",
     "typestyle": "^2.0.1"
   },
   "devDependencies": {
