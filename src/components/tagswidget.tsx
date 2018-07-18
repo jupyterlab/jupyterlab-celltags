@@ -56,7 +56,7 @@ class TagsWidget extends Widget {
 
   selectAll(name: string) {
     let notebookPanel = this.notebookTracker.currentWidget;
-    let notebook = notebookPanel.notebook;
+    let notebook = notebookPanel.content;
     let first:boolean = true;
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
@@ -137,7 +137,7 @@ class TagsWidget extends Widget {
 
   removeTagFromAllCells(name:string) {
     let notebookPanel = this.notebookTracker.currentWidget;
-    let notebook = notebookPanel.notebook;
+    let notebook = notebookPanel.content;
     this.tagsListShallNotRefresh = true;
     for (let i=0; i< notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
