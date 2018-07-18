@@ -456,7 +456,7 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-csstype@^2.2.0:
+csstype@^2.2.0, csstype@^2.4.0:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.5.tgz#4125484a3d42189a863943f23b9e4b80fedfa106"
 
@@ -513,6 +513,10 @@ fbjs@^0.8.16:
     promise "^7.1.1"
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.18"
+
+free-style@2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/free-style/-/free-style-2.5.1.tgz#5e3f684c470d3bba7e4dbb43524e0a08917e873c"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -743,6 +747,13 @@ string_decoder@~1.1.1:
 typescript@~2.6.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
+
+typestyle@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/typestyle/-/typestyle-2.0.1.tgz#9593e6029ce5f23f1a5728ddd3ed6bf1ffa781f8"
+  dependencies:
+    csstype "^2.4.0"
+    free-style "2.5.1"
 
 ua-parser-js@^0.7.18:
   version "0.7.18"

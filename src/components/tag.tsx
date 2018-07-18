@@ -15,7 +15,7 @@ abstract class TagComponent extends React.Component<any, any> {
     super(props);
     this.state = {addingNewTag: false};
   }
-
+  
   abstract singleCellOperationHandler(name: string): void;
   abstract singleCellOperationButton(name: string, operation: (event: React.MouseEvent<any>) => void): JSX.Element;
 
