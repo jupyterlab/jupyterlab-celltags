@@ -1,5 +1,7 @@
 # jupyterlab-celltags
 
+[![Binder](https://beta.mybinder.org/badge.svg)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-celltags/master?urlpath=lab)
+
 A JupyterLab extension for notebook cell tags
 
 ## Prerequisites
