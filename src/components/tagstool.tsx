@@ -67,6 +67,10 @@ class TagsToolComponent extends React.Component<any, any> {
     (this.props.widget as TagsWidget).removeTagFromAllCells(this.state.selected);
   }
 
+  clickedSelectAll() {
+    (this.props.widget as TagsWidget).selectAll(this.state.selected);
+  }
+
   clickedRenameTag() {
     if (this.state.selected as string != null) {
       if (this.state.editingSelectedTag === EditingStates.none) {
@@ -159,6 +163,11 @@ class TagsToolComponent extends React.Component<any, any> {
           editingSelectedTag={ this.state.editingSelectedTag }
         />
         <div>
+          <div className={operationClass} onClick={
+            () => this.clickedSelectAll()
+          }>
+          Select All Cells with this Tag
+          </div>
           <div className={ operationClass} onClick={ 
               () => this.clickedRenameTag() 
           }>
