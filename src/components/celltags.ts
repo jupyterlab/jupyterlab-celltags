@@ -76,6 +76,9 @@ export
 function cleanup_metadata(cell: Cell) {
   let taglist = <string[]>cell.model.metadata.get('tags');
   var results: string[] = [];
+  if (taglist === undefined) {
+    return;
+  }
   for (var i=taglist.length-1; i>=0; i--) {
     var found = false;
     for (var j=0; j<i; j++) {
