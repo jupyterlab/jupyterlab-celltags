@@ -3,7 +3,9 @@ import { TagListStyleClasses } from './tagslist-styles';
 import { TagsToolStyleClasses } from './tagstool-styles';
 
 const StyleClasses = {
-  TagStyleClasses, TagListStyleClasses, TagsToolStyleClasses
+  TagStyleClasses,
+  TagListStyleClasses,
+  TagsToolStyleClasses
 };
 
 export default StyleClasses;
