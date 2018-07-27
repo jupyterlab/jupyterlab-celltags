@@ -3,13 +3,15 @@ import * as React from 'react';
 namespace SharedStyles {
   export const tagInputStyleProperties = {
     padding: '0px',
+    paddingBottom: '2px',
     color: 'var(--jp-layout-color4)',
     fontSize: '12px',
     border: 'none',
     outline: 'none',
     resize: 'horizontal',
     maxWidth: '100%',
-    backgroundColor: 'var(--jp-layout-color1)'
+    backgroundColor: 'var(--jp-layout-color1)', 
+    maxHeight: '30px'
   } as React.CSSProperties;
 
   export const tagStyleProperties = {

@@ -67,11 +67,15 @@ export function preprocess_input(input: string) {
   return input.split(/[,\s]+/);
 }
 
-export function cleanup_metadata(cell: Cell) {
-  const taglist = cell.model.metadata.get('tags') as string[];
-  const results: string[] = [];
+export
+function cleanup_metadata(cell: Cell) {
+  let taglist = <string[]>cell.model.metadata.get('tags');
+  var results: string[] = [];
+  if (taglist === undefined) {
+    return;
+  }
   for (let i = taglist.length - 1; i >= 0; i--) {
-    let found = false;
+    var found = false;
     for (let j = 0; j < i; j++) {
       if (taglist[j] === taglist[i]) {
         found = true;
