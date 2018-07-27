@@ -30,7 +30,8 @@ namespace TagStyleClasses {
   const addTagStyleClass = style(SharedStyles.tagStyleProperties, {
     backgroundColor: 'var(--jp-layout-color1)',
     border: '1px solid var(--jp-layout-color4)',
-    maxWidth: '95%'
+    maxWidth: '95%',
+    maxHeight: '31px'
   });
   
   export
@@ -46,14 +47,19 @@ namespace TagStyleClasses {
   export
   const inputIconStyleClass = style({
     marginLeft: '5px',
-    marginTop: '2px',
-    marginBottom: '-1px',
+    marginTop: '1px',
+    marginBottom: '-2px',
     height: '13px'
   });
 
   export
   const tagIconLabelStyleClass = style({
     position: 'absolute'
+  });
+
+  export
+  const addTagSpanStyleClass = style({
+
   });
 
 }

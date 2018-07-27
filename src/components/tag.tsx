@@ -178,7 +178,9 @@ class AddTagComponent extends React.Component<any, any> {
                  : (<div className={ TagStyleClasses.blankAddInputStyleClass }
                      onClick={(event) => this.setState({ addingNewTag: true })}
                     >
-                      Add Tag
+                      <span className={ TagStyleClasses.addTagSpanStyleClass }>
+                        Add Tag
+                      </span>
                       <img src={ require("../../static/add_icon.svg") } 
                         className={ TagStyleClasses.inputIconStyleClass } 
                         onClick={ (event) => 
@@ -188,7 +190,7 @@ class AddTagComponent extends React.Component<any, any> {
                     </div>);
     return (
       <div className={ TagStyleClasses.addTagStyleClass } >
-        {inputBox}
+        { inputBox }
       </div>
     );
   }
