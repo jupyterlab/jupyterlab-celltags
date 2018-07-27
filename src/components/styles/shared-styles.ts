@@ -5,6 +5,7 @@ namespace SharedStyles {
   export
   const tagInputStyleProperties = {
     padding: '0px',
+    paddingBottom: '2px',
     color: 'var(--jp-layout-color4)',
     fontSize: '12px',
     border: 'none',

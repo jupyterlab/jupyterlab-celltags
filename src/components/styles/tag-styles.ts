@@ -7,7 +7,6 @@ namespace TagStyleClasses {
   export
   const tagLabelStyleClass = style({
     maxWidth: '100%',
-    // whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     display: 'inline-block',
     overflow: 'hidden',
