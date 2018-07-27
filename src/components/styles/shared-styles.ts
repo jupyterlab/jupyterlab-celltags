@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 namespace SharedStyles {
-  export const tagInputStyleProperties = {
+
+  export
+  const tagInputStyleProperties = {
     padding: '0px',
     paddingBottom: '2px',
     color: 'var(--jp-layout-color4)',
@@ -13,8 +15,9 @@ namespace SharedStyles {
     backgroundColor: 'var(--jp-layout-color1)', 
     maxHeight: '30px'
   } as React.CSSProperties;
-
-  export const tagStyleProperties = {
+  
+  export
+  const tagStyleProperties = {
     boxSizing: 'border-box',
     borderRadius: '20px',
     padding: '6px',
@@ -25,7 +28,8 @@ namespace SharedStyles {
     maxWidth: 'calc(100% - 25px)'
   } as React.CSSProperties;
 
-  export const confirmButtonProperties = {
+  export
+  const confirmButtonProperties = {
     borderRadius: '3px',
     backgroundColor: 'var(--jp-layout-color1)',
     border: '1px solid #bdbdbd',
@@ -36,14 +40,16 @@ namespace SharedStyles {
     paddingTop: '4px',
     paddingBottom: '4px',
     fontSize: '12px'
-  };
+  }
 
-  export const tagOperationsProperties = {
+  export
+  const tagOperationsProperties = {
     padding: '5px',
     paddingLeft: '10px',
     fontSize: '13px',
     width: '100%'
-  };
+  }
+  
 }
 
 export default SharedStyles;
