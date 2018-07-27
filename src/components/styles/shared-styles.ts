@@ -13,7 +13,7 @@ namespace SharedStyles {
     resize: 'horizontal',
     maxWidth: '100%',
     backgroundColor: 'var(--jp-layout-color1)', 
-    height: '31px'
+    height: '30px'
   } as React.CSSProperties;
   
   export
