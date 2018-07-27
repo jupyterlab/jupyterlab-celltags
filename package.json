@@ -27,6 +27,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf lib",
+    "prettier": "prettier --write '{,src/*,src/**/*,style/*}{.js,.jsx,.ts,.tsx,.css,.json,.md}'",
     "watch": "tsc -w"
   },
   "husky": {
@@ -45,7 +46,7 @@
     "@jupyterlab/apputils": "^0.17.0-0",
     "@jupyterlab/notebook": "^0.17.0-0",
     "@jupyterlab/notebook-extension": "^0.17.0-0",
-    "react": "~16.4.0", 
+    "react": "~16.4.0",
     "typestyle": "^2.0.1"
   },
   "devDependencies": {
