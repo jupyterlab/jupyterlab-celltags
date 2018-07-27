@@ -14,13 +14,28 @@ import StyleClasses from './styles';
 
 const TagListStyleClasses = StyleClasses.TagListStyleClasses;
 
+// TODO: Declare TagListComponentProps
+export interface TagListComponentProps {
+  widget: any;
+  selectedTag: any;
+  editingSelectedTag: any;
+  selectionStateHandler: any;
+  editingStateHandler: any;
+  deletingStateHandler: any;
+  allTagsList: any;
+  tagsList: any;
+}
+
+// TODO: Declare TagListComponentState
+export interface TagListComponentState {
+  selected: any;
+}
+
 export class TagListComponent extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.editedTagName = this.editedTagName.bind(this);
     this.timer = null;
     this.state = { selected: this.props.selectedTag };
-    this.selectedTagWithName = this.selectedTagWithName.bind(this);
   }
 
   selectedTagWithName = (name: string) => {

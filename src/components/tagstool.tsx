@@ -24,6 +24,20 @@ export enum EditingStates {
   allCells
 }
 
+// TODO: Declare TagForActiveCellComponentProps
+export interface TagsToolComponentProps {
+  widget: TagsWidget;
+  tagsList: any;
+  allTagsList: any;
+}
+
+// TODO: Declare AddTagComponentState
+export interface TagsToolComponentState {
+  selected: any;
+  editingSelectedTag: EditingStates;
+  deletingTag: boolean;
+}
+
 export class TagsToolComponent extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -33,9 +47,6 @@ export class TagsToolComponent extends React.Component<any, any> {
       deletingTag: false
     };
     this.node = null;
-    this.changeEditingState = this.changeEditingState.bind(this);
-    this.changeSelectionState = this.changeSelectionState.bind(this);
-    this.changeDeletingState = this.changeDeletingState.bind(this);
   }
 
   componentWillMount() {

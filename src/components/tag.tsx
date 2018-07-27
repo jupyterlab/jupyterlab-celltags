@@ -6,6 +6,26 @@ import { EditingStates } from './tagstool';
 
 const TagStyleClasses = StyleClasses.TagStyleClasses;
 
+// TODO: Declare TagComponentProps
+export interface TagComponentProps {
+  singleCellOperationHandler: (name: string) => void;
+  singleCellOperationButton: (
+    name: string,
+    operation: (event: React.MouseEvent<any>) => void
+  ) => JSX.Element;
+  inputShouldShow?: any;
+  tag?: any;
+  finishEditingHandler?: any;
+  editingStateHandler?: any;
+  widget: any;
+  selectedTag: any;
+  editingSelectedTag: any;
+  selectionStateHandler: any;
+  deletingStateHandler: any;
+  allTagsList: any;
+  tagsList: any;
+}
+
 export class TagComponent extends React.Component<any> {
   render() {
     const inputShouldShow = this.props.inputShouldShow as boolean;
@@ -45,6 +65,12 @@ export class TagComponent extends React.Component<any> {
       </div>
     );
   }
+}
+
+// TODO: Declare TagForAllCellsComponentProps
+export interface TagForAllCellsComponentProps {
+  widget: any;
+  selectedTag: any;
 }
 
 export class TagForAllCellsComponent extends React.Component<any> {
@@ -87,6 +113,13 @@ export class TagForAllCellsComponent extends React.Component<any> {
       />
     );
   }
+}
+
+// TODO: Declare TagForActiveCellComponentProps
+export interface TagForActiveCellComponentProps {
+  selectionStateHandler: any;
+  widget: any;
+  selectedTag: any;
 }
 
 export class TagForActiveCellComponent extends React.Component<any> {
@@ -134,10 +167,23 @@ export class TagForActiveCellComponent extends React.Component<any> {
   }
 }
 
+// TODO: Declare TagForActiveCellComponentProps
+export interface AddTagComponentProps {
+  widget: any;
+}
+
+// TODO: Declare AddTagComponentState
+export interface AddTagComponentState {
+  plusIconShouldHide: boolean;
+  addingNewTag: boolean;
+  inputValue: string;
+}
+
 export class AddTagComponent extends React.Component<any, any> {
   state = {
     plusIconShouldHide: false,
-    addingNewTag: false
+    addingNewTag: false,
+    inputValue: 'Add Tag'
   };
 
   finishedAddingTag = (name: string) => {
@@ -189,10 +235,12 @@ export class AddTagComponent extends React.Component<any, any> {
             onKeyDown={this.addTagOnKeyDown}
             onBlur={this.addTagOnBlur}
             autoFocus
-            width={this.state.added ? 62 : 50}
-            minWidth={this.state.added ? 62 : 50}
-            height={this.state.added ? 62 : 50}
             value={this.state.inputValue}
+            style={{
+              width: this.state.inputValue === 'Add Tag' ? 62 : 50,
+              minWidth: this.state.inputValue === 'Add Tag' ? 62 : 50,
+              height: this.state.inputValue === 'Add Tag' ? 62 : 50
+            }}
           />
         </div>
       ) : (
