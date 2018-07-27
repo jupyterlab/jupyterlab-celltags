@@ -30,7 +30,7 @@ export interface TagListComponentState {
 }
 
 export class TagListComponent extends React.Component<any, any> {
-  constructor(props: any) {
+  constructor(props: TagListComponentProps) {
     super(props);
     this.timer = null;
     this.state = { selected: this.props.selectedTag };

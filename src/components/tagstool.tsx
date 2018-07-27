@@ -37,7 +37,7 @@ export interface TagsToolComponentState {
 }
 
 export class TagsToolComponent extends React.Component<any, any> {
-  constructor(props: any) {
+  constructor(props: TagsToolComponentProps) {
     super(props);
     this.state = {
       selected: null,
