@@ -6,8 +6,22 @@ import { EditingStates } from "./tagstool";
 
 const TagStyleClasses = StyleClasses.TagStyleClasses;
 
-export abstract class TagComponent extends React.Component<any, any> {
-  constructor(props: any) {
+export interface TagComponentProps {
+  widget: TagsWidget,
+  finishEditingHandler: (newName: string) => void,
+  selectionStateHandler: (newState: string) => void,
+  editingStateHandler: (newState: EditingStates) => void,
+  selectedTag: string | null,
+  inputShouldShow: boolean,
+  tag: string
+}
+
+export interface TagComponentState {
+  addingNewTag: boolean
+}
+
+export abstract class TagComponent extends React.Component<TagComponentProps, TagComponentState> {
+  constructor(props: TagComponentProps) {
     super(props);
     this.state = { addingNewTag: false };
   }
@@ -127,8 +141,17 @@ export class TagForActiveCellComponent extends TagComponent {
   }
 }
 
-export class AddTagComponent extends React.Component<any, any> {
-  constructor(props: any) {
+export interface AddTagComponentProps {
+  widget: TagsWidget
+}
+
+export interface AddTagComponentState {
+  plusIconShouldHide: boolean;
+  addingNewTag: boolean;
+}
+
+export class AddTagComponent extends React.Component<AddTagComponentProps, AddTagComponentState> {
+  constructor(props: AddTagComponentProps) {
     super(props);
     this.state = { plusIconShouldHide: false, addingNewTag: false };
   }
