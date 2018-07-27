@@ -1,29 +1,17 @@
-import {
-  Cell, ICellModel
-} from '@jupyterlab/cells';
+import { Cell, ICellModel } from '@jupyterlab/cells';
 
-import {
-  INotebookTracker
-} from '@jupyterlab/notebook';
+import { INotebookTracker } from '@jupyterlab/notebook';
 
-import {
-  Widget
-} from '@phosphor/widgets';
+import { Widget } from '@phosphor/widgets';
 
-import {
-  write_tag, preprocess_input, cleanup_metadata
-} from './celltags';
+import { write_tag, preprocess_input, cleanup_metadata } from './celltags';
 
-import {
-  TagsToolComponent
-} from './tagstool';
+import { TagsToolComponent } from './tagstool';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-export
-class TagsWidget extends Widget {
-
+export class TagsWidget extends Widget {
   constructor(notebook_Tracker: INotebookTracker) {
     super();
     this.notebookTracker = notebook_Tracker;
@@ -32,9 +20,9 @@ class TagsWidget extends Widget {
   }
 
   cellModelContainsTag(tag: string, cellModel: ICellModel) {
-    let tagList = cellModel.metadata.get("tags") as string[];
+    let tagList = cellModel.metadata.get('tags') as string[];
     if (tagList) {
-      for (let i=0; i< tagList.length; i++){
+      for (let i = 0; i < tagList.length; i++) {
         if (tagList[i] === tag) {
           return true;
         }
@@ -43,7 +31,7 @@ class TagsWidget extends Widget {
     }
   }
 
-  containsTag(tag:string, cell: Cell) {
+  containsTag(tag: string, cell: Cell) {
     if (cell === null) {
       return false;
     }
@@ -57,16 +45,15 @@ class TagsWidget extends Widget {
   selectAll(name: string) {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.content;
-    let first:boolean = true;
-    for (let i=0; i< notebookPanel.model.cells.length; i++) {
+    let first: boolean = true;
+    for (let i = 0; i < notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
         if (first === true) {
-          notebook.activeCellIndex= i;
+          notebook.activeCellIndex = i;
           notebook.deselectAll();
-          first =false;
-        }
-        else {
+          first = false;
+        } else {
           notebook.select(notebook.widgets[i] as Cell);
         }
       }
@@ -78,11 +65,13 @@ class TagsWidget extends Widget {
     let cellTagsData = cellMetadata.get('tags') as string[];
     if (cellTagsData) {
       let results: string[] = [];
-      for (var j=0; j<cellTagsData.length; j++) {
+      for (var j = 0; j < cellTagsData.length; j++) {
         if (cellTagsData[j] === oldTag) {
           preprocess_input(newTag).forEach((tag: string) => {
-            if (!this.cellModelContainsTag(tag, this.currentActiveCell.model) 
-              || tag === oldTag) {
+            if (
+              !this.cellModelContainsTag(tag, this.currentActiveCell.model) ||
+              tag === oldTag
+            ) {
               results.push(tag);
             }
           });
@@ -98,16 +87,18 @@ class TagsWidget extends Widget {
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.tagsListShallNotRefresh = true;
-    for (var i=0; i<cells.length; i++) {
+    for (var i = 0; i < cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
       if (cellTagsData) {
         let results: string[] = [];
-        for (var j=0; j<cellTagsData.length; j++) {
+        for (var j = 0; j < cellTagsData.length; j++) {
           if (cellTagsData[j] === oldTag) {
             preprocess_input(newTag).forEach((tag: string) => {
-              if (!this.cellModelContainsTag(tag, cells.get(i)) 
-                || tag === oldTag) {
+              if (
+                !this.cellModelContainsTag(tag, cells.get(i)) ||
+                tag === oldTag
+              ) {
                 results.push(tag);
               }
             });
@@ -126,7 +117,7 @@ class TagsWidget extends Widget {
   didFinishAddingTags(name: string) {
     write_tag(this.currentActiveCell, name, true);
     let new_tags = name.split(/[,\s]+/);
-    for (var i=0; i < new_tags.length; i++) {
+    for (var i = 0; i < new_tags.length; i++) {
       this.addTagIntoAllTagsList(new_tags[i]);
     }
   }
@@ -135,11 +126,11 @@ class TagsWidget extends Widget {
     write_tag(this.currentActiveCell, name, false);
   }
 
-  removeTagFromAllCells(name:string) {
+  removeTagFromAllCells(name: string) {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.content;
     this.tagsListShallNotRefresh = true;
-    for (let i=0; i< notebookPanel.model.cells.length; i++) {
+    for (let i = 0; i < notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       if (this.containsTag(name, currentCell)) {
         write_tag(currentCell, name, false);
@@ -151,7 +142,7 @@ class TagsWidget extends Widget {
   }
 
   addTagIntoAllTagsList(name: string) {
-    if (name === "") {
+    if (name === '') {
       return;
     } else if (this.allTagsInNotebook == null) {
       this.allTagsInNotebook = [name];
@@ -162,7 +153,7 @@ class TagsWidget extends Widget {
     }
   }
 
-  addTagToActiveCell(name:string) {
+  addTagToActiveCell(name: string) {
     write_tag(this.currentActiveCell, name, true);
     this.loadTagsForActiveCell();
   }
@@ -171,11 +162,11 @@ class TagsWidget extends Widget {
     let notebook = this.notebookTracker.currentWidget;
     let cells = notebook.model.cells;
     this.allTagsInNotebook = null;
-    for (var i=0; i<cells.length; i++) {
+    for (var i = 0; i < cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
       let cellTagsData = cellMetadata.get('tags') as string[];
       if (cellTagsData) {
-        for (var j=0; j<cellTagsData.length; j++) {
+        for (var j = 0; j < cellTagsData.length; j++) {
           let name = cellTagsData[j];
           this.addTagIntoAllTagsList(name);
         }
@@ -186,7 +177,7 @@ class TagsWidget extends Widget {
 
   loadTagsForActiveCell() {
     if (this.currentActiveCell != null) {
-      let tags = this.currentActiveCell.model.metadata.get("tags");
+      let tags = this.currentActiveCell.model.metadata.get('tags');
       Private.setTagsListFor(Private.TAGS_FOR_CELL, tags);
     }
   }
@@ -203,7 +194,6 @@ class TagsWidget extends Widget {
   allTagsInNotebook: [string] = null;
   notebookTracker: INotebookTracker = null;
   tagsListShallNotRefresh = false;
-
 }
 
 namespace Private {
@@ -214,8 +204,7 @@ namespace Private {
   export const ALL_TAGS = 0;
   export const TAGS_FOR_CELL = 1;
 
-  export
-  function setTagsListFor(type: number, list: any) {
+  export function setTagsListFor(type: number, list: any) {
     switch (type) {
       case ALL_TAGS:
         allTagsList = list;
@@ -227,21 +216,18 @@ namespace Private {
     renderAllTagsNode();
   }
 
-  export
-  function setWidget(currentWidget: TagsWidget) {
+  export function setWidget(currentWidget: TagsWidget) {
     widget = currentWidget;
   }
 
-  export
-  function renderAllTagsNode() {
+  export function renderAllTagsNode() {
     ReactDOM.render(
-      (<TagsToolComponent 
-        widget={ widget } 
-        tagsList={ tagsList } 
-        allTagsList={ allTagsList } 
-      />),
+      <TagsToolComponent
+        widget={widget}
+        tagsList={tagsList}
+        allTagsList={allTagsList}
+      />,
       widget.node
     );
   }
-  
 }

@@ -1,12 +1,11 @@
 .jp-CellTools-tool {
-    overflow: visible;
+  overflow: visible;
 }
 
 .jp-CellTools {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 .jp-ActiveCellTool {
-    min-height: 54px;
+  min-height: 54px;
 }
-
