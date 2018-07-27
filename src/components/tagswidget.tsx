@@ -23,7 +23,6 @@ import * as ReactDOM from 'react-dom';
 
 export
 class TagsWidget extends Widget {
-
   constructor(notebook_Tracker: INotebookTracker) {
     super();
     this.notebookTracker = notebook_Tracker;

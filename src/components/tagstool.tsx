@@ -41,7 +41,6 @@ enum EditingStates {
 
 export
 class TagsToolComponent extends React.Component<any, any> {
-
   constructor(props: any) {
     super(props);
     this.state = { 
@@ -55,23 +54,31 @@ class TagsToolComponent extends React.Component<any, any> {
     this.changeDeletingState = this.changeDeletingState.bind(this);
   }
 
-  deletingTag() {
+  componentWillMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClick, false);
+  }
+
+  deletingTag = () => {
     if (this.state.selected !== null) {
       this.setState({ deletingTag: true });
     }
   }
 
-  clickedDeleteTag() {
+  clickedDeleteTag = () => {
     this.setState({ deletingTag: false });
     this.setState({ selected: null });
     (this.props.widget as TagsWidget).removeTagFromAllCells(this.state.selected);
   }
 
-  clickedSelectAll() {
+  clickedSelectAll = () => {
     (this.props.widget as TagsWidget).selectAll(this.state.selected);
   }
 
-  clickedRenameTag() {
+  clickedRenameTag = () => {
     if (this.state.selected as string != null) {
       if (this.state.editingSelectedTag === EditingStates.none) {
         this.setState({ editingSelectedTag: EditingStates.allCells });
@@ -81,24 +88,16 @@ class TagsToolComponent extends React.Component<any, any> {
     }
   }
 
-  changeSelectionState(newState: string) {
+  changeSelectionState = (newState: string) => {
     this.setState({ selected: newState });
   }
 
-  changeEditingState(newState: EditingStates) {
+  changeEditingState = (newState: EditingStates) => {
     this.setState({ editingSelectedTag: newState });
   }
 
-  changeDeletingState(newState: boolean) {
+  changeDeletingState = (newState: boolean) => {
     this.setState({ deletingTag: newState });
-  }
-
-  componentWillMount() {
-    document.addEventListener('mousedown', this.handleClick, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClick, false);
   }
 
   handleClick = (e: any) => {
@@ -185,7 +184,6 @@ class TagsToolComponent extends React.Component<any, any> {
 
 export
 class TagsTool extends CellTools.Tool {
-
   constructor(notebook_Tracker: INotebookTracker, app: JupyterLab) {
     super();
     this.notebookTracker = notebook_Tracker;

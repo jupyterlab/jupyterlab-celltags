@@ -20,7 +20,6 @@ const TagListStyleClasses = StyleClasses.TagListStyleClasses;
 
 export
 class TagListComponent extends React.Component<any, any> {
-
   constructor(props: any) {
     super(props);
     this.editedTagName = this.editedTagName.bind(this);
@@ -29,7 +28,7 @@ class TagListComponent extends React.Component<any, any> {
     this.selectedTagWithName = this.selectedTagWithName.bind(this);
   }
 
-  selectedTagWithName(name: string) {
+  selectedTagWithName = (name: string) => {
     if (this.props.selectedTag === name 
       && ((this.props.editingSelectedTag === EditingStates.none))) {
       this.props.selectionStateHandler(null);
@@ -42,7 +41,7 @@ class TagListComponent extends React.Component<any, any> {
     this.props.deletingStateHandler(false);
   }
 
-  editedTagName(newName: string) {
+  editedTagName = (newName: string) => {
     let widget = (this.props.widget as TagsWidget);
     this.props.editingStateHandler(EditingStates.none);
     if (this.props.editingSelectedTag === EditingStates.allCells) {
@@ -53,11 +52,11 @@ class TagListComponent extends React.Component<any, any> {
     this.props.selectionStateHandler(null);
   }
 
-  tagInActiveCell(name: string) {
+  tagInActiveCell = (name: string) => {
     return (this.props.widget as TagsWidget).activeCellContainsTag(name);
   }
 
-  renderElementForTags(tags: string[], TagType: typeof TagComponent, doubleClickAllowed: boolean) {
+  renderElementForTags = (tags: string[], TagType: typeof TagComponent, doubleClickAllowed: boolean) => {
     const selectedTag = this.props.selectedTag;
     const _self = this;
     return tags.map((tag, index) => {

@@ -51,7 +51,7 @@ class TagComponent extends React.Component<any> {
 
 export
 class TagForAllCellsComponent extends React.Component<any> {
-  singleCellOperationHandler =(name: string) => {
+  singleCellOperationHandler = (name: string) => {
     (this.props.widget as TagsWidget).addTagToActiveCell(name);
   }
 
@@ -117,7 +117,7 @@ class AddTagComponent extends React.Component<any, any> {
     addingNewTag: false 
   };
 
-  finishedAddingTag = (name: string) {
+  finishedAddingTag = (name: string) => {
     (this.props.widget as TagsWidget).didFinishAddingTags(name);
   }
 
