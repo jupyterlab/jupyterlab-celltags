@@ -17,7 +17,7 @@ namespace SharedStyles {
   export const tagStyleProperties = {
     boxSizing: 'border-box',
     borderRadius: '20px',
-    padding: '6px',
+    paddingBottom: '4px',
     paddingLeft: '10px',
     paddingRight: '10px',
     paddingTop: '7px',
