@@ -4,13 +4,15 @@ import SharedStyles from "./shared-styles";
 export namespace TagListStyleClasses {
   export const selectedTagStyleClass = style(SharedStyles.tagStyleProperties, {
     color: "white",
-    backgroundColor: "#2196F3"
+    backgroundColor: "#2196F3",
+    outline: 'none'
   });
 
   export const unselectedTagStyleClass = style(
     SharedStyles.tagStyleProperties,
     {
-      backgroundColor: "var(--jp-layout-color2)"
+      backgroundColor: "var(--jp-layout-color2)",
+      outline: 'none'
     }
   );
 
