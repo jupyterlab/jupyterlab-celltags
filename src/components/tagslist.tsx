@@ -92,6 +92,11 @@ class TagListComponent extends React.Component<any, any> {
               }
             }
           } }
+          onBlur={event => {
+            if (this.props.selectedTag === tag) {
+              this.props.selectionStateHandler(null);
+            }
+          }}
         >
           <TagType widget={ this.props.widget }
             finishEditingHandler={ this.editedTagName } 
