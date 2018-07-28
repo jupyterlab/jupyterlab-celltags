@@ -115,6 +115,11 @@ export class TagListComponent extends React.Component<any, any> {
                 _self.selectedTagWithName(tag);
               }
             }
+          } }
+          onBlur={event => {
+            if (this.props.selectedTag === tag) {
+              this.props.selectionStateHandler(null);
+            }
           }}
         >
           <TagType
