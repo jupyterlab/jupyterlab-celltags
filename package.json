@@ -1,7 +1,7 @@
 {
-  "name": "jupyterlab-celltags",
+  "name": "@jupyterlab/celltags",
   "version": "0.1.0",
-  "description": "Add tags for JupyterLab",
+  "description": "Extension for adding descriptive tags to notebook cells (Beta)",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -12,7 +12,7 @@
     "url": "https://github.com/jupyterlab/jupyterlab-celltags.git/issues"
   },
   "license": "BSD-3-Clause",
-  "author": "Zuoyuan Huang, Markelle Kelly",
+  "author": "Zuoyuan Huang, Markelle Kelly, Rose Chang",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
@@ -29,18 +29,33 @@
     "clean": "rimraf lib",
     "watch": "tsc -w"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "dependencies": {
-    "@jupyterlab/application": "^0.16.3",
-    "@jupyterlab/apputils": "^0.16.4",
-    "@jupyterlab/notebook": "^0.16.3",
-    "@jupyterlab/notebook-extension": "^0.16.3",
+    "@jupyterlab/application": "^0.17.0-0",
+    "@jupyterlab/apputils": "^0.17.0-0",
+    "@jupyterlab/notebook": "^0.17.0-0",
+    "@jupyterlab/notebook-extension": "^0.17.0-0",
     "@types/node": "^10.5.1",
     "@types/react-dom": "^16.0.6",
+    "react": "~16.4.0",
     "typestyle": "^2.0.1"
   },
   "devDependencies": {
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.7",
     "rimraf": "^2.6.1",
-    "typescript": "~2.6.0"
+    "typescript": "~2.9.2"
   },
   "jupyterlab": {
     "extension": true
