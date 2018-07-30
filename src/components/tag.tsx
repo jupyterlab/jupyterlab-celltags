@@ -39,7 +39,7 @@ export abstract class TagComponent extends React.Component<
     const inputShouldShow = this.props.inputShouldShow as boolean;
     const tag = this.props.tag as string;
     return (
-      <div className={TagStyleClasses.tagClass}>
+      <div>
         <label
           className={TagStyleClasses.tagLabelStyleClass}
           ref={label => inputShouldShow && label && label.focus()}
