@@ -10,8 +10,8 @@ export namespace TagStyleClasses {
     boxSizing: 'border-box',
     paddingRight: '25px',
     paddingTop: '0px',
-    marginTop: '0px'
-    //marginBottom: '-1px'
+    marginTop: '-1px',
+    marginBottom: '0px'
   });
 
   export const defaultAddInputStyleClass = style(
