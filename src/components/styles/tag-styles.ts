@@ -22,8 +22,6 @@ export namespace TagStyleClasses {
     }
   );
 
-  export const tagClass = style(SharedStyles.tagStyleProperties, {});
-
   export const blankAddInputStyleClass = style(
     SharedStyles.tagInputStyleProperties,
     {
