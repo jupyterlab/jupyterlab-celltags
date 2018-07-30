@@ -8,9 +8,9 @@ export namespace TagStyleClasses {
     display: 'inline-block',
     overflow: 'hidden',
     boxSizing: 'border-box',
-    paddingRight: '25px',
-    paddingTop: '1px',
-    marginBottom: '-1px'
+    paddingRight: '25px'
+    //paddingTop: '1px',
+    //marginBottom: '-1px'
   });
 
   export const defaultAddInputStyleClass = style(
