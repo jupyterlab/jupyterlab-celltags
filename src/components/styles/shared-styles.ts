@@ -2,8 +2,8 @@ import * as React from 'react';
 
 namespace SharedStyles {
   export const tagInputStyleProperties = {
-    //padding: '0px',
-    //paddingBottom: '3px',
+    padding: '0px',
+    paddingBottom: '3px',
     color: 'var(--jp-layout-color4)',
     fontSize: '12px',
     border: 'none',
@@ -17,10 +17,9 @@ namespace SharedStyles {
   export const tagStyleProperties = {
     boxSizing: 'border-box',
     borderRadius: '20px',
-    //paddingBottom: '4px',
-    //paddingLeft: '10px',
-    //paddingRight: '10px',
-    //paddingTop: '7px',
+    padding: '10px',
+    paddingBottom: '4px',
+    paddingTop: '7px',
     //margin: '4px',
     width: 'fit-content',
     maxWidth: 'calc(100% - 25px)'
