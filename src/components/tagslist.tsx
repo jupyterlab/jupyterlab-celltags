@@ -124,8 +124,6 @@ export class TagListComponent extends React.Component<any, any> {
               this.props.selectionStateHandler(null);
             }
           }}
-          tabIndex={1}
-          role="button"
         >
           <TagType
             widget={this.props.widget}
