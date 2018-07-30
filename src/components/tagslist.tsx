@@ -101,6 +101,7 @@ export class TagListComponent extends React.Component<any, any> {
                 _self.selectedTagWithName(tag);
               }, 250);
             }
+            console.log('1: onClick ' + this.props.selectedTag);
           }}
           onDoubleClick={event => {
             clearTimeout(this.timer);
@@ -110,9 +111,11 @@ export class TagListComponent extends React.Component<any, any> {
             ) {
               this.props.selectionStateHandler(tag);
               this.props.editingStateHandler(EditingStates.currentCell);
+              console.log('2: onDoubleClick ' + this.props.selectedTag);
             } else {
               if (!(this.props.selectedTag === tag)) {
                 _self.selectedTagWithName(tag);
+                console.log('3: onDoubleClick ' + this.props.selectedTag);
               }
             }
           }}
