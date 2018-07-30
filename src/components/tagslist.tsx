@@ -3,14 +3,14 @@ import {
   TagForActiveCellComponent,
   TagForAllCellsComponent,
   AddTagComponent
-} from "./tag";
+} from './tag';
 
-import { TagsWidget } from "./tagswidget";
+import { TagsWidget } from './tagswidget';
 
-import { EditingStates } from "./tagstool";
+import { EditingStates } from './tagstool';
 
-import * as React from "react";
-import StyleClasses from "./styles";
+import * as React from 'react';
+import StyleClasses from './styles';
 
 const TagListStyleClasses = StyleClasses.TagListStyleClasses;
 
@@ -101,6 +101,7 @@ export class TagListComponent extends React.Component<any, any> {
                 _self.selectedTagWithName(tag);
               }, 250);
             }
+            console.log('1: onClick ' + this.props.selectedTag);
           }}
           onDoubleClick={event => {
             clearTimeout(this.timer);
@@ -110,12 +111,14 @@ export class TagListComponent extends React.Component<any, any> {
             ) {
               this.props.selectionStateHandler(tag);
               this.props.editingStateHandler(EditingStates.currentCell);
+              console.log('2: onDoubleClick ' + this.props.selectedTag);
             } else {
               if (!(this.props.selectedTag === tag)) {
                 _self.selectedTagWithName(tag);
+                console.log('3: onDoubleClick ' + this.props.selectedTag);
               }
             }
-          } }
+          }}
           onBlur={event => {
             if (this.props.selectedTag === tag) {
               this.props.selectionStateHandler(null);
@@ -156,7 +159,7 @@ export class TagListComponent extends React.Component<any, any> {
     }
     var renderedTagsForActiveCell = null;
     if (this.props.tagsList != null) {
-      let tags = (this.props.tagsList as string).toString().split(",");
+      let tags = (this.props.tagsList as string).toString().split(',');
       renderedTagsForActiveCell = this.renderElementForTags(
         tags,
         TagForActiveCellComponent,

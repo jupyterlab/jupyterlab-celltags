@@ -41,10 +41,12 @@
     ]
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.17.0-0",
-    "@jupyterlab/apputils": "^0.17.0-0",
-    "@jupyterlab/notebook": "^0.17.0-0",
-    "@jupyterlab/notebook-extension": "^0.17.0-0",
+    "@jupyterlab/application": "^0.17.1",
+    "@jupyterlab/apputils": "^0.17.1",
+    "@jupyterlab/coreutils": "2.0.1",
+    "@jupyterlab/docmanager": "0.17.1",
+    "@jupyterlab/notebook": "^0.17.1",
+    "@jupyterlab/notebook-extension": "^0.17.1",
     "@types/node": "^10.5.1",
     "@types/react-dom": "^16.0.6",
     "react": "~16.4.0",
