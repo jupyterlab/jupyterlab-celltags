@@ -2,16 +2,17 @@
 
 [![Binder](https://beta.mybinder.org/badge.svg)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-celltags/master?urlpath=lab)
 
-A JupyterLab extension for notebook cell tags
+A JupyterLab extension for notebook cell tags, with an interface for adding, editing, and deleting descriptive tags.
+Includes the ability to select all cells with a certain tag, allowing users to quickly run, hide, or delete a group of cells.
 
 ## Prerequisites
 
-* JupyterLab
+- JupyterLab
 
 ## Install
 
 ```bash
-jupyter labextension install jupyterlab-celltags
+jupyter labextension install @jupyterlab/celltags
 ```
 
 ## Development
