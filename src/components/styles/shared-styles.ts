@@ -20,7 +20,7 @@ namespace SharedStyles {
     padding: '10px',
     paddingBottom: '4px',
     paddingTop: '7px',
-    margin: '4px',
+    margin: '3px',
     width: 'fit-content',
     maxWidth: 'calc(100% - 25px)'
   } as React.CSSProperties;
