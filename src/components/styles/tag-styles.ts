@@ -9,7 +9,8 @@ export namespace TagStyleClasses {
     overflow: 'hidden',
     boxSizing: 'border-box',
     paddingRight: '25px',
-    paddingTop: '1px'
+    paddingTop: '0px',
+    marginTop: '0px'
     //marginBottom: '-1px'
   });
 
