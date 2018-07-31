@@ -32,7 +32,8 @@ export interface TagListComponentState {
 export class TagListComponent extends React.Component<any, any> {
   constructor(props: TagListComponentProps) {
     super(props);
-    this.timer = null;
+    this.doubleClickTimer = null;
+    this.blurTimer = null;
     this.state = { selected: this.props.selectedTag };
   }
 
@@ -94,38 +95,50 @@ export class TagListComponent extends React.Component<any, any> {
                 this.props.editingSelectedTag != EditingStates.none
               )
             ) {
-              if (this.timer) {
-                clearTimeout(this.timer);
+              this.props.widget.tagBlurNotHandled = false;
+              if (this.doubleClickTimer) {
+                clearTimeout(this.doubleClickTimer);
               }
-              this.timer = setTimeout(function() {
+              this.doubleClickTimer = setTimeout(function() {
                 _self.selectedTagWithName(tag);
-              }, 250);
+              }, 200);
             }
-            console.log('1: onClick ' + this.props.selectedTag);
           }}
           onDoubleClick={event => {
-            clearTimeout(this.timer);
+            clearTimeout(this.doubleClickTimer);
+            event.stopPropagation();
             if (
               this.props.editingSelectedTag === EditingStates.none &&
               doubleClickAllowed
             ) {
+              this.props.widget.doubleClickDetected = true;
               this.props.selectionStateHandler(tag);
               this.props.editingStateHandler(EditingStates.currentCell);
-              console.log('2: onDoubleClick ' + this.props.selectedTag);
             } else {
               if (!(this.props.selectedTag === tag)) {
                 _self.selectedTagWithName(tag);
-                console.log('3: onDoubleClick ' + this.props.selectedTag);
               }
             }
           }}
           onBlur={event => {
-            if (this.props.selectedTag === tag) {
-              this.props.selectionStateHandler(null);
+            this.props.widget.tagBlurNotHandled = true;
+            if (this.blurTimer) {
+              clearTimeout(this.blurTimer);
             }
+            this.blurTimer = setTimeout(function() {
+              if (
+                _self.props.selectedTag === tag &&
+                _self.props.widget.tagBlurNotHandled &&
+                !_self.props.widget.doubleClickDetected
+              ) {
+                _self.props.selectionStateHandler(null);
+              }
+              if (_self.props.widget.doubleClickDetected) {
+                _self.props.widget.doubleClickDetected = false;
+              }
+            }, 225);
           }}
-          tabIndex={1}
-          role="button"
+          tabIndex={-1}
         >
           <TagType
             widget={this.props.widget}
@@ -189,5 +202,6 @@ export class TagListComponent extends React.Component<any, any> {
     );
   }
 
-  private timer: NodeJS.Timer = null;
+  private doubleClickTimer: NodeJS.Timer = null;
+  private blurTimer: NodeJS.Timer = null;
 }

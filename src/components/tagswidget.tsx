@@ -1,15 +1,15 @@
-import { Cell, ICellModel } from "@jupyterlab/cells";
+import { Cell, ICellModel } from '@jupyterlab/cells';
 
-import { INotebookTracker } from "@jupyterlab/notebook";
+import { INotebookTracker } from '@jupyterlab/notebook';
 
-import { Widget } from "@phosphor/widgets";
+import { Widget } from '@phosphor/widgets';
 
-import { write_tag, preprocess_input, cleanup_metadata } from "./celltags";
+import { write_tag, preprocess_input, cleanup_metadata } from './celltags';
 
-import { TagsToolComponent } from "./tagstool";
+import { TagsToolComponent } from './tagstool';
 
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 export class TagsWidget extends Widget {
   constructor(notebook_Tracker: INotebookTracker) {
@@ -20,7 +20,7 @@ export class TagsWidget extends Widget {
   }
 
   cellModelContainsTag(tag: string, cellModel: ICellModel) {
-    let tagList = cellModel.metadata.get("tags") as string[];
+    let tagList = cellModel.metadata.get('tags') as string[];
     if (tagList) {
       for (let i = 0; i < tagList.length; i++) {
         if (tagList[i] === tag) {
@@ -62,7 +62,7 @@ export class TagsWidget extends Widget {
 
   replaceNameForActiveCell(oldTag: string, newTag: string) {
     let cellMetadata = this.currentActiveCell.model.metadata;
-    let cellTagsData = cellMetadata.get("tags") as string[];
+    let cellTagsData = cellMetadata.get('tags') as string[];
     if (cellTagsData) {
       let results: string[] = [];
       for (var j = 0; j < cellTagsData.length; j++) {
@@ -79,7 +79,7 @@ export class TagsWidget extends Widget {
           results.push(cellTagsData[j]);
         }
       }
-      cellMetadata.set("tags", results);
+      cellMetadata.set('tags', results);
     }
   }
 
@@ -89,7 +89,7 @@ export class TagsWidget extends Widget {
     this.tagsListShallNotRefresh = true;
     for (var i = 0; i < cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
-      let cellTagsData = cellMetadata.get("tags") as string[];
+      let cellTagsData = cellMetadata.get('tags') as string[];
       if (cellTagsData) {
         let results: string[] = [];
         for (var j = 0; j < cellTagsData.length; j++) {
@@ -106,7 +106,7 @@ export class TagsWidget extends Widget {
             results.push(cellTagsData[j]);
           }
         }
-        cellMetadata.set("tags", results);
+        cellMetadata.set('tags', results);
       }
     }
     this.loadTagsForActiveCell();
@@ -142,7 +142,7 @@ export class TagsWidget extends Widget {
   }
 
   addTagIntoAllTagsList(name: string) {
-    if (name === "") {
+    if (name === '') {
       return;
     } else if (this.allTagsInNotebook == null) {
       this.allTagsInNotebook = [name];
@@ -164,7 +164,7 @@ export class TagsWidget extends Widget {
     this.allTagsInNotebook = null;
     for (var i = 0; i < cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
-      let cellTagsData = cellMetadata.get("tags") as string[];
+      let cellTagsData = cellMetadata.get('tags') as string[];
       if (cellTagsData) {
         for (var j = 0; j < cellTagsData.length; j++) {
           let name = cellTagsData[j];
@@ -177,7 +177,7 @@ export class TagsWidget extends Widget {
 
   loadTagsForActiveCell() {
     if (this.currentActiveCell != null) {
-      let tags = this.currentActiveCell.model.metadata.get("tags");
+      let tags = this.currentActiveCell.model.metadata.get('tags');
       Private.setTagsListFor(Private.TAGS_FOR_CELL, tags);
     }
   }
@@ -190,6 +190,8 @@ export class TagsWidget extends Widget {
     cleanup_metadata(this.currentActiveCell);
   }
 
+  tagBlurNotHandled = false;
+  doubleClickDetected = false;
   currentActiveCell: Cell = null;
   allTagsInNotebook: [string] = null;
   notebookTracker: INotebookTracker = null;
