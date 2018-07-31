@@ -1,6 +1,6 @@
 {
   "name": "@jupyterlab/celltags",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Extension for adding descriptive tags to notebook cells (Beta)",
   "keywords": [
     "jupyter",
