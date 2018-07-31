@@ -2,8 +2,7 @@
 
 [![Binder](https://beta.mybinder.org/badge.svg)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-celltags/master?urlpath=lab)
 
-A JupyterLab extension for notebook cell tags, with an interface for adding, editing, and deleting descriptive tags.
-Includes the ability to select all cells with a certain tag, allowing users to quickly run, hide, or delete a group of cells.
+The JupyterLab cell tags extension enables users to easily add, view, and manipulate descriptive tags for notebook cells. The extension includes the functionality to select all cells with a given tag, supporting the performance of any operation on those cells.
 ![](http://g.recordit.co/MxwN6UaFZj.gif)
 
 ## Prerequisites
