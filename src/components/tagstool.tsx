@@ -1,21 +1,21 @@
-import { TagsWidget } from "./tagswidget";
+import { TagsWidget } from './tagswidget';
 
-import { TagListComponent } from "./tagslist";
+import { TagListComponent } from './tagslist';
 
-import { PanelLayout } from "@phosphor/widgets";
+import { PanelLayout } from '@phosphor/widgets';
 
-import { CellTools, INotebookTracker } from "@jupyterlab/notebook";
+import { CellTools, INotebookTracker } from '@jupyterlab/notebook';
 
-import { Message } from "@phosphor/messaging";
+import { Message } from '@phosphor/messaging';
 
-import { ObservableJSON } from "@jupyterlab/observables";
+import { ObservableJSON } from '@jupyterlab/observables';
 
-import { JupyterLab } from "@jupyterlab/application";
+import { JupyterLab } from '@jupyterlab/application';
 
-import * as React from "react";
-import StyleClasses from "./styles";
+import * as React from 'react';
+import StyleClasses from './styles';
 
-const TAG_TOOL_CLASS = "jp-cellTags-Tools";
+const TAG_TOOL_CLASS = 'jp-cellTags-Tools';
 const TagsToolStyleClasses = StyleClasses.TagsToolStyleClasses;
 
 export enum EditingStates {
@@ -48,11 +48,11 @@ export class TagsToolComponent extends React.Component<any, any> {
   }
 
   componentWillMount() {
-    document.addEventListener("mousedown", this.handleClick, false);
+    document.addEventListener('mousedown', this.handleClick, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClick, false);
+    document.removeEventListener('mousedown', this.handleClick, false);
   }
 
   deletingTag = () => {
@@ -116,7 +116,7 @@ export class TagsToolComponent extends React.Component<any, any> {
           className={[
             TagsToolStyleClasses.bottomElementStyleClass,
             TagsToolStyleClasses.tagOperationsPopUpStyleClass
-          ].join(" ")}
+          ].join(' ')}
           ref={node => (this.node = node)}
         >
           Are you sure you want to delete this tag? <br />
@@ -124,14 +124,14 @@ export class TagsToolComponent extends React.Component<any, any> {
             onClick={() => this.setState({ deletingTag: false })}
             className={TagsToolStyleClasses.cancelButtonStyleClass}
           >
-            {" "}
-            Cancel{" "}
+            {' '}
+            Cancel{' '}
           </button>
           <button
             onClick={() => this.clickedDeleteTag()}
             className={TagsToolStyleClasses.deleteButtonStyleClass}
           >
-            Delete Tag{" "}
+            Delete Tag{' '}
           </button>
         </div>
       ) : (
@@ -139,8 +139,12 @@ export class TagsToolComponent extends React.Component<any, any> {
           className={[
             operationClass,
             TagsToolStyleClasses.bottomElementStyleClass
-          ].join(" ")}
-          onClick={() => this.deletingTag()}
+          ].join(' ')}
+          onClick={event => {
+            event.stopPropagation();
+            this.props.widget.tagBlurNotHandled = false;
+            this.deletingTag();
+          }}
         >
           Delete Tag from All Cells
         </div>
@@ -164,13 +168,21 @@ export class TagsToolComponent extends React.Component<any, any> {
         <div>
           <div
             className={operationClass}
-            onClick={() => this.clickedSelectAll()}
+            onClick={event => {
+              event.stopPropagation();
+              this.props.widget.tagBlurNotHandled = false;
+              this.clickedSelectAll();
+            }}
           >
             Select All Cells with this Tag
           </div>
           <div
             className={operationClass}
-            onClick={() => this.clickedRenameTag()}
+            onClick={event => {
+              event.stopPropagation();
+              this.props.widget.tagBlurNotHandled = false;
+              this.clickedRenameTag();
+            }}
           >
             Rename Tag for All Cells
           </div>
@@ -199,6 +211,10 @@ export class TagsTool extends CellTools.Tool {
   protected onActiveCellChanged(msg: Message): void {
     this.widget.currentActiveCell = this.parent.activeCell;
     this.widget.loadTagsForActiveCell();
+  }
+
+  protected onAfterShow() {
+    this.widget.getAllTagsInNotebook();
   }
 
   protected onAfterAttach() {
