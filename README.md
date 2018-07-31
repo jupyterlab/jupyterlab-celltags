@@ -4,6 +4,7 @@
 
 A JupyterLab extension for notebook cell tags, with an interface for adding, editing, and deleting descriptive tags.
 Includes the ability to select all cells with a certain tag, allowing users to quickly run, hide, or delete a group of cells.
+![](http://g.recordit.co/mGHh9Wo97o.gif)
 
 ## Prerequisites
 
