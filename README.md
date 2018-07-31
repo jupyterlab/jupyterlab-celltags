@@ -30,7 +30,7 @@ Requires node 4+ and npm 4+
 ```bash
 # Clone the repo to your local environment
 git clone https://github.com/jupyterlab/jupyterlab-celltags.git
-cd jupyterlab-shortcelltagscutui
+cd jupyterlab-celltags
 # Install dependencies
 npm install # or yarn
 # Build Typescript source
