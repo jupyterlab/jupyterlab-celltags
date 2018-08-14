@@ -71,7 +71,6 @@ export class TagsToolComponent extends React.Component<any, any> {
 
   clickedSelectAll = () => {
     let selectedTag: string[] = [this.state.selected];
-    console.log('step 2: ' + selectedTag);
     (this.props.widget as TagsWidget).selectAll(selectedTag);
   };
 
@@ -173,7 +172,6 @@ export class TagsToolComponent extends React.Component<any, any> {
             onClick={event => {
               event.stopPropagation();
               this.props.widget.tagBlurNotHandled = false;
-              console.log('step 1');
               this.clickedSelectAll();
             }}
           >
