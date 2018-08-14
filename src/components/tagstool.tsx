@@ -70,8 +70,7 @@ export class TagsToolComponent extends React.Component<any, any> {
   };
 
   clickedSelectAll = () => {
-    let selectedTag: string[];
-    selectedTag.push(this.state.selected);
+    let selectedTag: string[] = [this.state.selected];
     console.log('step 2: ' + selectedTag);
     (this.props.widget as TagsWidget).selectAll(selectedTag);
   };
