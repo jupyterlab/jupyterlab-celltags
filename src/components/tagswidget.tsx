@@ -46,12 +46,10 @@ export class TagsWidget extends Widget {
     let notebookPanel = this.notebookTracker.currentWidget;
     let notebook = notebookPanel.content;
     let first: boolean = true;
-    console.log('hello???? in selectall?');
     for (let i = 0; i < notebookPanel.model.cells.length; i++) {
       let currentCell = notebook.widgets[i] as Cell;
       for (let j = 0; j < names.length; j++) {
         if (this.containsTag(names[j], currentCell)) {
-          console.log('entering correct place');
           if (first === true) {
             notebook.activeCellIndex = i;
             notebook.deselectAll();
