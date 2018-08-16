@@ -42,26 +42,6 @@ export class TagsWidget extends Widget {
     return this.containsTag(tag, this.currentActiveCell);
   }
 
-  selectAll(names: string[]) {
-    let notebookPanel = this.notebookTracker.currentWidget;
-    let notebook = notebookPanel.content;
-    let first: boolean = true;
-    for (let i = 0; i < notebookPanel.model.cells.length; i++) {
-      let currentCell = notebook.widgets[i] as Cell;
-      for (let j = 0; j < names.length; j++) {
-        if (this.containsTag(names[j], currentCell)) {
-          if (first === true) {
-            notebook.activeCellIndex = i;
-            notebook.deselectAll();
-            first = false;
-          } else {
-            notebook.select(notebook.widgets[i] as Cell);
-          }
-        }
-      }
-    }
-  }
-
   replaceNameForActiveCell(oldTag: string, newTag: string) {
     let cellMetadata = this.currentActiveCell.model.metadata;
     let cellTagsData = cellMetadata.get('tags') as string[];
