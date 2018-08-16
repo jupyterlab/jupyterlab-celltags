@@ -69,11 +69,6 @@ export class TagsToolComponent extends React.Component<any, any> {
     );
   };
 
-  clickedSelectAll = () => {
-    let selectedTag: string[] = [this.state.selected];
-    (this.props.widget as TagsWidget).selectAll(selectedTag);
-  };
-
   clickedRenameTag = () => {
     if ((this.state.selected as string) != null) {
       if (this.state.editingSelectedTag === EditingStates.none) {
@@ -167,16 +162,6 @@ export class TagsToolComponent extends React.Component<any, any> {
           editingSelectedTag={this.state.editingSelectedTag}
         />
         <div>
-          <div
-            className={operationClass}
-            onClick={event => {
-              event.stopPropagation();
-              this.props.widget.tagBlurNotHandled = false;
-              this.clickedSelectAll();
-            }}
-          >
-            Select All Cells with this Tag
-          </div>
           <div
             className={operationClass}
             onClick={event => {
