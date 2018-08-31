@@ -34,10 +34,37 @@ export abstract class TagComponent extends React.Component<
     name: string,
     operation: (event: React.MouseEvent<any>) => void
   ): JSX.Element;
+  abstract addButtonOperationHandler(event: React.MouseEvent<any>): void;
 
   render() {
     const inputShouldShow = this.props.inputShouldShow as boolean;
     const tag = this.props.tag as string;
+    let button;
+    if (!inputShouldShow) {
+      button = (
+        <label className={TagStyleClasses.tagIconLabelStyleClass}>
+          {this.singleCellOperationButton(
+            tag,
+            (event: React.MouseEvent<any>) => {
+              event.stopPropagation();
+              this.addButtonOperationHandler(event);
+            }
+          )}
+        </label>
+      );
+    } else {
+      button = (
+        <label className={TagStyleClasses.tagIconLabelStyleClass}>
+          {this.singleCellOperationButton(
+            tag,
+            (event: React.MouseEvent<any>) => {
+              event.stopPropagation();
+              this.singleCellOperationHandler(tag);
+            }
+          )}
+        </label>
+      );
+    }
     return (
       <div>
         <label
@@ -61,15 +88,7 @@ export abstract class TagComponent extends React.Component<
         >
           {tag}
         </label>
-        <label className={TagStyleClasses.tagIconLabelStyleClass}>
-          {this.singleCellOperationButton(
-            tag,
-            (event: React.MouseEvent<any>) => {
-              event.stopPropagation();
-              this.singleCellOperationHandler(tag);
-            }
-          )}
-        </label>
+        {button}
       </div>
     );
   }
@@ -80,11 +99,26 @@ export class TagForAllCellsComponent extends TagComponent {
     (this.props.widget as TagsWidget).addTagToActiveCell(name);
   }
 
+  addButtonOperationHandler(event: React.MouseEvent<any>) {
+    let value = (event.target as HTMLLabelElement).innerHTML;
+    this.props.finishEditingHandler(value);
+  }
+
   singleCellOperationButton(
     name: string,
     operation: (event: React.MouseEvent<any>) => void
   ) {
-    if ((this.props.selectedTag as string) === name) {
+    if (this.props.inputShouldShow as boolean) {
+      return (
+        <img
+          onClick={event => operation(event)}
+          alt="Rename Tag"
+          title="Rename Tag"
+          src={require('../../static/add_blue.svg')}
+          className={TagStyleClasses.tagIconStyleClass}
+        />
+      );
+    } else if ((this.props.selectedTag as string) === name) {
       return (
         <img
           onClick={event => operation(event)}
@@ -116,11 +150,26 @@ export class TagForActiveCellComponent extends TagComponent {
     }
   }
 
+  addButtonOperationHandler(event: React.MouseEvent<any>) {
+    let value = (event.target as HTMLLabelElement).innerHTML;
+    this.props.finishEditingHandler(value);
+  }
+
   singleCellOperationButton(
     name: string,
     operation: (event: React.MouseEvent<any>) => void
   ) {
-    if ((this.props.selectedTag as string) === name) {
+    if (this.props.inputShouldShow as boolean) {
+      return (
+        <img
+          onClick={event => operation(event)}
+          alt="Rename Tag"
+          title="Rename Tag"
+          src={require('../../static/add_blue.svg')}
+          className={TagStyleClasses.tagIconStyleClass}
+        />
+      );
+    } else if ((this.props.selectedTag as string) === name) {
       return (
         <img
           onClick={event => operation(event)}
