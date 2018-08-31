@@ -173,7 +173,6 @@ export class TagsWidget extends Widget {
   }
 
   tagBlurNotHandled = false;
-  doubleClickDetected = false;
   currentActiveCell: Cell = null;
   allTagsInNotebook: [string] = null;
   notebookTracker: INotebookTracker = null;

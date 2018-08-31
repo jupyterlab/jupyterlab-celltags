@@ -32,6 +32,7 @@ export interface TagListComponentState {
 export class TagListComponent extends React.Component<any, any> {
   constructor(props: TagListComponentProps) {
     super(props);
+    this.blurTimer = null;
     this.state = { selected: this.props.selectedTag };
   }
 
@@ -97,7 +98,7 @@ export class TagListComponent extends React.Component<any, any> {
               )
             ) {
               this.props.widget.tagBlurNotHandled = false;
-              _self.selectedTagWithName(tag);
+              this.selectedTagWithName(tag);
             }
           }}
           onBlur={event => {
@@ -108,6 +109,14 @@ export class TagListComponent extends React.Component<any, any> {
             ) {
               _self.props.selectionStateHandler(null);
             }
+            this.blurTimer = setTimeout(function() {
+              if (
+                _self.props.selectedTag === tag &&
+                _self.props.widget.tagBlurNotHandled
+              ) {
+                _self.props.selectionStateHandler(null);
+              }
+            }, 145);
           }}
           tabIndex={-1}
         >
@@ -170,4 +179,6 @@ export class TagListComponent extends React.Component<any, any> {
       </div>
     );
   }
+
+  private blurTimer: NodeJS.Timer = null;
 }
