@@ -72,25 +72,18 @@ export class TagListComponent extends React.Component<any, any> {
     const selectedTag = this.props.selectedTag;
     const _self = this;
     return tags.map((tag, index) => {
-      let tagClass =
+      const tagClass =
         selectedTag === tag
           ? TagListStyleClasses.selectedTagStyleClass
           : TagListStyleClasses.unselectedTagStyleClass;
       const inputShouldShow =
         selectedTag === tag &&
         this.props.editingSelectedTag != EditingStates.none;
-      if (inputShouldShow) {
-        tagClass = TagListStyleClasses.editTagStyleClass;
-      }
       return (
         <div
           key={tag}
           className={tagClass}
           onClick={event => {
-            event.stopPropagation();
-            if (!(this.props.selectedTag === tag)) {
-              _self.selectedTagWithName(tag);
-            }
             if (
               !(
                 this.props.selectedTag === tag &&
@@ -103,11 +96,8 @@ export class TagListComponent extends React.Component<any, any> {
           }}
           onBlur={event => {
             this.props.widget.tagBlurNotHandled = true;
-            if (
-              _self.props.selectedTag === tag &&
-              _self.props.widget.tagBlurNotHandled
-            ) {
-              _self.props.selectionStateHandler(null);
+            if (this.blurTimer) {
+              clearTimeout(this.blurTimer);
             }
             this.blurTimer = setTimeout(function() {
               if (
