@@ -147,10 +147,6 @@ export class TagsToolComponent extends React.Component<any, any> {
       );
     return (
       <div>
-        <span>
-          <div className={TagsToolStyleClasses.tagHeaderStyleClass}>Tags</div>
-          <hr className={TagsToolStyleClasses.tagHeaderHrStyleClass} />
-        </span>
         <TagListComponent
           widget={this.props.widget}
           allTagsList={this.props.allTagsList}
