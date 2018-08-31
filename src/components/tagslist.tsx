@@ -72,13 +72,16 @@ export class TagListComponent extends React.Component<any, any> {
     const selectedTag = this.props.selectedTag;
     const _self = this;
     return tags.map((tag, index) => {
-      const tagClass =
+      let tagClass =
         selectedTag === tag
           ? TagListStyleClasses.selectedTagStyleClass
           : TagListStyleClasses.unselectedTagStyleClass;
       const inputShouldShow =
         selectedTag === tag &&
         this.props.editingSelectedTag != EditingStates.none;
+      if (inputShouldShow) {
+        tagClass = TagListStyleClasses.editTagStyleClass;
+      }
       return (
         <div
           key={tag}
