@@ -39,6 +39,27 @@ export namespace TagStyleClasses {
     maxHeight: '31px'
   });
 
+  export const addTagDefaultStyleClass = style(
+    SharedStyles.tagStyleProperties,
+    {
+      backgroundColor: 'var(--jp-layout-color1)',
+      border: '1px solid var(--jp-layout-color4)',
+      maxWidth: '95%',
+      minHeight: '31px',
+      maxHeight: '31px',
+      $nest: {
+        '&:hover': {
+          backgroundColor: 'var(--jp-layout-color2)'
+        }
+      }
+    }
+  );
+
+  /* DESIRED CSS:
+.addTagDefaultStyleClass:hover .blankAddInputStyleClass {
+  backgroundColor: 'var(--jp-layout-color2)'
+}*/
+
   export const tagIconStyleClass = style({
     marginLeft: '10px',
     marginTop: '2px',

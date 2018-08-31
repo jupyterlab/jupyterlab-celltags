@@ -257,28 +257,34 @@ export class AddTagComponent extends React.Component<
   render() {
     var inputBox =
       this.state.addingNewTag === true ? (
-        <div>
-          <input
-            className={TagStyleClasses.defaultAddInputStyleClass}
-            onClick={event => this.addTagOnClick(event)}
-            onKeyDown={event => this.addTagOnKeyDown(event)}
-            onBlur={event => this.addTagOnBlur(event)}
-            autoFocus
-          />
+        <div className={TagStyleClasses.addTagStyleClass}>
+          <div>
+            <input
+              className={TagStyleClasses.defaultAddInputStyleClass}
+              onClick={event => this.addTagOnClick(event)}
+              onKeyDown={event => this.addTagOnKeyDown(event)}
+              onBlur={event => this.addTagOnBlur(event)}
+              autoFocus
+            />
+          </div>
         </div>
       ) : (
-        <div
-          className={TagStyleClasses.blankAddInputStyleClass}
-          onClick={event => this.setState({ addingNewTag: true })}
-        >
-          <span className={TagStyleClasses.addTagSpanStyleClass}>Add Tag</span>
-          <img
-            src={require('../../static/add_icon.svg')}
-            className={TagStyleClasses.inputIconStyleClass}
+        <div className={TagStyleClasses.addTagDefaultStyleClass}>
+          <div
+            className={TagStyleClasses.blankAddInputStyleClass}
             onClick={event => this.setState({ addingNewTag: true })}
-          />
+          >
+            <span className={TagStyleClasses.addTagSpanStyleClass}>
+              Add Tag
+            </span>
+            <img
+              src={require('../../static/add_icon.svg')}
+              className={TagStyleClasses.inputIconStyleClass}
+              onClick={event => this.setState({ addingNewTag: true })}
+            />
+          </div>
         </div>
       );
-    return <div className={TagStyleClasses.addTagStyleClass}>{inputBox}</div>;
+    return <span>{inputBox}</span>;
   }
 }
