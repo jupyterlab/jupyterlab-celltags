@@ -32,7 +32,6 @@ export interface TagListComponentState {
 export class TagListComponent extends React.Component<any, any> {
   constructor(props: TagListComponentProps) {
     super(props);
-    this.doubleClickTimer = null;
     this.blurTimer = null;
     this.state = { selected: this.props.selectedTag };
   }
@@ -69,11 +68,7 @@ export class TagListComponent extends React.Component<any, any> {
     return this.props.widget.activeCellContainsTag(name);
   };
 
-  renderElementForTags = (
-    tags: string[],
-    TagType: typeof TagComponent,
-    doubleClickAllowed: boolean
-  ) => {
+  renderElementForTags = (tags: string[], TagType: typeof TagComponent) => {
     const selectedTag = this.props.selectedTag;
     const _self = this;
     return tags.map((tag, index) => {
@@ -96,28 +91,7 @@ export class TagListComponent extends React.Component<any, any> {
               )
             ) {
               this.props.widget.tagBlurNotHandled = false;
-              if (this.doubleClickTimer) {
-                clearTimeout(this.doubleClickTimer);
-              }
-              this.doubleClickTimer = setTimeout(function() {
-                _self.selectedTagWithName(tag);
-              }, 200);
-            }
-          }}
-          onDoubleClick={event => {
-            clearTimeout(this.doubleClickTimer);
-            event.stopPropagation();
-            if (
-              this.props.editingSelectedTag === EditingStates.none &&
-              doubleClickAllowed
-            ) {
-              this.props.widget.doubleClickDetected = true;
-              this.props.selectionStateHandler(tag);
-              this.props.editingStateHandler(EditingStates.currentCell);
-            } else {
-              if (!(this.props.selectedTag === tag)) {
-                _self.selectedTagWithName(tag);
-              }
+              this.selectedTagWithName(tag);
             }
           }}
           onBlur={event => {
@@ -128,15 +102,11 @@ export class TagListComponent extends React.Component<any, any> {
             this.blurTimer = setTimeout(function() {
               if (
                 _self.props.selectedTag === tag &&
-                _self.props.widget.tagBlurNotHandled &&
-                !_self.props.widget.doubleClickDetected
+                _self.props.widget.tagBlurNotHandled
               ) {
                 _self.props.selectionStateHandler(null);
               }
-              if (_self.props.widget.doubleClickDetected) {
-                _self.props.widget.doubleClickDetected = false;
-              }
-            }, 225);
+            }, 145);
           }}
           tabIndex={-1}
         >
@@ -168,8 +138,7 @@ export class TagListComponent extends React.Component<any, any> {
     if (otherTagsList != null) {
       renderedTagsForAllCells = this.renderElementForTags(
         otherTagsList,
-        TagForAllCellsComponent,
-        false
+        TagForAllCellsComponent
       );
     }
     var renderedTagsForActiveCell = null;
@@ -177,8 +146,7 @@ export class TagListComponent extends React.Component<any, any> {
       let tags = (this.props.tagsList as string).toString().split(',');
       renderedTagsForActiveCell = this.renderElementForTags(
         tags,
-        TagForActiveCellComponent,
-        true
+        TagForActiveCellComponent
       );
     }
     return (
@@ -202,6 +170,5 @@ export class TagListComponent extends React.Component<any, any> {
     );
   }
 
-  private doubleClickTimer: NodeJS.Timer = null;
   private blurTimer: NodeJS.Timer = null;
 }
