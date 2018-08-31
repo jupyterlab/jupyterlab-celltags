@@ -34,8 +34,10 @@ export namespace TagListStyleClasses {
     display: 'flex',
     flexWrap: 'wrap',
     padding: '4px',
+    marginLeft: '0',
+    paddingLeft: '7px',
     height: 'fit-content',
-    marginBottom: '20px',
+    marginBottom: '11px',
     paddingRight: '10px'
   });
 }
