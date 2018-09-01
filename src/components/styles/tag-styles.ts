@@ -27,7 +27,8 @@ export namespace TagStyleClasses {
     SharedStyles.tagInputStyleProperties,
     {
       display: 'inline',
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
+      backgroundColor: 'transparent'
     }
   );
 
@@ -54,11 +55,6 @@ export namespace TagStyleClasses {
       }
     }
   );
-
-  /* DESIRED CSS:
-.addTagDefaultStyleClass:hover .blankAddInputStyleClass {
-  backgroundColor: 'var(--jp-layout-color2)'
-}*/
 
   export const tagIconStyleClass = style({
     marginLeft: '10px',
