@@ -279,6 +279,16 @@ export class AddTagComponent extends React.Component<
           />
         </div>
       );
-    return <div className={TagStyleClasses.addTagStyleClass}>{inputBox}</div>;
+    return (
+      <div
+        className={
+          this.state.addingNewTag
+            ? TagStyleClasses.addTagStyleClass
+            : TagStyleClasses.addTagDefaultStyleClass
+        }
+      >
+        {inputBox}
+      </div>
+    );
   }
 }

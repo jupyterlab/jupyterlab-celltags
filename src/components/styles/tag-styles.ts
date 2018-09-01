@@ -28,11 +28,7 @@ export namespace TagStyleClasses {
     {
       display: 'inline',
       whiteSpace: 'nowrap',
-      $nest: {
-        '&:hover': {
-          backgroundColor: 'var(--jp-layout-color2)'
-        }
-      }
+      backgroundColor: 'transparent'
     }
   );
 
@@ -60,11 +56,6 @@ export namespace TagStyleClasses {
       }
     }
   );
-
-  /* DESIRED CSS:
-.addTagDefaultStyleClass:hover .blankAddInputStyleClass {
-  backgroundColor: 'var(--jp-layout-color2)'
-}*/
 
   export const tagIconStyleClass = style({
     marginLeft: '10px',
