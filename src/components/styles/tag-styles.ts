@@ -35,8 +35,8 @@ export namespace TagStyleClasses {
     backgroundColor: 'var(--jp-layout-color1)',
     border: '1px solid var(--jp-layout-color4)',
     maxWidth: '95%',
-    minHeight: '31px',
-    maxHeight: '31px'
+    minHeight: '27px',
+    maxHeight: '27px'
   });
 
   export const addTagDefaultStyleClass = style(
