@@ -27,16 +27,22 @@ export namespace TagStyleClasses {
     SharedStyles.tagInputStyleProperties,
     {
       display: 'inline',
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
+      $nest: {
+        '&:hover': {
+          backgroundColor: 'var(--jp-layout-color2)'
+        }
+      }
     }
   );
 
   export const addTagStyleClass = style(SharedStyles.tagStyleProperties, {
     backgroundColor: 'var(--jp-layout-color1)',
     border: '1px solid var(--jp-layout-color4)',
+    paddingTop: '4px',
     maxWidth: '95%',
-    minHeight: '27px',
-    maxHeight: '27px'
+    minHeight: '26px',
+    maxHeight: '26px'
   });
 
   export const addTagDefaultStyleClass = style(
@@ -45,8 +51,8 @@ export namespace TagStyleClasses {
       backgroundColor: 'var(--jp-layout-color1)',
       border: '1px solid var(--jp-layout-color4)',
       maxWidth: '95%',
-      minHeight: '31px',
-      maxHeight: '31px',
+      minHeight: '26px',
+      maxHeight: '26px',
       $nest: {
         '&:hover': {
           backgroundColor: 'var(--jp-layout-color2)'
@@ -65,7 +71,7 @@ export namespace TagStyleClasses {
     marginTop: '2px',
     right: '0px',
     marginBottom: '-1px',
-    height: '13px',
+    height: '12px',
     position: 'absolute'
   });
 
