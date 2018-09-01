@@ -5,7 +5,7 @@ namespace SharedStyles {
     padding: '0px',
     paddingBottom: '3px',
     color: 'var(--jp-layout-color4)',
-    fontSize: '12px',
+    fontSize: '11px',
     border: 'none',
     outline: 'none',
     resize: 'horizontal',
@@ -21,6 +21,8 @@ namespace SharedStyles {
     paddingBottom: '4px',
     paddingTop: '7px',
     margin: '3px',
+    marginTop: '2px',
+    marginBottom: '2px',
     width: 'fit-content',
     maxWidth: 'calc(100% - 25px)'
   } as React.CSSProperties;
