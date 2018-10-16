@@ -146,10 +146,11 @@ export class TagsWidget extends Widget {
     this.allTagsInNotebook = null;
     for (var i = 0; i < cells.length; i++) {
       let cellMetadata = cells.get(i).metadata;
-      let cellTagsData = cellMetadata.get('tags') as string[];
+      let cellTagsData = cellMetadata.get('tags');
       if (cellTagsData) {
-        for (var j = 0; j < cellTagsData.length; j++) {
-          let name = cellTagsData[j];
+        let cellTagsList: string[] = cellTagsData as string[];
+        for (var j = 0; j < cellTagsList.length; j++) {
+          let name = cellTagsList[j];
           this.addTagIntoAllTagsList(name);
         }
       }

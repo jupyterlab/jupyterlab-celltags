@@ -28,7 +28,8 @@ export namespace TagStyleClasses {
     {
       display: 'inline',
       whiteSpace: 'nowrap',
-      backgroundColor: 'transparent'
+      backgroundColor: 'transparent',
+      minWidth: '64.52px'
     }
   );
 
@@ -46,6 +47,7 @@ export namespace TagStyleClasses {
     {
       backgroundColor: 'var(--jp-layout-color1)',
       border: '1px solid var(--jp-layout-color4)',
+      paddingTop: '4px',
       maxWidth: '95%',
       minHeight: '26px',
       maxHeight: '26px',
