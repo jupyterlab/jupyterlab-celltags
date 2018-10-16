@@ -4,7 +4,6 @@ export function write_tag(cell: Cell, name: string, add: boolean) {
   /* If add = true, check if tags are undefined; if so, initialize the array.
     Otherwise, check if the tag already exists; if so, return false.
     Then add the tag to metadata.tags. */
-  console.log('entered write tag');
   if (name === '') {
     //do nothing if tag is a blank string - can't add or remove
     return;
