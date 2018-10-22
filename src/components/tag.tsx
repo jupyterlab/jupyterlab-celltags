@@ -40,7 +40,7 @@ export abstract class TagComponent extends React.Component<
     const inputShouldShow = this.props.inputShouldShow as boolean;
     const tag = this.props.tag as string;
     let button;
-    if (!inputShouldShow) {
+    if (inputShouldShow) {
       button = (
         <label className={TagStyleClasses.tagIconLabelStyleClass}>
           {this.singleCellOperationButton(
