@@ -4,7 +4,7 @@ import { TagListComponent } from './tagslist';
 
 import { PanelLayout } from '@phosphor/widgets';
 
-import { CellTools, INotebookTracker } from '@jupyterlab/notebook';
+import { NotebookTools, INotebookTracker } from '@jupyterlab/notebook';
 
 import { Message } from '@phosphor/messaging';
 
@@ -166,7 +166,7 @@ export class TagsToolComponent extends React.Component<any, any> {
               this.clickedRenameTag();
             }}
           >
-            Rename Tag for All Cells
+            Rename Tag for All Cells eEIJO
           </div>
           {deleteDiv}
         </div>
@@ -177,7 +177,7 @@ export class TagsToolComponent extends React.Component<any, any> {
   private node: any;
 }
 
-export class TagsTool extends CellTools.Tool {
+export class TagsTool extends NotebookTools.Tool {
   constructor(notebook_Tracker: INotebookTracker, app: JupyterLab) {
     super();
     this.notebookTracker = notebook_Tracker;
@@ -191,7 +191,7 @@ export class TagsTool extends CellTools.Tool {
    * Handle a change to the active cell.
    */
   protected onActiveCellChanged(msg: Message): void {
-    this.widget.currentActiveCell = this.parent.activeCell;
+    this.widget.currentActiveCell = this.notebookTools.activeCell;
     this.widget.loadTagsForActiveCell();
   }
 
