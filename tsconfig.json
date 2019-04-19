@@ -2,15 +2,18 @@
   "compilerOptions": {
     "declaration": true,
     "noImplicitAny": true,
+    "strictNullChecks": false,
+    "skipLibCheck": true,
     "noEmitOnError": true,
     "noUnusedLocals": true,
-    "jsx": "react",
+    "lib": ["DOM", "ES6"],
+    "types": ["node"],
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "ES6",
-    "outDir": "./lib",
-    "lib": ["ES5", "ES2015.Promise", "DOM"],
-    "types": ["node"]
+    "outDir": "lib",
+    "rootDir": "src",
+    "jsx": "react"
   },
-  "include": ["src/*"]
+  "include": ["src/**/*"]
 }
