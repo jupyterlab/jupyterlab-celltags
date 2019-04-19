@@ -166,7 +166,7 @@ export class TagsToolComponent extends React.Component<any, any> {
               this.clickedRenameTag();
             }}
           >
-            Rename Tag for All Cells eEIJO
+            Rename Tag for All Cells
           </div>
           {deleteDiv}
         </div>
