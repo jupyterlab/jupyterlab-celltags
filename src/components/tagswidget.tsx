@@ -228,10 +228,6 @@ namespace Private {
   }
 
   export function renderAllTagsNode() {
-    console.log('all tags:');
-    console.log(allTagsList);
-    console.log('tags:');
-    console.log(tagsList);
     ReactDOM.render(
       <TagsToolComponent
         widget={widget}
