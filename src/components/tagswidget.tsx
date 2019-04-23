@@ -91,9 +91,9 @@ export class TagsWidget extends Widget {
         cellMetadata.set('tags', results);
       }
     }
+    this.tagsListShallNotRefresh = false;
     this.loadTagsForActiveCell();
     this.getAllTagsInNotebook();
-    this.tagsListShallNotRefresh = false;
   }
 
   didFinishAddingTags(name: string) {
@@ -102,10 +102,14 @@ export class TagsWidget extends Widget {
     for (var i = 0; i < new_tags.length; i++) {
       this.addTagIntoAllTagsList(new_tags[i]);
     }
+    this.loadTagsForActiveCell();
+    this.getAllTagsInNotebook();
   }
 
   removeTagForSelectedCellWithName(name: string) {
     write_tag(this.currentActiveCell, name, false);
+    this.loadTagsForActiveCell();
+    this.getAllTagsInNotebook();
   }
 
   removeTagFromAllCells(name: string) {
@@ -131,6 +135,26 @@ export class TagsWidget extends Widget {
     } else {
       if (this.allTagsInNotebook.indexOf(name) < 0) {
         this.allTagsInNotebook.push(name);
+      }
+    }
+  }
+
+  selectAll(names: string[]) {
+    let notebookPanel = this.notebookTracker.currentWidget;
+    let notebook = notebookPanel.content;
+    let first: boolean = true;
+    for (let i = 0; i < notebookPanel.model.cells.length; i++) {
+      let currentCell = notebook.widgets[i] as Cell;
+      for (let j = 0; j < names.length; j++) {
+        if (this.containsTag(names[j], currentCell)) {
+          if (first === true) {
+            notebook.activeCellIndex = i;
+            notebook.deselectAll();
+            first = false;
+          } else {
+            notebook.select(notebook.widgets[i] as Cell);
+          }
+        }
       }
     }
   }
@@ -204,6 +228,10 @@ namespace Private {
   }
 
   export function renderAllTagsNode() {
+    console.log('all tags:');
+    console.log(allTagsList);
+    console.log('tags:');
+    console.log(tagsList);
     ReactDOM.render(
       <TagsToolComponent
         widget={widget}

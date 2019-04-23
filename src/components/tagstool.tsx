@@ -26,7 +26,7 @@ export enum EditingStates {
 
 export interface TagsToolComponentProps {
   widget: TagsWidget;
-  tagsList: string | null;
+  tagsList: string[] | null;
   allTagsList: string[] | null;
 }
 
@@ -77,6 +77,11 @@ export class TagsToolComponent extends React.Component<any, any> {
         this.setState({ editingSelectedTag: EditingStates.none });
       }
     }
+  };
+
+  clickedSelectAll = () => {
+    let selectedTag: string[] = [this.state.selected];
+    (this.props.widget as TagsWidget).selectAll(selectedTag);
   };
 
   changeSelectionState = (newState: string) => {
@@ -158,6 +163,16 @@ export class TagsToolComponent extends React.Component<any, any> {
           editingSelectedTag={this.state.editingSelectedTag}
         />
         <div>
+          <div
+            className={operationClass}
+            onClick={event => {
+              event.stopPropagation();
+              this.props.widget.tagBlurNotHandled = false;
+              this.clickedSelectAll();
+            }}
+          >
+            Select All Cells with this Tag
+          </div>
           <div
             className={operationClass}
             onClick={event => {
