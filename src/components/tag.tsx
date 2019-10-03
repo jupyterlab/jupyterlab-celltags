@@ -114,7 +114,7 @@ export class TagForAllCellsComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Rename Tag"
           title="Rename Tag"
-          src={require('../../static/add_blue.svg')}
+          src={require('../../static/add_blue.svg').default}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -124,7 +124,7 @@ export class TagForAllCellsComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Add Tag To Active Cell"
           title="Add Tag To Active Cell"
-          src={require('../../static/white_addcircle.svg')}
+          src={require('../../static/white_addcircle.svg').default}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -134,7 +134,7 @@ export class TagForAllCellsComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Add Tag To Active Cell"
           title="Add Tag To Active Cell"
-          src={require('../../static/darkgrey_addcircle.svg')}
+          src={require('../../static/darkgrey_addcircle.svg').default}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -165,7 +165,7 @@ export class TagForActiveCellComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Rename Tag"
           title="Rename Tag"
-          src={require('../../static/add_blue.svg')}
+          src={require('../../static/add_blue.svg').default}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -175,7 +175,7 @@ export class TagForActiveCellComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Remove Tag From Active Cell"
           title="Remove Tag From Active Cell"
-          src={require('../../static/white_minuscircle.svg')}
+          src={require('../../static/white_minuscircle.svg').default}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -185,7 +185,7 @@ export class TagForActiveCellComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Remove Tag From Active Cell"
           title="Remove Tag From Active Cell"
-          src={require('../../static/darkgrey_minuscircle.svg')}
+          src={require('../../static/darkgrey_minuscircle.svg').default}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -273,7 +273,7 @@ export class AddTagComponent extends React.Component<
         >
           <span className={TagStyleClasses.addTagSpanStyleClass}>Add Tag</span>
           <img
-            src={require('../../static/add_icon.svg')}
+            src={require('../../static/add_icon.svg').default}
             className={TagStyleClasses.inputIconStyleClass}
             onClick={event => this.setState({ addingNewTag: true })}
           />
