@@ -1,0 +1,6 @@
+name: jupyterlab-celltags
+channels:
+- conda-forge
+dependencies:
+- jupyterlab=1.0
+
