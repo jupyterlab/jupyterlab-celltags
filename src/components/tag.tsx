@@ -114,7 +114,7 @@ export class TagForAllCellsComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Rename Tag"
           title="Rename Tag"
-          src={require('../../static/add_blue.svg').default}
+          src={Private.encodesvg(require('../../static/add_blue.svg'))}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -124,7 +124,7 @@ export class TagForAllCellsComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Add Tag To Active Cell"
           title="Add Tag To Active Cell"
-          src={require('../../static/white_addcircle.svg').default}
+          src={Private.encodesvg(require('../../static/white_addcircle.svg'))}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -134,7 +134,9 @@ export class TagForAllCellsComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Add Tag To Active Cell"
           title="Add Tag To Active Cell"
-          src={require('../../static/darkgrey_addcircle.svg').default}
+          src={Private.encodesvg(
+            require('../../static/darkgrey_addcircle.svg')
+          )}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -165,7 +167,7 @@ export class TagForActiveCellComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Rename Tag"
           title="Rename Tag"
-          src={require('../../static/add_blue.svg').default}
+          src={Private.encodesvg(require('../../static/add_blue.svg'))}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -175,7 +177,7 @@ export class TagForActiveCellComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Remove Tag From Active Cell"
           title="Remove Tag From Active Cell"
-          src={require('../../static/white_minuscircle.svg').default}
+          src={Private.encodesvg(require('../../static/white_minuscircle.svg'))}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -185,7 +187,9 @@ export class TagForActiveCellComponent extends TagComponent {
           onClick={event => operation(event)}
           alt="Remove Tag From Active Cell"
           title="Remove Tag From Active Cell"
-          src={require('../../static/darkgrey_minuscircle.svg').default}
+          src={Private.encodesvg(
+            require('../../static/darkgrey_minuscircle.svg')
+          )}
           className={TagStyleClasses.tagIconStyleClass}
         />
       );
@@ -273,7 +277,7 @@ export class AddTagComponent extends React.Component<
         >
           <span className={TagStyleClasses.addTagSpanStyleClass}>Add Tag</span>
           <img
-            src={require('../../static/add_icon.svg').default}
+            src={Private.encodesvg(require('../../static/add_icon.svg'))}
             className={TagStyleClasses.inputIconStyleClass}
             onClick={event => this.setState({ addingNewTag: true })}
           />
@@ -290,5 +294,14 @@ export class AddTagComponent extends React.Component<
         {inputBox}
       </div>
     );
+  }
+}
+
+namespace Private {
+  export function encodesvg(svg: any) {
+    // need to escape # sign and probably some other stuff
+    const svgstr: string = encodeURIComponent(svg.default);
+
+    return 'data:image/svg+xml,' + svgstr;
   }
 }
