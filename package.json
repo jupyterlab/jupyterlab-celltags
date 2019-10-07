@@ -1,6 +1,6 @@
 {
   "name": "@jupyterlab/celltags",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Extension for adding descriptive tags to notebook cells (Beta)",
   "keywords": [
     "jupyter",
@@ -25,8 +25,21 @@
     "url": "https://github.com/jupyterlab/jupyterlab-celltags.git"
   },
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf lib",
+    "build": "jlpm install && tsc",
+    "build:dev": "jlpm run build && jlpm run lab:install",
+    "build:watch": "jlpm run build --watch",
+    "clean": "rimraf lib && rimraf tsconfig.tsbuildinfo",
+    "clean:more": "jlpm run clean && rimraf build && rimraf dist && rimraf package && rimraf *.tgz",
+    "clean:slate": "jlpm run clean:more && rimraf node_modules",
+    "deduplicate": "jlpm yarn-deduplicate -s fewer",
+    "lab:install": "jupyter labextension install .",
+    "lab:link": "jupyter labextension install . --no-build",
+    "lab:uninstall": "jupyter labextension uninstall jupyter-unicron",
+    "lab:unlink": "jupyter labextension uninstall jupyter-unicron --no-build",
+    "precommit": "lint-staged",
+    "prepublishOnly": "jlpm run clean && jlpm run build",
+    "prettier": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}'",
+    "tslint": "tslint -c tslint.json --project tsconfig.json '**/*{.ts,.tsx}'",
     "watch": "tsc -w"
   },
   "husky": {
@@ -35,33 +48,33 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md,ts,tsx}": [
+    "**/*{.ts,.tsx,.css,.json,.md}": [
       "prettier --write",
       "git add"
     ]
   },
   "dependencies": {
-    "@jupyterlab/application": "^1.0.0-alpha.6",
-    "@jupyterlab/apputils": "^1.0.0-alpha.6",
-    "@jupyterlab/coreutils": "^3.0.0-alpha.6",
-    "@jupyterlab/docmanager": "^1.0.0-alpha.6",
-    "@jupyterlab/notebook": "^1.0.0-alpha.6",
-    "@jupyterlab/notebook-extension": "^1.0.0-alpha.6",
-    "@jupyterlab/rendermime": "^1.0.0-alpha.6",
-    "@types/node": "~8.0.47",
+    "@jupyterlab/application": "^1.1.0",
+    "@jupyterlab/apputils": "^1.1.0",
+    "@jupyterlab/coreutils": "^3.1.0",
+    "@jupyterlab/docmanager": "^1.1.0",
+    "@jupyterlab/notebook": "^1.1.0",
+    "@jupyterlab/notebook-extension": "^1.1.0",
+    "@jupyterlab/rendermime": "^1.1.0",
     "react": "~16.8.4",
     "react-dom": "~16.8.4",
     "typestyle": "^2.0.1"
   },
   "devDependencies": {
-    "@types/node": "~8.0.47",
-    "@types/react": "~16.8.8",
-    "@types/react-dom": "~16.8.2",
-    "husky": "^1.0.0-rc.13",
+    "@types/node": "^12.7.11",
+    "@types/react": "~16.8.18",
+    "@types/react-dom": "~16.8.4",
+    "husky": "^3.0.1",
     "lint-staged": "^7.2.0",
     "prettier": "^1.13.7",
     "rimraf": "^2.6.1",
-    "typescript": "~3.4.3"
+    "typescript": "~3.4.3",
+    "yarn-deduplicate": "^1.1.1"
   },
   "jupyterlab": {
     "extension": true

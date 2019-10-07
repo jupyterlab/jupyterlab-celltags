@@ -2,6 +2,7 @@
 *.egg-info/
 node_modules/
 .ipynb_checkpoints
+*.tsbuildinfo
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
