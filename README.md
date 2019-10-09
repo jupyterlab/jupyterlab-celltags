@@ -4,7 +4,6 @@
 
 ### Note: A new version of celltags is currently being developed to be merged into core JupyterLab. This repo is at end of lifecycle, and will only be updated with critical bugfixes.
 
-
 The JupyterLab cell tags extension enables users to easily add, view, and manipulate descriptive tags for notebook cells. The extension includes the functionality to select all cells with a given tag, supporting the performance of any operation on those cells.
 ![](http://g.recordit.co/MxwN6UaFZj.gif)
 
@@ -26,27 +25,35 @@ If you would like to contribute to the project, please read our [contributor doc
 
 JupyterLab follows the official [Jupyter Code of Conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
 
-### Install
+### Dev Install
 
 Requires node 4+ and npm 4+
 
 ```bash
 # Clone the repo to your local environment
 git clone https://github.com/jupyterlab/jupyterlab-celltags.git
+
+# move into repo dir
 cd jupyterlab-celltags
-# Install dependencies
-npm install # or yarn
-# Build Typescript source
-npm run build # or yarn build
-# Link your development version of the extension with JupyterLab
-jupyter labextension link .
-# Rebuild Typescript source after making changes
-npm run build # or yarn build
+
+# build celltags and install it into jupyterlab
+jlpm build:dev
 ```
 
-To rebuild the package and the JupyterLab app:
+To watch for/rebuild on changes to this extension's source code, run:
 
 ```bash
-npm run build
+jlpm run build:watch
+```
+
+For the watch build, you will also need to separately rebuild Jupyterlab itself when you make changes. You can either do this manually:
+
+```bash
 jupyter lab build
+```
+
+or run Jupyterlab itself in watch mode, which will pick up the changes automatically (you'll still need to reload your browser yourself):
+
+```bash
+jupyter lab --watch
 ```
