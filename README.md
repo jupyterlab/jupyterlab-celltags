@@ -1,6 +1,9 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-celltags/master?urlpath=lab)
+
 # jupyterlab-celltags
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-celltags/master?urlpath=lab)
+### Note: A new version of celltags is currently being developed to be merged into core JupyterLab. This repo is at end of lifecycle, and will only be updated with critical bugfixes.
+
 
 The JupyterLab cell tags extension enables users to easily add, view, and manipulate descriptive tags for notebook cells. The extension includes the functionality to select all cells with a given tag, supporting the performance of any operation on those cells.
 ![](http://g.recordit.co/MxwN6UaFZj.gif)
