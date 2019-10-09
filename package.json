@@ -12,7 +12,7 @@
     "url": "https://github.com/jupyterlab/jupyterlab-celltags.git/issues"
   },
   "license": "BSD-3-Clause",
-  "author": "Zuoyuan Huang, Markelle Kelly, Rose Chang",
+  "author": "Zuoyuan Huang, Markelle Kelly, Rose Chang, Max Klein",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
@@ -29,13 +29,13 @@
     "build:dev": "jlpm run build && jlpm run lab:install",
     "build:watch": "jlpm run build --watch",
     "clean": "rimraf lib && rimraf tsconfig.tsbuildinfo",
-    "clean:more": "jlpm run clean && rimraf build && rimraf dist && rimraf package && rimraf *.tgz",
-    "clean:slate": "jlpm run clean:more && rimraf node_modules",
+    "clean:dist": "jlpm run clean && rimraf *.tgz",
+    "clean:slate": "jlpm run clean:dist && rimraf node_modules",
     "deduplicate": "jlpm yarn-deduplicate -s fewer",
     "lab:install": "jupyter labextension install .",
     "lab:link": "jupyter labextension install . --no-build",
-    "lab:uninstall": "jupyter labextension uninstall jupyter-unicron",
-    "lab:unlink": "jupyter labextension uninstall jupyter-unicron --no-build",
+    "lab:uninstall": "jupyter labextension uninstall @jupyterlab/celltags",
+    "lab:unlink": "jupyter labextension uninstall @jupyterlab/celltags --no-build",
     "precommit": "lint-staged",
     "prepublishOnly": "jlpm run clean && jlpm run build",
     "prettier": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}'",
@@ -75,6 +75,9 @@
     "rimraf": "^2.6.1",
     "typescript": "~3.4.3",
     "yarn-deduplicate": "^1.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "jupyterlab": {
     "extension": true

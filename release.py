@@ -14,20 +14,22 @@ def npmjs(dry=False):
 
     version = info['version']
 
-    tag(version, 'npmjs', dry=dry)
+    tag(version, dry=dry)
 
     if dry:
         # dry run build and release
+        print('doing a dry run: `npm publish --access public --dry-run`')
         subprocess.run(['npm', 'publish', '--access', 'public', '--dry-run'])
     else:
         # build and release
+        print('publishing to npm: `npm publish --access public`')
         subprocess.run(['npm', 'publish', '--access', 'public'])
 
 
-def tag(version, kind, dry=False):
+def tag(version, dry=False):
     """git tagging
     """
-    tag = f"{kind}_v{version}"
+    tag = f"v{version}"
 
     if dry:
         print(f'would release with git tag: {tag}')
@@ -40,13 +42,11 @@ def main():
     parser = argp.ArgumentParser()
 
     parser.add_argument('-d', '--dry', action='store_true')
-    parser.add_argument('--npmjs', action='store_true')
 
     parsed = vars(parser.parse_args())
     dry = 'dry' in parsed and parsed['dry']
 
-    if 'npmjs' in parsed and parsed['npmjs']:
-        npmjs(dry=dry)
+    npmjs(dry=dry)
 
 
 if __name__=='__main__':
