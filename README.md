@@ -1,8 +1,11 @@
+# jupyterlab-celltags is archived. The code in this repo is outdated, and no new development work will occur here.
+# As of JupyterLab 2.0, jupyterlab-celltags has been pulled into JupyterLab core as the [@jupyterlab/celltags](https://github.com/jupyterlab/jupyterlab/tree/6d106df4276e39b7726083b9d1bd3166b8a5c74b/packages/celltags) package.
+# If you are using JupyterLab >=2.0, celltags are available by default. Please do not try to install this extension.
+# If you are using JupyterLab 1.x, you can still install and use this extension.
+
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-celltags/master?urlpath=lab)
 
 # jupyterlab-celltags
-
-### Note: A new version of celltags is currently being developed to be merged into core JupyterLab. This repo is at end of lifecycle, and will only be updated with critical bugfixes.
 
 The JupyterLab cell tags extension enables users to easily add, view, and manipulate descriptive tags for notebook cells. The extension includes the functionality to select all cells with a given tag, supporting the performance of any operation on those cells.
 ![](http://g.recordit.co/MxwN6UaFZj.gif)
